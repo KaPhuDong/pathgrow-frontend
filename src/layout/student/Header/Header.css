@@ -1,0 +1,33 @@
+.container {
+    max-width: 1440px;
+}
+.header {
+    height: 100px;
+    background-color: #7FBE5D;
+    justify-content: space-between;
+}
+.logo-name {
+    font-size: 40px;
+    font-weight: bold;
+    color: white;
+}
+
+.nav-pills {
+    margin-left: 120px;
+}
+.nav-pills a {
+    color: white;
+    font-size: 20px;
+}
+
+.logo-brand, .icon {
+    display: flex;
+    column-gap: 20px;
+}
+.icon i {
+    font-size: 35px;
+    color: white;
+}
+.icon:hover {
+    cursor: pointer;
+}
