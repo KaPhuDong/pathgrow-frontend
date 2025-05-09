@@ -1,18 +1,23 @@
 import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './layout/student/header/Header';
-import Content from './pages/student/student-profile/StudentProfile';
 import Footer from './layout/student/footer/Footer';
+import routes from './routes/StudentRoutes';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 function App() {
   return (
-    <div className='App-PathGrow'>
+    <Router>
       <Header />
       <main>
-        <Content />
+        <Routes>
+          {routes.map(({ path, element }, i) => (
+            <Route key={i} path={path} element={element} />
+          ))}
+        </Routes>
       </main>
       <Footer />
-    </div>
+    </Router>
   );
 }
 

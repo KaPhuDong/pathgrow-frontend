@@ -1,9 +1,12 @@
 .container {
     max-width: 1440px;
+    justify-content: space-between;
 }
 .header {
     height: 100px;
     background-color: #7FBE5D;
+    display: flex;
+    align-items: center;
     justify-content: space-between;
 }
 .logo-name {
@@ -13,7 +16,9 @@
 }
 
 .nav-pills {
-    margin-left: 120px;
+  display: flex;
+  align-items: center;
+  margin-left: 0; 
 }
 .nav-pills a {
     color: white;
