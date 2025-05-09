@@ -1,38 +1,30 @@
-// import logo from './logo.svg';
 import './App.css';
-<<<<<<< HEAD
-import Login from './pages/Login';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Header from './layout/student/header/Header';
+import Footer from './layout/student/footer/Footer';
+import routes from './routes/StudentRoutes';
+import Goals from './pages/student/Goals';
+import StudyPlan from'./pages/student/studyPlan/StudyPlan';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <Router>
+      <Header />
       <main>
-        <Login></Login>
+        <Routes>
+          {routes.map(({ path, element }, i) => (
+            <Route key={i} path={path} element={element} />
+          ))}
+        </Routes>
       </main>
-    </div>
-=======
-import Goals from './pages/student/Goals';
-import StudyPlan from'./pages/student/studyPlan/StudyPlan';
+      <Footer />
+    </Router>
 
 function App() {
   return (
     <StudyPlan></StudyPlan>
     // <Goals></Goals>
->>>>>>> e2df1b14c6d4cfe75316a313d2b4289aebca5ddc
   );
 }
 

@@ -30,7 +30,7 @@ const Goals = () => {
     <div className="container mt-4">
       {/* Nội dung Tab: Bảng mục tiêu học kỳ */}
       {activeTab === "semester-table" && (
-        <div className="card border-0 shadow-sm mt-3">
+        <div className="border-0 shadow-sm mt-3">
           <div className="card-body">
             <div className="mb-4">
               <h5 className="card-title fw-bold text-success">Semester goals</h5>
