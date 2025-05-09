@@ -4,7 +4,7 @@ class Header extends Component {
     render() {
         return (
             <header className="header">
-              <div className="container d-flex align-items-center justify-content-between">
+              <div className="container header-small d-flex align-items-center justify-content-between ">
                 <a href="/" className="logo-brand d-flex align-items-center link-body-emphasis text-decoration-none">
                   <img src='/images/logo-path.png' className="bi me-2" width="64" height="64" aria-hidden="true" />
                   <span className="logo-name fs-40">PathGrow</span>

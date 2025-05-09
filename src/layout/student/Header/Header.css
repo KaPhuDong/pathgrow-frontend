@@ -1,6 +1,5 @@
 .container {
     max-width: 1440px;
-    justify-content: space-between;
 }
 .header {
     height: 100px;
@@ -8,6 +7,10 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+.header-small {
+    margin: 0 auto;
+    padding: 0 35px;
 }
 .logo-name {
     font-size: 40px;
