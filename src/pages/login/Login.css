@@ -1,0 +1,44 @@
+.header {
+  height: 110px;
+}
+
+.header__title {
+  text-decoration: none;
+  color: #7fbe5d;
+  font-size: 40px;
+  font-weight: 700;
+}
+
+.sign-up {
+  max-width: 650px;
+  margin: 0 auto;
+  border: 2px solid #7fbe5d;
+  padding: 50px 0;
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.title {
+  text-align: center;
+}
+
+.btn-signup {
+  width: 100% !important;
+  border: none;
+  border-radius: 5px;
+  height: 54px;
+  background-color: #7fbe5d;
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: 20px;
+  color: white;
+}
+
+.btn-signup:hover {
+  background-color: rgb(133, 213, 90);
+  color: white;
+}
