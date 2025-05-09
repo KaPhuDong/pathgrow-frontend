@@ -4,7 +4,6 @@ import Header from './layout/student/header/Header';
 import Footer from './layout/student/footer/Footer';
 import routes from './routes/StudentRoutes';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-
 function App() {
   return (
     <Router>
@@ -18,6 +17,7 @@ function App() {
       </main>
       <Footer />
     </Router>
+
   );
 }
 
