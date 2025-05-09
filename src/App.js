@@ -3,10 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './layout/student/header/Header';
 import Footer from './layout/student/footer/Footer';
 import routes from './routes/StudentRoutes';
-import Goals from './pages/student/Goals';
-import StudyPlan from'./pages/student/studyPlan/StudyPlan';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-
 function App() {
   return (
     <Router>
@@ -21,10 +18,6 @@ function App() {
       <Footer />
     </Router>
 
-function App() {
-  return (
-    <StudyPlan></StudyPlan>
-    // <Goals></Goals>
   );
 }
 
