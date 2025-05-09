@@ -1,10 +1,12 @@
 // import logo from './logo.svg';
 import './App.css';
 import Goals from './pages/student/Goals';
+import StudyPlan from'./pages/student/studyPlan/StudyPlan';
 
 function App() {
   return (
-    <Goals></Goals>
+    <StudyPlan></StudyPlan>
+    // <Goals></Goals>
   );
 }
 
