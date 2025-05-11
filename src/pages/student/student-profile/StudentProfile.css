@@ -47,8 +47,10 @@
 }
 .content-description {
     display: flex;
-    flex-direction: column;
     row-gap: 45px;
+    margin: 0 auto;
+    padding: 0 35px;
+    flex-direction: column;
     background-color: white;
 }
 /* About me */

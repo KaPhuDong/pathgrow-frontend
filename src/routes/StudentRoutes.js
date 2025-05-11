@@ -19,11 +19,11 @@ const routes = [
     element: <StudentProfile />
   },
   {
-    path: '/student-goals',
+    path: '/student-goals', 
     element: <Goals />
   },
   {
-    path: '/study-plan',
+    path: '/study-plans',
     element: <StudyPlan />
   },
 ];

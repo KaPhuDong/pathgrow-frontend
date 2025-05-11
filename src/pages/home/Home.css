@@ -3,6 +3,8 @@
 }
 
 .header__title {
+  display: flex;
+  column-gap: 20px;
   text-decoration: none;
   color: #7fbe5d;
   font-size: 40px;
