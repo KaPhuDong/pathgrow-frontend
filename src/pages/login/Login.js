@@ -3,9 +3,12 @@ import './Login.css';
 
 function Login() {
   return (
-    <main className="container">
+    <main className="container mx-auto px-4">
       <header className="header d-flex justify-content-between align-items-center">
-        <a href="#" className="header__title">PathGrow</a>
+        <a href="#" className="header__title">
+            <img src='/images/logo-path.png' className="bi me-2" width="64" height="64" aria-hidden="true" />
+            <span className="fs-40">PathGrow</span>
+        </a>
       </header>
       <section className="sign-up">
         <h1 className="title">Sign in</h1>

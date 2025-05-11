@@ -13,7 +13,7 @@ class StudentProfile extends Component {
                             </div>
                             
                         </div>
-                        <span className='student-name'>SEVENTEEN</span>
+                        <span className='student-name'>ZOAN THI BANG</span>
                     </div>
                 </div>
                 <div className='content-description container'>

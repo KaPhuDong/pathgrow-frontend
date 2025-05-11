@@ -23,7 +23,7 @@ const routes = [
     element: <Goals />
   },
   {
-    path: '/study-plan',
+    path: '/study-plans',
     element: <StudyPlan />
   },
 ];
