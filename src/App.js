@@ -1,16 +1,13 @@
 import './App.css';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import Header from './layout/student/header/Header';
-import Footer from './layout/student/footer/Footer';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './styles/main.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import routes from './routes/StudentRoutes';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
-function AppContent() {
-  const location = useLocation();
-
+function App() {
   return (
-    <div>
-      {location.pathname !== '/' && location.pathname !== '/login' && <Header />}
+    <Router>
       <main>
         <Routes>
           {routes.map(({ path, element }, i) => (
@@ -18,15 +15,6 @@ function AppContent() {
           ))}
         </Routes>
       </main>
-      {location.pathname !== '/' && location.pathname !== '/login' && <Footer />}
-    </div>
-  );
-}
-
-function App() {
-  return (
-    <Router>
-      <AppContent />
     </Router>
   );
 }

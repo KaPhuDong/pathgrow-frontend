@@ -1,0 +1,186 @@
+.content-body {
+  display: flex;
+  flex-direction: column;
+  row-gap: 55px;
+}
+.content-header {
+  background-color: #e8e8f4;
+}
+.content-info {
+  display: flex;
+  flex-direction: column;
+  row-gap: 37px;
+  justify-content: center;
+  text-align: center;
+
+  height: 390px;
+}
+.profile {
+  display: flex;
+  justify-content: center;
+}
+
+.img-profile {
+  width: 200px;
+  height: 200px;
+  position: relative;
+}
+
+.img-profile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 100px;
+}
+
+.edit-icon {
+  position: absolute;
+  bottom: 0px;
+  transform: translateX(-50%);
+  font-size: 24px;
+  color: var(--primary);
+  cursor: pointer;
+}
+.student-name {
+  font-size: 36px;
+  font-weight: bold;
+}
+.content-description {
+  display: flex;
+  flex-direction: column;
+  row-gap: 45px;
+  background-color: white;
+}
+/* About me */
+.about-me,
+.fact-about,
+.class-objects {
+  display: flex;
+  flex-direction: column;
+  row-gap: 14px;
+}
+.about-icon,
+.fact-icon,
+.class-icon {
+  display: flex;
+  column-gap: 14px;
+}
+.icon-user,
+.icon-fact {
+  font-size: 35px;
+}
+.icon-class {
+  width: 35px;
+  height: 35px;
+}
+.about-name,
+.fact-name,
+.class-name {
+  font-size: 30px;
+  font-weight: bold;
+}
+.about-description,
+.card-text {
+  font-size: 20px;
+}
+.group-card {
+  display: flex;
+  justify-content: space-between;
+  column-gap: 35px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 430px;
+  height: 560px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.card:hover,
+.class-card:hover {
+  transform: translateY(-5px);
+  cursor: pointer;
+}
+
+.card img {
+  width: 100%;
+  height: 350px;
+  object-fit: cover;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: space-between;
+  flex: none;
+}
+
+.card-title {
+  font-size: 25px;
+  font-weight: bold;
+  text-align: center;
+}
+.class-description {
+  display: flex;
+  justify-content: space-between;
+  column-gap: 20px;
+}
+.class-card {
+  width: 400px;
+  height: 200px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.card-header {
+  height: 120px;
+  padding: 16px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.class-info {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+}
+.class-info h3 {
+  margin: 0;
+  font-size: 32px;
+}
+
+.class-info p {
+  margin: 4px 0 0;
+  font-size: 20px;
+}
+
+.teacher-avatar {
+  position: absolute;
+  bottom: -25px;
+  right: 16px;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid #333;
+  background-color: white;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+}
+
+.teacher-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
