@@ -36,6 +36,8 @@
 }
 .student__header {
   height: 100px;
+  width: 100%;
+  padding: 0 50px;
   background-color: var(--primary);
   display: flex;
   align-items: center;

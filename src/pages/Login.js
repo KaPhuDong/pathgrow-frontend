@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import authService from '../services/authService';
 
+import logo from '../assets/images/logo.png';
+
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -26,8 +28,15 @@ function Login() {
   return (
     <main className="container">
       <header className="login__header d-flex justify-content-between align-items-center">
-        <a href="/" className="header__title">
-          PathGrow
+        <a href="/" className="d-flex align-items-center">
+          <img
+            src={logo}
+            className="bi me-2"
+            width="64"
+            height="64"
+            aria-hidden="true"
+          />
+          <span className="header__title">PathGrow</span>
         </a>
       </header>
 

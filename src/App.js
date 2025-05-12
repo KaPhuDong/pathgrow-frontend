@@ -4,6 +4,7 @@ import './styles/main.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import routes from './routes/StudentRoutes';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+
 function App() {
   return (
     <Router>

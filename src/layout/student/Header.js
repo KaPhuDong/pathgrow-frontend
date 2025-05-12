@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 
+import logo from '../../assets/images/logo.png';
+
 class Header extends Component {
   render() {
     return (
-      <header className="student__header">
-        <div className="container d-flex align-items-center justify-content-between">
+      <header>
+        <div className="student__header d-flex align-items-center justify-content-between">
           <a
             href="/"
             className="logo-brand d-flex align-items-center link-body-emphasis text-decoration-none"
           >
             <img
-              src="/images/logo-path.png"
+              src={logo}
               className="bi me-2"
               width="64"
               height="64"
