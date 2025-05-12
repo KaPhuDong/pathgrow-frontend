@@ -1,0 +1,71 @@
+/* Welcome */
+.welcome__header {
+  height: 110px;
+}
+
+.header__title {
+  display: flex;
+  column-gap: 20px;
+  text-decoration: none;
+  color: var(--primary);
+  font-size: 40px;
+  font-weight: 700;
+}
+
+.header__btn-signup {
+  background-color: var(--primary);
+  border: none;
+  border-radius: 5px;
+  width: 150px;
+  height: 54px;
+  font-size: 20px;
+  font-weight: 600;
+  color: white;
+  text-align: center;
+  line-height: 54px;
+}
+
+.header__btn-signup:hover {
+  background-color: var(--primary);
+  color: white;
+}
+
+/* Student */
+.container {
+  justify-content: space-between;
+}
+.student__header {
+  height: 100px;
+  background-color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.logo-name {
+  font-size: 40px;
+  font-weight: bold;
+  color: white;
+}
+
+.nav-pills {
+  display: flex;
+  align-items: center;
+  margin-left: 0;
+}
+.nav-pills a {
+  color: white;
+  font-size: 20px;
+}
+
+.logo-brand,
+.icon {
+  display: flex;
+  column-gap: 20px;
+}
+.icon i {
+  font-size: 35px;
+  color: white;
+}
+.icon:hover {
+  cursor: pointer;
+}

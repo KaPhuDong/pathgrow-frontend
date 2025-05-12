@@ -1,0 +1,17 @@
+/* Design system */
+@import './design-system/index.css';
+
+/* Global styles */
+@import './global/index.css';
+
+/* Components styles */
+@import './components/index.css';
+
+/* Layouts styles */
+@import './layouts/index.css';
+
+/* Sections styles */
+@import './sections/index.css';
+
+/* Pages styles */
+@import './pages/index.css';
