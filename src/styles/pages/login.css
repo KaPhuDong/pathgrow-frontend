@@ -11,13 +11,8 @@
 
 .sign-in {
   max-width: 650px;
-<<<<<<< HEAD:src/pages/login/Login.css
-  margin: 55px auto 0px auto;
-  border: 2px solid #7fbe5d;
-=======
   margin: 0 auto;
   border: 2px solid var(--primary);
->>>>>>> b164a7111f223eba339e395c106b46bc423432f2:src/styles/pages/login.css
   padding: 50px 0;
   box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
 }
