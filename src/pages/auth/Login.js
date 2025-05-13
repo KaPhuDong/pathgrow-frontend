@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import authService from '../services/authService';
+import authService from '../../services/authService';
 
-import logo from '../assets/images/logo.png';
+import logo from '../../assets/images/logo.png';
 
 function Login() {
   const [email, setEmail] = useState('');

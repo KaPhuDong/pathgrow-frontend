@@ -1,19 +1,8 @@
-import React from 'react';
 import StudentProfile from '../pages/student/StudentProfile';
 import Goals from '../pages/student/Goals';
 import StudyPlan from '../pages/student/StudyPlan';
-import Welcome from '../pages/Welcome';
-import Login from '../pages/Login';
 
-const routes = [
-  {
-    path: '/',
-    element: <Welcome />,
-  },
-  {
-    path: '/login',
-    element: <Login />,
-  },
+const StudentRoutes = [
   {
     path: '/student/profile',
     element: <StudentProfile />,
@@ -28,4 +17,4 @@ const routes = [
   },
 ];
 
-export default routes;
+export default StudentRoutes;
