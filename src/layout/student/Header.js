@@ -37,7 +37,7 @@ const Header = () => {
           </li>
           <li className="nav-item">
             <NavLink to="/student/goals" className="nav-NavLink">
-              My Goals
+              Goals
             </NavLink>
           </li>
           <li className="nav-item">
@@ -47,12 +47,7 @@ const Header = () => {
           </li>
           <li className="nav-item">
             <NavLink to="#" className="nav-NavLink">
-              Learning Journal
-            </NavLink>
-          </li>
-          <li className="nav-item">
-            <NavLink to="#" className="nav-NavLink">
-              Teacher Interaction
+              Achievements
             </NavLink>
           </li>
         </ul>
