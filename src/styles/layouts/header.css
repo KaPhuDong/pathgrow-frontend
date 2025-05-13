@@ -57,17 +57,23 @@
 .nav-pills a {
   color: white;
   font-size: 20px;
+  padding: 0 20px;
 }
 
 .logo-brand,
 .icon {
   display: flex;
+}
+
+.icon {
   column-gap: 20px;
 }
+
 .icon i {
   font-size: 35px;
   color: white;
 }
+
 .icon:hover {
   cursor: pointer;
 }

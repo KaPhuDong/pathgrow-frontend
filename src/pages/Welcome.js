@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { NavLink } from 'react-router-dom';
+
 import logo from '../assets/images/logo.png';
 import banner from '../assets/images/banner.png';
 
@@ -7,7 +9,7 @@ function Welcome() {
   return (
     <main className="container">
       <header className="welcome__header d-flex justify-content-between align-items-center">
-        <a href="/" className="d-flex align-items-center">
+        <NavLink to="/" className="d-flex align-items-center">
           <img
             src={logo}
             className="bi me-2"
@@ -16,10 +18,10 @@ function Welcome() {
             aria-hidden="true"
           />
           <span className="header__title">PathGrow</span>
-        </a>
-        <a href="/login" className="header__btn-signup">
+        </NavLink>
+        <NavLink to="/login" className="header__btn-signup">
           Sign In
-        </a>
+        </NavLink>
       </header>
 
       <section className="content d-flex justify-content-between align-items-center">
@@ -30,9 +32,9 @@ function Welcome() {
             Students can track their daily progress and build better habits.
             Teachers can review student activities and provide helpful guidance.
           </p>
-          <a href="/login" className="header__btn-signup">
+          <NavLink to="/login" className="header__btn-signup">
             Sign In
-          </a>
+          </NavLink>
         </div>
 
         <div className="content__left">

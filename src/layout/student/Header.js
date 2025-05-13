@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 
 import logo from '../../assets/images/logo.png';
+import { NavLink } from 'react-router-dom';
 
 class Header extends Component {
   render() {
     return (
       <header>
         <div className="student__header d-flex align-items-center justify-content-between">
-          <a
-            href="/"
-            className="logo-brand d-flex align-items-center link-body-emphasis text-decoration-none"
+          <NavLink
+            to="/"
+            className="logo-brand d-flex align-items-center NavLink-body-emphasis text-decoration-none"
           >
             <img
               src={logo}
@@ -19,43 +20,45 @@ class Header extends Component {
               aria-hidden="true"
             />
             <span className="logo-name fs-40">PathGrow</span>
-          </a>
+          </NavLink>
           <ul className="nav nav-pills">
             <li className="nav-item">
-              <a
-                href="/student/profile"
-                className="nav-link"
+              <NavLink
+                to="/student/profile"
+                className="nav-NavLink"
                 aria-current="page"
               >
                 About me
-              </a>
+              </NavLink>
             </li>
             <li className="nav-item">
-              <a href="/student/goals" className="nav-link">
+              <NavLink to="/student/goals" className="nav-NavLink">
                 My Goals
-              </a>
+              </NavLink>
             </li>
             <li className="nav-item">
-              <a href="/study/plans" className="nav-link">
+              <NavLink to="/study/plans" className="nav-NavLink">
                 Study Plans
-              </a>
+              </NavLink>
             </li>
             <li className="nav-item">
-              <a href="#" className="nav-link">
+              <NavLink to="#" className="nav-NavLink">
                 Learning Journal
-              </a>
+              </NavLink>
             </li>
             <li className="nav-item">
-              <a href="#" className="nav-link">
+              <NavLink to="#" className="nav-NavLink">
                 Teacher Interaction
-              </a>
+              </NavLink>
             </li>
           </ul>
           <div className="icon">
-            <a href="/" className="icon-notification">
+            <NavLink to="/" className="icon-notification">
               <i className="fa-solid fa-bell"></i>
-            </a>
-            <i className="fa-solid fa-circle-user"></i>
+            </NavLink>
+            <NavLink to="#" className="icon-user">
+              <i className="fa-solid fa-circle-user"></i>
+            </NavLink>
           </div>
         </div>
       </header>
