@@ -63,7 +63,7 @@ const Goals = () => {
 
   const fetchQA = async () => {
     try {
-      const res = await axios.get(`/api/questions?semester=${selectedSemester}&subject=${selectedSubject}`);
+      const res = await axios.get(`http://127.0.0.1:8000/api/goal-questions?semester=${selectedSemester}&subject=${selectedSubject}`);
       setQuestion(res.data.question || '');
       setAnswer(res.data.answer || '');
     } catch (error) {
@@ -102,7 +102,7 @@ const Goals = () => {
 
     setLoading(true);
     try {
-      await axios.post('/api/questions', {
+      await axios.post('http://127.0.0.1:8000/api/goal-questions', {
         semester: selectedSemester,
         subject: selectedSubject,
         question: question.trim()
@@ -170,7 +170,7 @@ const Goals = () => {
             <table className="table table-bordered" style={{ border: '2px solid #00cdd0' }}>
               <thead>
                 <tr style={{ backgroundColor: '#00cdd0' }}>
-                  <th colSpan={2} className="text-white text-center fw-bold py-2 w-100">
+                  <th colSpan={2} className="text-white text-center fw-bold py-2 w-100" style={{backgroundColor: '#00cdd0'}}>
                     SEMESTER {selectedSemester}
                   </th>
                 </tr>
