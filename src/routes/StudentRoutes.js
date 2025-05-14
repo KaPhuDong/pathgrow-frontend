@@ -1,6 +1,7 @@
 import StudentProfile from '../pages/student/StudentProfile';
 import Goals from '../pages/student/Goals';
 import StudyPlan from '../pages/student/StudyPlan';
+import Notifications from '../pages/student/Notifications'
 
 const StudentRoutes = [
   {
@@ -14,6 +15,10 @@ const StudentRoutes = [
   {
     path: '/study/plans',
     element: <StudyPlan />,
+  },
+  {
+    path: '/student/notifications',
+    element: <Notifications/>,
   },
 ];
 

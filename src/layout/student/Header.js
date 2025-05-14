@@ -52,7 +52,7 @@ const Header = () => {
           </li>
         </ul>
         <div className="icon">
-          <NavLink to="/" className="icon-notification">
+          <NavLink to="/student/notifications" className="icon-notification">
             <i className="fa-solid fa-bell"></i>
           </NavLink>
 
