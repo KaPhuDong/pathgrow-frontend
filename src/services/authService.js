@@ -1,11 +1,12 @@
 import authApi from '../api/authApi';
-import { saveToken, saveUser, removeAuth } from '../utils/auth';
+import { saveToken, saveRole, saveUser, removeAuth } from '../utils/auth';
 
 const login = async (email, password) => {
   try {
     const data = await authApi.login(email, password);
 
     saveToken(data.token);
+    saveRole(data.role);
     saveUser(data.user);
 
     return { success: true, user: data.user };
