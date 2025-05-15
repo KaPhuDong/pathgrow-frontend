@@ -8,14 +8,17 @@ function Home() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('http://localhost:8000/api/classes')
-      .then(res => setClasses(res.data))
-      .catch(err => console.error(err));
+    axios
+      .get('http://localhost:8000/api/classes')
+      .then((res) => setClasses(res.data))
+      .catch((err) => console.error(err));
   }, []);
 
   const handleClassClick = (cls) => {
     // Navigate to the student list page and pass class data
-    navigate('/teacher/list-student', { state: { classId: cls.id, className: cls.name } });
+    navigate('/teacher/list-student', {
+      state: { classId: cls.id, className: cls.name },
+    });
   };
 
   return (
@@ -24,19 +27,28 @@ function Home() {
         <div className="row h-100">
           {/* Sidebar */}
           <nav className="col-md-2 d-none d-md-block bg-white border-end p-3">
-            <h4 
-              className="fw-bold mb-3" 
-              style={{ color: '#00CED1' /* Màu xanh turquoise */, fontWeight: '700' }}
+            <h4
+              className="fw-bold mb-3"
+              style={{
+                color: '#00CED1' /* Màu xanh turquoise */,
+                fontWeight: '700',
+              }}
             >
               Classes
             </h4>
             <ul className="nav flex-column">
-              {classes.map(cls => (
+              {classes.map((cls) => (
                 <li className="nav-item mb-2" key={cls.id}>
                   <button
                     className="nav-link text-start px-2 py-1 rounded text-dark"
                     onClick={() => handleClassClick(cls)}
-                    style={{ border: 'none', background: 'none', width: '100%', textAlign: 'left', cursor: 'pointer' }}
+                    style={{
+                      border: 'none',
+                      background: 'none',
+                      width: '100%',
+                      textAlign: 'left',
+                      cursor: 'pointer',
+                    }}
                   >
                     {cls.name}
                   </button>
@@ -50,15 +62,19 @@ function Home() {
 
           {/* Main Content */}
           <div className="col-md-10 p-4">
-            <h3 
-              className="fw-bold mb-4" 
+            <h3
+              className="fw-bold mb-4"
               style={{ color: '#00CED1', fontWeight: '700' }}
             >
               All Classes
             </h3>
             <div className="row g-4">
-              {classes.map(cls => (
-                <div className="col-12 col-sm-6 col-lg-4" key={cls.id} id={cls.slug}>
+              {classes.map((cls) => (
+                <div
+                  className="col-12 col-sm-6 col-lg-4"
+                  key={cls.id}
+                  id={cls.slug}
+                >
                   <div
                     className="class-card position-relative shadow-sm rounded overflow-hidden"
                     style={{
@@ -70,12 +86,18 @@ function Home() {
                   >
                     <div
                       className="class-card-top px-3 py-2"
-                      style={{ backgroundColor: cls.color, textAlign: 'center' }}
+                      style={{
+                        backgroundColor: cls.color,
+                        textAlign: 'center',
+                      }}
                     >
                       <h6 className="fw-bold mb-1">{cls.name}</h6>
                       <div className="small">Students: {cls.students}</div>
                     </div>
-                    <div className="class-card-bottom bg-white" style={{ height: '40px' }}></div>
+                    <div
+                      className="class-card-bottom bg-white"
+                      style={{ height: '40px' }}
+                    ></div>
                   </div>
                 </div>
               ))}

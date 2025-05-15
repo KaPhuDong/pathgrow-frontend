@@ -1,4 +1,4 @@
-import Header from '../../layout/teacher/Header';
+import Header from '../layout/Header';
 
 const Main = ({ children }) => {
   return (

@@ -1,5 +1,5 @@
-import Header from '../../../layout/student/Header';
-import Footer from '../../../layout/student/Footer';
+import Header from '../layout/Header';
+import Footer from '../layout/Footer';
 
 const Main = ({ children }) => {
   return (

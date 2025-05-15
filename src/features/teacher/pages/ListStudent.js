@@ -13,9 +13,10 @@ const ListStudent = () => {
   const [classes, setClasses] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:8000/api/classes')
-      .then(res => setClasses(res.data))
-      .catch(err => console.error('Error fetching class list:', err));
+    axios
+      .get('http://localhost:8000/api/classes')
+      .then((res) => setClasses(res.data))
+      .catch((err) => console.error('Error fetching class list:', err));
   }, []);
 
   useEffect(() => {
@@ -25,11 +26,11 @@ const ListStudent = () => {
     }
 
     fetch(`http://127.0.0.1:8000/api/list-student/class/${classId}`)
-      .then(res => {
+      .then((res) => {
         if (!res.ok) throw new Error('Failed to load student list');
         return res.json();
       })
-      .then(data => {
+      .then((data) => {
         if (data.success) {
           setStudents(data.data);
           setError(null);
@@ -38,13 +39,15 @@ const ListStudent = () => {
           setStudents([]);
         }
       })
-      .catch(err => {
+      .catch((err) => {
         setError(err.message);
       });
   }, [classId]);
 
   const handleClassClick = (cls) => {
-    navigate('/teacher/list-student', { state: { classId: cls.id, className: cls.name } });
+    navigate('/teacher/list-student', {
+      state: { classId: cls.id, className: cls.name },
+    });
   };
 
   return (
@@ -57,14 +60,15 @@ const ListStudent = () => {
               Classes
             </h4>
             <ul className="nav flex-column">
-              {classes.map(cls => (
+              {classes.map((cls) => (
                 <li className="nav-item mb-2" key={cls.id}>
                   <button
                     className="nav-link text-start px-2 py-1 rounded"
                     onClick={() => handleClassClick(cls)}
                     style={{
                       border: 'none',
-                      backgroundColor: classId === cls.id ? '#00ced1' : 'transparent',
+                      backgroundColor:
+                        classId === cls.id ? '#00ced1' : 'transparent',
                       color: classId === cls.id ? 'white' : 'black',
                       width: '100%',
                       textAlign: 'left',
@@ -79,7 +83,10 @@ const ListStudent = () => {
                 </li>
               ))}
             </ul>
-            <div className="mt-4 pt-3 border-top text-center text-muted small" style={{ color: '#999' }}>
+            <div
+              className="mt-4 pt-3 border-top text-center text-muted small"
+              style={{ color: '#999' }}
+            >
               © 2025 PNV – PathGrow
             </div>
           </nav>
@@ -93,7 +100,10 @@ const ListStudent = () => {
             {error ? (
               <p style={{ color: 'red' }}>Error: {error}</p>
             ) : (
-              <table className="table table-bordered text-center" style={{ fontSize: '0.95rem' }}>
+              <table
+                className="table table-bordered text-center"
+                style={{ fontSize: '0.95rem' }}
+              >
                 <thead style={{ backgroundColor: '#00CED1', color: 'white' }}>
                   <tr>
                     <th style={{ width: '5%' }}>#</th>
@@ -118,9 +128,13 @@ const ListStudent = () => {
                               padding: '2px 12px',
                               borderRadius: '20px',
                               fontSize: '0.85rem',
-                              fontWeight: 'bold'
+                              fontWeight: 'bold',
                             }}
-                            onClick={() => navigate('/student/profile', { state: { studentId: student.id } })}
+                            onClick={() =>
+                              navigate('/student/profile', {
+                                state: { studentId: student.id },
+                              })
+                            }
                           >
                             View
                           </button>

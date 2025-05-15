@@ -1,5 +1,5 @@
-import Home from '../pages/teacher/Home';
-import ListStudent from '../pages/teacher/ListStudent';
+import Home from '../features/teacher/pages/Home';
+import ListStudent from '../features/teacher/pages/ListStudent';
 
 const TeacherRoutes = [
   {
@@ -13,4 +13,3 @@ const TeacherRoutes = [
 ];
 
 export default TeacherRoutes;
-
