@@ -78,13 +78,13 @@ const Goals = () => {
   const handleSave = async () => {
     setLoading(true);
     try {
-      await axios.post('http://127.0.0.1:8000/api/goals', {
-        semester: selectedSemester,
-        subject: selectedSubject,
+        await axios.post('http://127.0.0.1:8000/api/goals', {
+        semester_id: selectedSemester,   
+        subject_id: selectedSubject,      
         expect_course: inputs.expectCourse,
         expect_teacher: inputs.expectTeacher,
         expect_myself: inputs.expectMyself
-      });
+    });
       alert('Saved successfully!');
     } catch (error) {
       console.error('Error saving goal:', error);
