@@ -1,0 +1,43 @@
+/* Custom variables, Custom properties */
+:root {
+  /* Colors */
+  --primary: #00cece;
+  --light: #fff;
+  --dark: #1f1d2b;
+
+  --text-color-primary: var(--primary);
+  --text-color-secondary: #abbbc2;
+  --text-color-light: var(--light);
+  --text-color-dark: var(--dark);
+
+  --bg-color-primary: #252836;
+  --bg-color-input: #2d303e;
+  --bg-color-border: #393c49;
+  --bg-color-dark: var(--dark);
+  --bg-color-light: var(--light);
+  --bg-color-card: #1f1d2b;
+  --bg-color-button: var(--primary);
+  --bg-color-modal: rgba(0,0,0,0.4);
+
+  /* Radii */
+  --border-radius-sm: 5px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 16px;
+  --border-radius-full: 100%;
+
+  /* font-family */
+  --font-family: 'Barlow', sans-serif;
+
+  /* font-size */
+  --font-size-sm: 12px;
+  --font-size-md: 14px;
+  --font-size-lg: 16px;
+  --font-size-xl: 24px;
+  --font-size-2xl: 28px;
+  --font-size-xl: 40px;
+
+  /* font-weight*/
+  --font-weight-light: 400;
+  --font-weight-normal: 500;
+  --font-weight-bold: 600;
+}
