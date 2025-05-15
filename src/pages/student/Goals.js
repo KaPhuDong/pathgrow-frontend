@@ -45,13 +45,13 @@ const Goals = () => {
     try {
       const res = await axios.get(`http://127.0.0.1:8000/api/goals?semester=${selectedSemester}&subject=${selectedSubject}`);
       const goalData = res.data[0]; // API trả về mảng
-      
+
       setInputs(goalData
         ? {
-            expectCourse: goalData.expect_course || '',
-            expectTeacher: goalData.expect_teacher || '',
-            expectMyself: goalData.expect_myself || ''
-          }
+          expectCourse: goalData.expect_course || '',
+          expectTeacher: goalData.expect_teacher || '',
+          expectMyself: goalData.expect_myself || ''
+        }
         : { expectCourse: '', expectTeacher: '', expectMyself: '' });
     } catch (error) {
       console.error('Error fetching goal:', error);
@@ -170,7 +170,7 @@ const Goals = () => {
             <table className="table table-bordered" style={{ border: '2px solid #00cdd0' }}>
               <thead>
                 <tr style={{ backgroundColor: '#00cdd0' }}>
-                  <th colSpan={2} className="text-white text-center fw-bold py-2 w-100" style={{backgroundColor: '#00cdd0'}}>
+                  <th colSpan={2} className="text-white text-center fw-bold py-2 w-100" style={{ backgroundColor: '#00cdd0' }}>
                     SEMESTER {selectedSemester}
                   </th>
                 </tr>
