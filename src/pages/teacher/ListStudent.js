@@ -9,12 +9,10 @@ const ListStudent = () => {
   const { classId, className } = location.state || {};
 
   const [students, setStudents] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [classes, setClasses] = useState([]);
 
   useEffect(() => {
-    // Fetch all classes to display in sidebar
     axios.get('http://localhost:8000/api/classes')
       .then(res => setClasses(res.data))
       .catch(err => console.error('Error fetching class list:', err));
@@ -23,11 +21,9 @@ const ListStudent = () => {
   useEffect(() => {
     if (!classId) {
       setError('Class information not found');
-      setLoading(false);
       return;
     }
 
-    setLoading(true);
     fetch(`http://127.0.0.1:8000/api/list-student/class/${classId}`)
       .then(res => {
         if (!res.ok) throw new Error('Failed to load student list');
@@ -41,23 +37,14 @@ const ListStudent = () => {
           setError('API returned an error');
           setStudents([]);
         }
-        setLoading(false);
       })
       .catch(err => {
         setError(err.message);
-        setLoading(false);
       });
   }, [classId]);
 
   const handleClassClick = (cls) => {
     navigate('/teacher/list-student', { state: { classId: cls.id, className: cls.name } });
-  };
-
-  const renderGender = (gender) => {
-    if (!gender) return 'Unspecified';
-    if (gender.toLowerCase() === 'm') return 'Male';
-    if (gender.toLowerCase() === 'f') return 'Female';
-    return 'Other';
   };
 
   return (
@@ -103,9 +90,7 @@ const ListStudent = () => {
               Student List: {className || 'Unspecified'}
             </h3>
 
-            {loading ? (
-              <p>Loading student list...</p>
-            ) : error ? (
+            {error ? (
               <p style={{ color: 'red' }}>Error: {error}</p>
             ) : (
               <table className="table table-bordered text-center" style={{ fontSize: '0.95rem' }}>
@@ -114,7 +99,6 @@ const ListStudent = () => {
                     <th style={{ width: '5%' }}>#</th>
                     <th>Name</th>
                     <th>Email</th>
-                    <th>Gender</th>
                     <th style={{ width: '20%' }}>Profile</th>
                   </tr>
                 </thead>
@@ -125,7 +109,6 @@ const ListStudent = () => {
                         <td>{index + 1}</td>
                         <td>{student.name}</td>
                         <td>{student.email || 'Not updated'}</td>
-                        <td>{renderGender(student.gender)}</td>
                         <td>
                           <button
                             className="btn btn-sm"
@@ -146,7 +129,7 @@ const ListStudent = () => {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan={5}>No students in this class</td>
+                      <td colSpan={4}>No students in this class</td>
                     </tr>
                   )}
                 </tbody>
