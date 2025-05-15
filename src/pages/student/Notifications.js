@@ -43,10 +43,6 @@ function Notifications() {
     }
   }, [userId]);
 
-  // Debug info
-//   console.log('Current notifications:', notifications);
-//   console.log('Active tab:', activeTab);
-
   const filteredNotifications = notifications.filter(n => n.type === activeTab);
 
   return (
