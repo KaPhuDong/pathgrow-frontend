@@ -1,5 +1,5 @@
-import authApi from '../api/authApi';
-import { saveToken, saveRole, saveUser, removeAuth } from '../utils/auth';
+import authApi from './api';
+import { saveToken, saveRole, saveUser, removeAuth } from '../../utils/auth';
 
 const login = async (email, password) => {
   try {

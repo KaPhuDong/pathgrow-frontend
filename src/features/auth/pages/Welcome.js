@@ -2,8 +2,8 @@ import React from 'react';
 
 import { NavLink } from 'react-router-dom';
 
-import logo from '../assets/images/logo.png';
-import banner from '../assets/images/banner.png';
+import logo from '../../../assets/images/logo.png';
+import banner from '../../../assets/images/banner.png';
 
 function Welcome() {
   return (

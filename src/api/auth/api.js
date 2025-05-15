@@ -1,4 +1,4 @@
-import axios from './axiosConfig';
+import axios from '../axiosConfig';
 
 const login = async (email, password) => {
   const response = await axios.post('/login', {

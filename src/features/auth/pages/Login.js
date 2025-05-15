@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import authService from '../../services/authService';
+import auth from '../../../api/auth/service';
 
-import logo from '../../assets/images/logo.png';
+import logo from '../../../assets/images/logo.png';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -13,7 +13,7 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const result = await authService.login(email, password);
+    const result = await auth.login(email, password);
     if (result.success) {
       const role = result.user.role;
 
@@ -68,7 +68,6 @@ function Login() {
               className="form-control"
               id="password"
               value={password}
-              
               onChange={(e) => setPassword(e.target.value)}
               required
             />

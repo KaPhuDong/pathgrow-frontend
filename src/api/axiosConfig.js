@@ -21,10 +21,8 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Ví dụ: nếu lỗi 401 thì redirect login
     if (error.response?.status === 401) {
       console.log('Unauthorized. Redirect to login...');
-      // window.location.href = '/login'; // nếu cần
     }
     return Promise.reject(error);
   }

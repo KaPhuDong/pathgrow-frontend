@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { loginService } from '../services/authService';
+import { loginService } from '../../../services/authService';
 
 export const useAuth = () => {
   const [error, setError] = useState(null);

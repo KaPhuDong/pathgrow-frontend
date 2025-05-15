@@ -1,6 +1,6 @@
-import StudentProfile from '../pages/student/StudentProfile';
-import Goals from '../pages/student/Goals';
-import StudyPlan from '../pages/student/StudyPlan';
+import StudentProfile from '../features/student/pages/StudentProfile';
+import Goals from '../features/student/pages/Goals';
+import StudyPlan from '../features/student/pages/StudyPlan';
 
 const StudentRoutes = [
   {

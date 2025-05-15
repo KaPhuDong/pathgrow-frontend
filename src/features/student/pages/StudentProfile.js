@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 
 import Main from './Main';
 
-import avatar from '../../assets/images/avatar.png';
-import playsport from '../../assets/images/playsport.png';
-import penguin from '../../assets/images/penguin.png';
-import star from '../../assets/images/star.png';
-import classroom from '../../assets/images/classroom.png';
-import msNhan from '../../assets/images/msNhan.png';
-import msTrang from '../../assets/images/msTrang.png';
-import msUyen from '../../assets/images/msUyen.png';
+import avatar from '../../../assets/images/avatar.png';
+import playsport from '../../../assets/images/playsport.png';
+import penguin from '../../../assets/images/penguin.png';
+import star from '../../../assets/images/star.png';
+import classroom from '../../../assets/images/classroom.png';
+import msNhan from '../../../assets/images/msNhan.png';
+import msTrang from '../../../assets/images/msTrang.png';
+import msUyen from '../../../assets/images/msUyen.png';
 
 const StudentProfile = () => {
   return (
