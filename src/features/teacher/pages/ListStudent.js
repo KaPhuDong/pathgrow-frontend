@@ -1,22 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import Main from './Main';
 import { useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../../api/teacher/api';
 
 const ListStudent = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { classId, className } = location.state || {};
 
+  const [classes, setClasses] = useState([]);
   const [students, setStudents] = useState([]);
   const [error, setError] = useState(null);
-  const [classes, setClasses] = useState([]);
 
   useEffect(() => {
-    axios
-      .get('http://localhost:8000/api/classes')
-      .then((res) => setClasses(res.data))
-      .catch((err) => console.error('Error fetching class list:', err));
+    const getClasses = async () => {
+      try {
+        const data = await api.fetchAllClasses();
+        setClasses(data);
+      } catch (err) {
+        console.error('Error fetching classes:', err);
+      }
+    };
+    getClasses();
   }, []);
 
   useEffect(() => {
@@ -25,23 +30,22 @@ const ListStudent = () => {
       return;
     }
 
-    fetch(`http://127.0.0.1:8000/api/list-student/class/${classId}`)
-      .then((res) => {
-        if (!res.ok) throw new Error('Failed to load student list');
-        return res.json();
-      })
-      .then((data) => {
-        if (data.success) {
-          setStudents(data.data);
+    const getStudents = async () => {
+      try {
+        const res = await api.fetchStudentsByClass(classId);
+        if (res.success) {
+          setStudents(res.data);
           setError(null);
         } else {
           setError('API returned an error');
           setStudents([]);
         }
-      })
-      .catch((err) => {
+      } catch (err) {
         setError(err.message);
-      });
+      }
+    };
+
+    getStudents();
   }, [classId]);
 
   const handleClassClick = (cls) => {
@@ -74,8 +78,8 @@ const ListStudent = () => {
                       textAlign: 'left',
                       cursor: 'pointer',
                       fontWeight: classId === cls.id ? '600' : '400',
-                      transition: 'background-color 0.3s, color 0.3s',
                       fontSize: '0.95rem',
+                      transition: 'background-color 0.3s, color 0.3s',
                     }}
                   >
                     {cls.name}
@@ -83,15 +87,12 @@ const ListStudent = () => {
                 </li>
               ))}
             </ul>
-            <div
-              className="mt-4 pt-3 border-top text-center text-muted small"
-              style={{ color: '#999' }}
-            >
+            <div className="mt-4 pt-3 border-top text-center text-muted small">
               © 2025 PNV – PathGrow
             </div>
           </nav>
 
-          {/* Main content */}
+          {/* Main Content */}
           <div className="col-md-10 p-4">
             <h3 className="fw-bold mb-4" style={{ color: '#00CED1' }}>
               Student List: {className || 'Unspecified'}

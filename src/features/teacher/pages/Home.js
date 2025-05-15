@@ -1,21 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import Main from './Main';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Main from './Main';
+import api from '../../../api/teacher/api';
 
 function Home() {
   const [classes, setClasses] = useState([]);
   const navigate = useNavigate();
 
+  // Fetch class list on first render
   useEffect(() => {
-    axios
-      .get('http://localhost:8000/api/classes')
-      .then((res) => setClasses(res.data))
-      .catch((err) => console.error(err));
+    fetchClasses();
   }, []);
 
+  const fetchClasses = async () => {
+    try {
+      const data = await api.getClasses();
+      setClasses(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // Navigate to student list page with class info
   const handleClassClick = (cls) => {
-    // Navigate to the student list page and pass class data
     navigate('/teacher/list-student', {
       state: { classId: cls.id, className: cls.name },
     });
@@ -29,10 +36,7 @@ function Home() {
           <nav className="col-md-2 d-none d-md-block bg-white border-end p-3">
             <h4
               className="fw-bold mb-3"
-              style={{
-                color: '#00CED1' /* Màu xanh turquoise */,
-                fontWeight: '700',
-              }}
+              style={{ color: '#00CED1', fontWeight: '700' }}
             >
               Classes
             </h4>

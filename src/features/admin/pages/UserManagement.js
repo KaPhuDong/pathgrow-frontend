@@ -1,68 +1,54 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import AddUserModal from '../../../components/admin/AddUser';
+import userApi from '../../../api/admin/api';
+import AddUserModal from '../components/AddUser';
 
-const UserTable = () => {
+const UserManagement = () => {
   const [users, setUsers] = useState([]);
   const [filterRole, setFilterRole] = useState('all');
   const [filterName, setFilterName] = useState('');
   const [searchName, setSearchName] = useState('');
   const [showAddUserModal, setShowAddUserModal] = useState(false);
   const [updateUser, setUpdateUser] = useState(null);
+
   useEffect(() => {
-    const fetchUsers = async () => {
+    const getUsers = async () => {
       try {
-        const response = await axios.get(
-          'http://127.0.0.1:8000/api/admin/users'
-        );
-        if (response.data && Array.isArray(response.data)) {
-          setUsers(response.data);
+        const data = await userApi.fetchUsers();
+        if (Array.isArray(data)) {
+          setUsers(data);
         }
       } catch (error) {
         console.error('Failed to fetch users:', error);
       }
     };
-    fetchUsers();
+    getUsers();
   }, []);
 
-  // Add new user or Update user
   const handleAddOrUpdateUser = async (userData) => {
     try {
       if (userData.id) {
-        //Update user
-        const response = await axios.put(
-          `http://127.0.0.1:8000/api/admin/users/${userData.id}`,
-          userData
+        const updated = await userApi.updateUser(userData.id, userData);
+        setUsers((prev) =>
+          prev.map((user) => (user.id === userData.id ? updated : user))
         );
-        if (response.data) {
-          setUsers((prev) =>
-            prev.map((user) => (user.id === userData.id ? response.data : user))
-          );
-        }
       } else {
-        const response = await axios.post(
-          `http://127.0.0.1:8000/api/admin/users`,
-          userData
-        );
-        if (response.data) {
-          setUsers((prev) => [...prev, response.data]); // Cập nhật danh sách
-        }
+        const added = await userApi.addUser(userData);
+        setUsers((prev) => [...prev, added]);
       }
-      //Close Modal
       setShowAddUserModal(false);
       setUpdateUser(null);
     } catch (error) {
-      console.error('Failed to add or edit user:', error);
+      console.error('Failed to add or update user:', error);
     }
   };
-  //Delete user
+
   const handleDeleteUser = async (id) => {
     const confirmDelete = window.confirm(
       'Are you sure you want to delete this user?'
     );
     if (!confirmDelete) return;
     try {
-      await axios.delete(`http://127.0.0.1:8000/api/admin/users/${id}`);
+      await userApi.deleteUser(id);
       setUsers((prev) => prev.filter((user) => user.id !== id));
     } catch (error) {
       console.error('Failed to delete user:', error);
@@ -74,29 +60,28 @@ const UserTable = () => {
       setSearchName('');
     }
   }, [filterName]);
+
   const getUsers = () => {
     let filteredUsers = [...users];
-    // Lọc theo role
     if (filterRole === 'teacher') {
       filteredUsers = filteredUsers.filter((user) => user.role === 'teacher');
     } else if (filterRole === 'student') {
       filteredUsers = filteredUsers.filter((user) => user.role === 'student');
     }
 
-    // Lọc theo tên
     if (searchName.trim() !== '') {
       filteredUsers = filteredUsers.filter((user) =>
         user.name.toLowerCase().includes(searchName.toLowerCase())
       );
     }
 
-    // Sắp xếp theo role
     return filteredUsers.sort((a, b) => {
       if (a.role === 'teacher' && b.role !== 'teacher') return -1;
       if (a.role === 'student' && b.role !== 'student') return 1;
       return 0;
     });
   };
+
   return (
     <div className="user-management container py-4">
       <div className="user-management__header">
@@ -230,4 +215,4 @@ const UserTable = () => {
   );
 };
 
-export default UserTable;
+export default UserManagement;
