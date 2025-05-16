@@ -1,0 +1,82 @@
+/* body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+} */
+
+.container-notifications {
+  margin: 30px 50px;
+}
+
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.tab-button {
+  padding: 10px 20px;
+  border: 1px solid #ccc;
+  background-color: white;
+  color: black;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.tab-button.active {
+  background-color: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.tab-content {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.notification-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border: 1px solid #f5c6cb;
+  border-radius: 8px;
+  padding: 25px;
+  background-color: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.notification-left {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.bell i {
+  font-size: 22px;
+  color: rgb(255, 201, 24);
+}
+
+.notification-title {
+  font-weight: bold;
+  margin: 0;
+}
+
+.notification-message {
+  margin: 3px 0 0;
+  font-size: 16px;
+  color: #444;
+}
+
+.notification-time {
+  font-size: 16px;
+  color: gray;
+  white-space: nowrap;
+}
+
+.empty-text {
+  text-align: center;
+  color: #888;
+  font-size: 14px;
+}

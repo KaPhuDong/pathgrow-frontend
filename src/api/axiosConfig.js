@@ -7,27 +7,42 @@ const instance = axios.create({
   },
 });
 
-instance.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
+export const setupAxiosInterceptors = (startLoading, stopLoading) => {
+  // Request Interceptor
+  instance.interceptors.request.use(
+    (config) => {
+      startLoading && startLoading();
 
-instance.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    // Ví dụ: nếu lỗi 401 thì redirect login
-    if (error.response?.status === 401) {
-      console.log('Unauthorized. Redirect to login...');
-      // window.location.href = '/login'; // nếu cần
+      const token = localStorage.getItem('token');
+      if (token) {
+        config.headers['Authorization'] = `Bearer ${token}`;
+      }
+
+      return config;
+    },
+    (error) => {
+      stopLoading && stopLoading();
+      return Promise.reject(error);
     }
-    return Promise.reject(error);
-  }
-);
+  );
+
+  // Response Interceptor
+  instance.interceptors.response.use(
+    (response) => {
+      stopLoading && stopLoading();
+      return response;
+    },
+    (error) => {
+      stopLoading && stopLoading();
+
+      if (error.response?.status === 401) {
+        console.log('Unauthorized. Redirect to login...');
+        window.location.href = '/login';
+      }
+
+      return Promise.reject(error);
+    }
+  );
+};
 
 export default instance;

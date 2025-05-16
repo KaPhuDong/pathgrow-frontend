@@ -1,0 +1,15 @@
+.text-goal {
+  border: none;
+  box-shadow: none !important;
+  color: var(--dark);
+  font-weight: var(--font-weight-normal);
+  height: 100% !important;
+}
+
+/* .row-goal {
+  height: 160px;
+} */
+
+.btn-save {
+  background-color: var(--primary);
+}
