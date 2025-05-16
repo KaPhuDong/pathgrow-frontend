@@ -25,9 +25,9 @@
 }
 
 .tab-button.active {
-  background-color: #20dfc4;
+  background-color: var(--primary);
   color: white;
-  border-color: #20dfc4;
+  border-color: var(--primary);
 }
 
 .tab-content {
@@ -44,7 +44,7 @@
   border-radius: 8px;
   padding: 25px;
   background-color: #fff;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .notification-left {
@@ -53,7 +53,7 @@
   align-items: flex-start;
 }
 
-.bell i{
+.bell i {
   font-size: 22px;
   color: rgb(255, 201, 24);
 }
