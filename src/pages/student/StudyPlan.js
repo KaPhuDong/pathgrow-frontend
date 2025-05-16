@@ -1,9 +1,105 @@
-import Main from './Main';
+import React, { useState } from "react";
+import Main from "./Main";
 
 const StudyPlan = () => {
+  const [activeTab, setActiveTab] = useState("in-class"); // tab state
+
+  const renderTable = () => {
+    if (activeTab === "in-class") {
+      return (
+        <>
+          <h3 className="section-title">In - Class</h3>
+          <table className="log-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Skills/Module</th>
+                <th>
+                  My lesson <br />
+                  <small>What did I learn today?</small>
+                </th>
+                <th>
+                  Self-assessment <br />
+                  <small>
+                    1 = I need more practice
+                    <br />2 = Sometimes I find this difficult
+                    <br />3 = No problem!
+                  </small>
+                </th>
+                <th>My difficulties</th>
+                <th>My Plan</th>
+                <th>Problem solved</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[...Array(5)].map((_, index) => (
+                <tr key={index}>
+                  {[...Array(7)].map((_, i) => (
+                    <td key={i}>
+                      <textarea rows="2" />
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <h3 className="section-title">Self - Study</h3>
+          <table className="log-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Skills/Module</th>
+                <th>My lesson<br /><small>What did I learn today?</small></th>
+                <th>Time allocation</th>
+                <th>Learning resources</th>
+                <th>Learning activities</th>
+                <th>Focus & planning</th>
+                <th>Evaluation of my work</th>
+                <th>Reinforcing learning</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[...Array(5)].map((_, index) => (
+                <tr key={index}>
+                  {[...Array(10)].map((_, i) => (
+                    <td key={i}>
+                      <textarea rows="2" />
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
+      );
+    }
+  };
+
   return (
     <Main>
-      <div className="study-plan-container">
+      <div className="container-study-plan">
+        <div className="top-bar">
+          <button
+            className={activeTab === "in-class" ? "active-tab" : "inactive-tab"}
+            onClick={() => setActiveTab("in-class")}
+          >
+            In - Class
+          </button>
+          <button
+            className={activeTab === "self-study" ? "active-tab" : "inactive-tab"}
+            onClick={() => setActiveTab("self-study")}
+          >
+            Self - study
+          </button>
+          <button className="save-button">Save</button>
+        </div>
+
         {/* My learning target */}
         <section className="learning-target">
           <h3>My learning target</h3>
@@ -52,160 +148,30 @@ const StudyPlan = () => {
           </p>
         </section>
 
-        {/* In-Class Table */}
-        <section className="in-class-section">
-          <h3 className="in-class-title">In - Class</h3>
-          <table className="study-table">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Skills/Module</th>
-                <th>
-                  My lesson
-                  <br />
-                  <small>What did I learn today?</small>
-                </th>
-                <th>
-                  Self-assessment
-                  <br />
-                  <small>
-                    1 = I need more practice
-                    <br />2 = Sometimes I find this difficult
-                    <br />3 = No problem!
-                  </small>
-                </th>
-                <th>My difficulties</th>
-                <th>My Plan</th>
-                <th>Problem solved</th>
-              </tr>
-            </thead>
-            <tbody>
-              {[...Array(5)].map((_, idx) => (
-                <tr key={idx}>
-                  <td>
-                    <input type="text" className="cell-input" />
-                  </td>{' '}
-                  {/* Date */}
-                  <td>
-                    <input type="text" className="cell-input" />
-                  </td>{' '}
-                  {/* Skills/Module */}
-                  <td>
-                    <input className="cell-input" />
-                  </td>{' '}
-                  {/* My lesson */}
-                  <td>
-                    <select className="cell-input">
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                    </select>
-                  </td>{' '}
-                  {/* Self-assessment */}
-                  <td>
-                    <input className="cell-input" />
-                  </td>{' '}
-                  {/* My difficulties */}
-                  <td>
-                    <input className="cell-input" />
-                  </td>{' '}
-                  {/* My Plan */}
-                  <td>
-                    <select className="cell-input">
-                      <option value="No">No</option>
-                      <option value="Yes">Yes</option>
-                    </select>
-                  </td>{' '}
-                  {/* Problem Solved */}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </section>
+        {/* Table section (conditionally rendered) */}
+        {renderTable()}
 
-        {/* Self-study Table */}
-        <section className="self-study-section">
-          <h3 className="self-study-title">Self - study</h3>
-          <table className="self-study-table">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Skills/Module</th>
-                <th>
-                  My lesson
-                  <br />
-                  <small>What did I learn today?</small>
-                </th>
-                <th>Time allocation</th>
-                <th>Learning resources</th>
-                <th>Learning activities</th>
-                <th>Focus & planning</th>
-                <th>Evaluation of my work</th>
-                <th>Reinforcing learning</th>
-                <th>Notes</th>
-              </tr>
-            </thead>
-            <tbody>
-              {[...Array(5)].map((_, idx) => (
-                <tr key={idx}>
-                  <td>
-                    <input type="text" className="self-input" />
-                  </td>
-                  <td>
-                    <input type="text" className="self-input" />
-                  </td>
-                  <td>
-                    <input className="self-input" />
-                  </td>
-                  <td>
-                    <input type="text" className="self-input" />
-                  </td>
-                  <td>
-                    <input className="self-input" />
-                  </td>
-                  <td>
-                    <input className="self-input" />
-                  </td>
-                  <td>
-                    <input type="text" className="self-input" />
-                  </td>
-                  <td>
-                    <input type="text" className="self-input" />
-                  </td>
-                  <td>
-                    <input type="text" className="self-input" />
-                  </td>
-                  <td>
-                    <input type="text" className="self-input" />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </section>
-        <div className="week-list-container">
-          {/* Week Items */}
-          <div className="week-box">
-            <div className="week-title">Week 1</div>
-            <div className="week-date">1/5/2025 - 7/5/2025</div>
-          </div>
+        <div className="note-section">
+          <p>
+            <strong>Note:</strong> If you have any questions for the teacher or
+            need help, feel free to include them here.
+          </p>
+          <textarea placeholder="I want you to check my goal"></textarea>
+          <button className="send-button">Send</button>
+        </div>
 
-          <div className="week-box">
-            <div className="week-title">Week 2</div>
-            <div className="week-date">8/5/2025 - 14/5/2025</div>
-          </div>
-
-          <div className="week-box">
-            <div className="week-title">Week 3</div>
-            <div className="week-date">15/5/2025 - 21/5/2025</div>
-          </div>
-
-          <div className="week-box">
-            <div className="week-title">Week 4</div>
-            <div className="week-date">22/5/2025 - 27/5/2025</div>
-          </div>
-
-          {/* Plus button */}
+        <div className="week-selector">
+          {[
+            ["Week 1", "1/5/2025 - 7/5/2025"],
+            ["Week 2", "8/5/2025 - 14/5/2025"],
+            ["Week 3", "15/5/2025 - 21/5/2025"],
+            ["Week 4", "22/5/2025 - 27/5/2025"],
+          ].map(([title, date]) => (
+            <button key={title}>
+              <div className="week-title">{title}</div>
+              <div className="week-date">{date}</div>
+            </button>
+          ))}
           <button className="add-button">+</button>
         </div>
       </div>
