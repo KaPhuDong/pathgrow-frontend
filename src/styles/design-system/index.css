@@ -2,11 +2,12 @@
 :root {
   /* Colors */
   --primary: #00cece;
+  --secondary: #fe5d26;
   --light: #fff;
   --dark: #1f1d2b;
 
   --text-color-primary: var(--primary);
-  --text-color-secondary: #abbbc2;
+  --text-color-secondary: var(--secondary);
   --text-color-light: var(--light);
   --text-color-dark: var(--dark);
 
@@ -17,7 +18,7 @@
   --bg-color-light: var(--light);
   --bg-color-card: #1f1d2b;
   --bg-color-button: var(--primary);
-  --bg-color-modal: rgba(0,0,0,0.4);
+  --bg-color-modal: rgba(0, 0, 0, 0.4);
 
   /* Radii */
   --border-radius-sm: 5px;

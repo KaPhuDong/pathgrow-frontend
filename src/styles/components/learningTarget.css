@@ -1,0 +1,13 @@
+.goal-table {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.goal-textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 60px;
+  padding: 6px;
+  font-size: 14px;
+}
