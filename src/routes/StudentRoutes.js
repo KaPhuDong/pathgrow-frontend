@@ -1,6 +1,7 @@
 import StudentProfile from '../features/student/pages/StudentProfile';
 import Goals from '../features/student/pages/Goals';
 import StudyPlan from '../features/student/pages/StudyPlan';
+import Notifications from '../features/student/pages/Notifications';
 
 const StudentRoutes = [
   {
@@ -14,6 +15,10 @@ const StudentRoutes = [
   {
     path: '/study/plans',
     element: <StudyPlan />,
+  },
+  {
+    path: '/student/notifications',
+    element: <Notifications />,
   },
 ];
 

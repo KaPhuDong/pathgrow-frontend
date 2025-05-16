@@ -60,6 +60,11 @@ const sendQuestion = async (data) => {
   return response.data;
 };
 
+const fetchNotificationsByUser = async (userId) => {
+  const response = await axios.get(`/notifications/${userId}`);
+  return response.data;
+};
+
 export default {
   fetchSemesters,
   fetchSubjects,
@@ -68,4 +73,5 @@ export default {
   createGoal,
   fetchQA,
   sendQuestion,
+  fetchNotificationsByUser,
 };
