@@ -37,7 +37,7 @@ export const setupAxiosInterceptors = (startLoading, stopLoading) => {
 
       if (error.response?.status === 401) {
         console.log('Unauthorized. Redirect to login...');
-        // Optional: window.location.href = '/login';
+        window.location.href = '/login';
       }
 
       return Promise.reject(error);
