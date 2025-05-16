@@ -3,6 +3,7 @@ import api from '../../../api/student/api';
 import Main from './Main';
 import Filters from '../components/Filters';
 import GoalRow from '../components/GoalRow';
+import ToastNotification from '../../../components/ui/ToastNotification';
 
 const {
   fetchSemesters,
@@ -27,6 +28,7 @@ const Goals = () => {
   const [answer, setAnswer] = useState('');
   const [error, setError] = useState('');
   const [isNew, setIsNew] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
   useEffect(() => {
     const loadFilters = async () => {
@@ -101,8 +103,8 @@ const Goals = () => {
         await api.saveGoal(goalPayload);
       }
 
-      alert('Saved successfully!');
       setIsNew(false);
+      setShowToast(true);
     } catch (err) {
       alert('Save failed. Please try again.');
       console.error(err);
@@ -129,7 +131,12 @@ const Goals = () => {
           </button>
         </div>
 
-        {error && <div className="alert alert-danger">{error}</div>}
+        {showToast && (
+          <ToastNotification
+            message="Saved successfully!"
+            onClose={() => setShowToast(false)}
+          />
+        )}
 
         <div className="table-responsive mb-4">
           <table
