@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import userApi from '../../../api/admin/api';
 import AddUserModal from '../components/AddUser';
+import { NavLink } from 'react-router-dom';
 
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
@@ -86,10 +87,12 @@ const UserManagement = () => {
     <div className="user-management container py-4">
       <div className="user-management__header">
         <h2 className="user-management__title">Users Management</h2>
-        <button className="btn-logout">
-          Log out
-          <i class="fa-solid fa-arrow-right"></i>
-        </button>
+        <div className="btn-logout">
+          <NavLink to="/logout" className="btn-admin-logout">
+            Log out
+          </NavLink>
+          <i className="fa-solid fa-arrow-right"></i>
+        </div>
       </div>
       <div className="user-management__controls mb-3">
         <div className="dropdown">
