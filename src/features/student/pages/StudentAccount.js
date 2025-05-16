@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Pencil, Eye, EyeOff } from "lucide-react";
 import axios from "axios";
+import Main from './Main';
 
 const StudentAccount = () => {
   const [showPasswordModal, setShowPasswordModal] = useState(false);
@@ -62,6 +63,7 @@ const StudentAccount = () => {
   };
 
   return (
+    <Main>
     <div className="container py-5">
       <div className="row bg-light rounded p-4">
         <div className="col-md-4 text-center d-flex flex-column align-items-center justify-content-center">
@@ -204,6 +206,7 @@ const StudentAccount = () => {
         </div>
       )}
     </div>
+    </Main>
   );
 };
 
