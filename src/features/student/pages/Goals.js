@@ -40,7 +40,7 @@ const Goals = () => {
         setSelectedSemester(semRes.data[0]?.id?.toString() || '');
         setSelectedSubject(subjRes.data[0]?.id?.toString() || '');
       } catch (err) {
-        setError('Failed to load semesters and subjects.');
+        // setError('Failed to load semesters and subjects.');
       }
     };
     loadFilters();
@@ -124,7 +124,7 @@ const Goals = () => {
             onSemesterChange={setSelectedSemester}
             onSubjectChange={setSelectedSubject}
           />
-          <button className="btn btn-primary" onClick={handleSave}>
+          <button className="btn btn-save" onClick={handleSave}>
             Save
           </button>
         </div>
@@ -137,14 +137,19 @@ const Goals = () => {
             style={{ border: '2px solid #00cdd0' }}
           >
             <thead>
-              <tr style={{ backgroundColor: '#00cdd0' }}>
-                <th colSpan={2} className="text-white text-center fw-bold py-2">
+              <tr>
+                <th
+                  colSpan={12}
+                  className="text-black text-center fw-bold py-2"
+                  style={{ backgroundColor: '#00cdd0' }}
+                >
                   SEMESTER {selectedSemester}
                 </th>
               </tr>
               <tr>
-                <td style={{ width: '30%', border: '1px solid #00cdd0' }}></td>
+                {/* <td style={{ width: '30%', border: '1px solid #00cdd0' }}></td> */}
                 <td
+                  colSpan={12}
                   className="text-center fw-bold"
                   style={{ border: '1px solid #00cdd0' }}
                 >
