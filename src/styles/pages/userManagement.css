@@ -9,10 +9,10 @@
   align-items: center;
 }
 .btn-logout {
-  background-color: #20dfd8;
+  background-color: var(--bg-color-button);
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--border-radius-md);
   padding: 6px 12px;
   font-weight: 500;
   transition: 0.3s ease;
@@ -39,7 +39,7 @@
 .btn-filter,
 .btn-add-user {
   width: 140px;
-  background-color: #20dfd8;
+  background-color: var(--bg-color-button);
   border: none;
   color: white;
   padding: 8px 16px;
@@ -117,12 +117,13 @@ table {
   cursor: pointer;
   margin: 0 7px;
 }
-/* .dropdown-menu {
+.dropdown-menu {
     width: 140px;
     border-radius: 8px;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
     margin-left: 10px;
-} */
+    border: 1px solid #00cece;
+}
 .dropdown-item {
   padding: 10px 20px;
   font-size: 15px;
