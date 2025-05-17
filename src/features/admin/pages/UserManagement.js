@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import userApi from '../../../api/admin/api';
+import Main from './Main';
 import AddUserModal from '../components/AddUser';
+import FilterDropdown from '../components/FilterDropdown';
+import SearchBar from '../components/SearchBar';
+import UserTable from '../components/UserTable';
 import { NavLink } from 'react-router-dom';
 
 const UserManagement = () => {
@@ -44,10 +48,7 @@ const UserManagement = () => {
   };
 
   const handleDeleteUser = async (id) => {
-    const confirmDelete = window.confirm(
-      'Are you sure you want to delete this user?'
-    );
-    if (!confirmDelete) return;
+    if (!window.confirm('Are you sure you want to delete this user?')) return;
     try {
       await userApi.deleteUser(id);
       setUsers((prev) => prev.filter((user) => user.id !== id));
@@ -57,164 +58,73 @@ const UserManagement = () => {
   };
 
   useEffect(() => {
-    if (filterName.trim() === '') {
-      setSearchName('');
-    }
+    if (filterName.trim() === '') setSearchName('');
   }, [filterName]);
 
   const getUsers = () => {
-    let filteredUsers = [...users];
-    if (filterRole === 'teacher') {
-      filteredUsers = filteredUsers.filter((user) => user.role === 'teacher');
-    } else if (filterRole === 'student') {
-      filteredUsers = filteredUsers.filter((user) => user.role === 'student');
+    let filtered = [...users];
+    if (filterRole !== 'all') {
+      filtered = filtered.filter((u) => u.role === filterRole);
     }
-
-    if (searchName.trim() !== '') {
-      filteredUsers = filteredUsers.filter((user) =>
-        user.name.toLowerCase().includes(searchName.toLowerCase())
+    if (searchName.trim()) {
+      filtered = filtered.filter((u) =>
+        u.name.toLowerCase().includes(searchName.toLowerCase())
       );
     }
-
-    return filteredUsers.sort((a, b) => {
-      if (a.role === 'teacher' && b.role !== 'teacher') return -1;
-      if (a.role === 'student' && b.role !== 'student') return 1;
-      return 0;
-    });
+    return filtered.sort((a, b) => (a.role === 'teacher' ? -1 : 1));
   };
 
   return (
-    <div className="user-management container py-4">
-      <div className="user-management__header">
-        <h2 className="user-management__title">Users Management</h2>
-        <div className="btn-logout">
+    <Main>
+      <div className="user-management container py-4">
+        <div className="user-management__header d-flex justify-content-between align-items-center">
+          <h2>Users Management</h2>
           <NavLink to="/logout" className="btn-admin-logout">
             Log out
           </NavLink>
-          <i className="fa-solid fa-arrow-right"></i>
-        </div>
-      </div>
-      <div className="user-management__controls mb-3">
-        <div className="dropdown">
-          <button
-            className="btn-filter"
-            type="button"
-            id="userTypeDropdown"
-            data-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <span className="btn-text">
-              {filterRole === 'all' ? 'All users' : `All ${filterRole}s`}
-            </span>
-            <div className="btn-icon">
-              <i className="fa-solid fa-chevron-down"></i>
-            </div>
-          </button>
-          <ul className="dropdown-menu" aria-labelledby="userTypeDropdown">
-            <li>
-              <button
-                className="dropdown-item"
-                onClick={() => setFilterRole('all')}
-              >
-                All users
-              </button>
-            </li>
-            <li>
-              <button
-                className="dropdown-item"
-                onClick={() => setFilterRole('teacher')}
-              >
-                All teachers
-              </button>
-            </li>
-            <li>
-              <button
-                className="dropdown-item"
-                onClick={() => setFilterRole('student')}
-              >
-                All students
-              </button>
-            </li>
-          </ul>
         </div>
 
-        <button
-          className="btn-add-user text-white"
-          onClick={() => setShowAddUserModal(true)}
-        >
-          <i class="fa-solid fa-plus"></i>New user
-        </button>
-        <div className="search-box d-flex justify-content-between align-items-center">
-          <input
-            type="text"
-            className="form-control w-30 rounded-pill px-4"
-            placeholder="Search..."
-            value={filterName}
-            onChange={(e) => setFilterName(e.target.value)}
+        <div className="user-management__controls d-flex gap-3 align-items-center justify-content-between mb-4">
+          <div className="d-flex gap-3 align-items-center">
+            <FilterDropdown
+              filterRole={filterRole}
+              setFilterRole={setFilterRole}
+            />
+            <button
+              className="btn btn-add-user btn-admin-add-user"
+              onClick={() => setShowAddUserModal(true)}
+            >
+              + New user
+            </button>
+          </div>
+          <SearchBar
+            filterName={filterName}
+            setFilterName={setFilterName}
+            setSearchName={setSearchName}
           />
-          <i
-            class="fa-solid fa-magnifying-glass"
-            onClick={() => setSearchName(filterName)}
-          ></i>
         </div>
-      </div>
 
-      {/* Table */}
-      <div className="table-responsive">
-        <table className="table table-bordered text-center align-middle">
-          <thead className="table-success">
-            <tr>
-              <th>Full name</th>
-              <th>Email</th>
-              <th>Password</th>
-              <th className="th-action" style={{ width: '120px' }}>
-                Action
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {getUsers().map((user, idx) => (
-              <tr key={idx}>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                <td>{user.password}</td>
-                <td>
-                  <div className="action-icons">
-                    <i
-                      className="fa-solid fa-pen-to-square"
-                      onClick={() => {
-                        setUpdateUser(user);
-                        setShowAddUserModal(true);
-                      }}
-                    ></i>
-                    <i
-                      class="fa-solid fa-trash"
-                      onClick={() => handleDeleteUser(user.id)}
-                    ></i>
-                  </div>
-                </td>
-              </tr>
-            ))}
-            {getUsers().length === 0 && (
-              <tr>
-                <td colSpan="4">No users found.</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-      {/* Add User Modal */}
-      {(showAddUserModal || updateUser) && (
-        <AddUserModal
-          onAddUser={handleAddOrUpdateUser}
-          onClose={() => {
-            setShowAddUserModal(false);
-            setUpdateUser(null);
+        <UserTable
+          users={getUsers()}
+          onEdit={(user) => {
+            setUpdateUser(user);
+            setShowAddUserModal(true);
           }}
-          updateUser={updateUser}
+          onDelete={handleDeleteUser}
         />
-      )}
-    </div>
+
+        {(showAddUserModal || updateUser) && (
+          <AddUserModal
+            onAddUser={handleAddOrUpdateUser}
+            onClose={() => {
+              setShowAddUserModal(false);
+              setUpdateUser(null);
+            }}
+            updateUser={updateUser}
+          />
+        )}
+      </div>
+    </Main>
   );
 };
 
