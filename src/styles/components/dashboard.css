@@ -1,0 +1,39 @@
+.admin-management {
+    display: flex;
+    min-height: 100vh;
+}
+.dashboard-left {
+    width: 270px;
+    height:auto;
+    background-color: #00cece;
+    padding-left: 35px;
+}
+.admin-title {
+    font-size: 40px;
+    font-weight: bold;
+    color: black;
+    text-align: center;
+    text-decoration: none;
+    margin-bottom: 50px;
+}
+.nav {
+    display: flex;
+    flex-direction: column;
+    row-gap: 30px;
+}
+.nav-item {
+    display: flex;
+    column-gap: 10px;
+    align-items: center;
+}
+.nav-item i {
+    font-size: 30px;
+}
+.text-dark {
+    font-size: 30px;
+}
+.main-content {
+    flex: 1; /* chiếm hết phần còn lại */
+    padding: 40px;
+    overflow-y: auto; /* nếu nội dung dài sẽ scroll */
+}

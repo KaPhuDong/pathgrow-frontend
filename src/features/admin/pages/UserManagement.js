@@ -84,7 +84,7 @@ const UserManagement = () => {
   };
 
   return (
-    <div className="user-management container py-4">
+    <div className="user-management">
       <div className="user-management__header">
         <h2 className="user-management__title">Users Management</h2>
         <div className="btn-logout">
