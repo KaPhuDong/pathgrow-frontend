@@ -1,5 +1,5 @@
-import Header from '../layout/Header';
-import Footer from '../layout/Footer';
+import Header from '../layouts/Header';
+import Footer from '../layouts/Footer';
 
 const Main = ({ children }) => {
   return (

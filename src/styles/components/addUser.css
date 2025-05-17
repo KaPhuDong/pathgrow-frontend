@@ -50,7 +50,7 @@ form select {
   margin-bottom: 10px;
 }
 form select {
-    width: 200px;
+  width: 200px;
 }
 form button {
   margin-top: 20px;
@@ -62,7 +62,21 @@ form button {
   font-size: var(--font-size-lg);
   cursor: pointer;
 }
+
 .btn-add__cancel {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn-admin-add-user:hover {
+  background-color: var(--primary);
+  color: var(--light);
+}
+
+.btn-admin-add-user {
+  width: 80px !important;
+}
+
+.btn-cancel {
+  background-color: var(--secondary);
 }
