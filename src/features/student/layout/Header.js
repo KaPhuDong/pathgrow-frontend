@@ -69,6 +69,7 @@ const Header = () => {
               style={{ display: isOpen ? 'block' : 'none' }}
             >
               <NavLink to="/logout">Log out</NavLink>
+              <NavLink to="/student/account">Setting</NavLink>
             </div>
           </div>
         </div>
