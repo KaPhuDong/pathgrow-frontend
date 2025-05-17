@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import userApi from '../../../api/admin/api';
+import Main from './Main';
 import AddUserModal from '../components/AddUser';
 import { NavLink } from 'react-router-dom';
 
@@ -84,137 +85,139 @@ const UserManagement = () => {
   };
 
   return (
-    <div className="user-management">
-      <div className="user-management__header">
-        <h2 className="user-management__title">Users Management</h2>
-        <div className="btn-logout">
-          <NavLink to="/logout" className="btn-admin-logout">
-            Log out
-          </NavLink>
-          <i className="fa-solid fa-arrow-right"></i>
+    <Main>
+      <div className="user-management">
+        <div className="user-management__header">
+          <h2 className="user-management__title">Users Management</h2>
+          <div className="btn-logout">
+            <NavLink to="/logout" className="btn-admin-logout">
+              Log out
+            </NavLink>
+            <i className="fa-solid fa-arrow-right"></i>
+          </div>
         </div>
-      </div>
-      <div className="user-management__controls mb-3">
-        <div className="dropdown">
+        <div className="user-management__controls mb-3">
+          <div className="dropdown">
+            <button
+              className="btn-filter"
+              type="button"
+              id="userTypeDropdown"
+              data-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <span className="btn-text">
+                {filterRole === 'all' ? 'All users' : `All ${filterRole}s`}
+              </span>
+              <div className="btn-icon">
+                <i className="fa-solid fa-chevron-down"></i>
+              </div>
+            </button>
+            <ul className="dropdown-menu" aria-labelledby="userTypeDropdown">
+              <li>
+                <button
+                  className="dropdown-item"
+                  onClick={() => setFilterRole('all')}
+                >
+                  All users
+                </button>
+              </li>
+              <li>
+                <button
+                  className="dropdown-item"
+                  onClick={() => setFilterRole('teacher')}
+                >
+                  All teachers
+                </button>
+              </li>
+              <li>
+                <button
+                  className="dropdown-item"
+                  onClick={() => setFilterRole('student')}
+                >
+                  All students
+                </button>
+              </li>
+            </ul>
+          </div>
+
           <button
-            className="btn-filter"
-            type="button"
-            id="userTypeDropdown"
-            data-toggle="dropdown"
-            aria-expanded="false"
+            className="btn-add-user text-white"
+            onClick={() => setShowAddUserModal(true)}
           >
-            <span className="btn-text">
-              {filterRole === 'all' ? 'All users' : `All ${filterRole}s`}
-            </span>
-            <div className="btn-icon">
-              <i className="fa-solid fa-chevron-down"></i>
-            </div>
+            <i class="fa-solid fa-plus"></i>New user
           </button>
-          <ul className="dropdown-menu" aria-labelledby="userTypeDropdown">
-            <li>
-              <button
-                className="dropdown-item"
-                onClick={() => setFilterRole('all')}
-              >
-                All users
-              </button>
-            </li>
-            <li>
-              <button
-                className="dropdown-item"
-                onClick={() => setFilterRole('teacher')}
-              >
-                All teachers
-              </button>
-            </li>
-            <li>
-              <button
-                className="dropdown-item"
-                onClick={() => setFilterRole('student')}
-              >
-                All students
-              </button>
-            </li>
-          </ul>
+          <div className="search-box d-flex justify-content-between align-items-center">
+            <input
+              type="text"
+              className="form-control w-30 rounded-pill px-4"
+              placeholder="Search..."
+              value={filterName}
+              onChange={(e) => setFilterName(e.target.value)}
+            />
+            <i
+              class="fa-solid fa-magnifying-glass"
+              onClick={() => setSearchName(filterName)}
+            ></i>
+          </div>
         </div>
 
-        <button
-          className="btn-add-user text-white"
-          onClick={() => setShowAddUserModal(true)}
-        >
-          <i class="fa-solid fa-plus"></i>New user
-        </button>
-        <div className="search-box d-flex justify-content-between align-items-center">
-          <input
-            type="text"
-            className="form-control w-30 rounded-pill px-4"
-            placeholder="Search..."
-            value={filterName}
-            onChange={(e) => setFilterName(e.target.value)}
-          />
-          <i
-            class="fa-solid fa-magnifying-glass"
-            onClick={() => setSearchName(filterName)}
-          ></i>
-        </div>
-      </div>
-
-      {/* Table */}
-      <div className="table-responsive">
-        <table className="table table-bordered text-center align-middle">
-          <thead className="table-success">
-            <tr>
-              <th>Full name</th>
-              <th>Email</th>
-              <th>Password</th>
-              <th className="th-action" style={{ width: '120px' }}>
-                Action
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {getUsers().map((user, idx) => (
-              <tr key={idx}>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                <td>{user.password}</td>
-                <td>
-                  <div className="action-icons">
-                    <i
-                      className="fa-solid fa-pen-to-square"
-                      onClick={() => {
-                        setUpdateUser(user);
-                        setShowAddUserModal(true);
-                      }}
-                    ></i>
-                    <i
-                      class="fa-solid fa-trash"
-                      onClick={() => handleDeleteUser(user.id)}
-                    ></i>
-                  </div>
-                </td>
-              </tr>
-            ))}
-            {getUsers().length === 0 && (
+        {/* Table */}
+        <div className="table-responsive">
+          <table className="table table-bordered text-center align-middle">
+            <thead className="table-success">
               <tr>
-                <td colSpan="4">No users found.</td>
+                <th>Full name</th>
+                <th>Email</th>
+                <th>Password</th>
+                <th className="th-action" style={{ width: '120px' }}>
+                  Action
+                </th>
               </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {getUsers().map((user, idx) => (
+                <tr key={idx}>
+                  <td>{user.name}</td>
+                  <td>{user.email}</td>
+                  <td>{user.password}</td>
+                  <td>
+                    <div className="action-icons">
+                      <i
+                        className="fa-solid fa-pen-to-square"
+                        onClick={() => {
+                          setUpdateUser(user);
+                          setShowAddUserModal(true);
+                        }}
+                      ></i>
+                      <i
+                        class="fa-solid fa-trash"
+                        onClick={() => handleDeleteUser(user.id)}
+                      ></i>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+              {getUsers().length === 0 && (
+                <tr>
+                  <td colSpan="4">No users found.</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+        {/* Add User Modal */}
+        {(showAddUserModal || updateUser) && (
+          <AddUserModal
+            onAddUser={handleAddOrUpdateUser}
+            onClose={() => {
+              setShowAddUserModal(false);
+              setUpdateUser(null);
+            }}
+            updateUser={updateUser}
+          />
+        )}
       </div>
-      {/* Add User Modal */}
-      {(showAddUserModal || updateUser) && (
-        <AddUserModal
-          onAddUser={handleAddOrUpdateUser}
-          onClose={() => {
-            setShowAddUserModal(false);
-            setUpdateUser(null);
-          }}
-          updateUser={updateUser}
-        />
-      )}
-    </div>
+    </Main>
   );
 };
 
