@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Main from './Main';
 import { useLocation, useNavigate } from 'react-router-dom';
 import api from '../../../api/teacher/api';
+import Pagination from '../../../components/ui/Pagination';
 
 const ListStudent = () => {
   const location = useLocation();
@@ -11,6 +12,8 @@ const ListStudent = () => {
   const [classes, setClasses] = useState([]);
   const [students, setStudents] = useState([]);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const studentsPerPage = 5;
 
   useEffect(() => {
     const getClasses = async () => {
@@ -49,10 +52,19 @@ const ListStudent = () => {
   }, [classId]);
 
   const handleClassClick = (cls) => {
+    setCurrentPage(1);
     navigate('/teacher/list-student', {
       state: { classId: cls.id, className: cls.name },
     });
   };
+
+  const indexOfLastStudent = currentPage * studentsPerPage;
+  const indexOfFirstStudent = indexOfLastStudent - studentsPerPage;
+  const currentStudents = students.slice(
+    indexOfFirstStudent,
+    indexOfLastStudent
+  );
+  const totalPages = Math.ceil(students.length / studentsPerPage);
 
   return (
     <Main>
@@ -60,7 +72,7 @@ const ListStudent = () => {
         <div className="row h-100">
           {/* Sidebar */}
           <nav className="col-md-2 d-none d-md-block bg-white border-end p-3">
-            <h4 className="fw-bold mb-3" style={{ color: '#00CED1' }}>
+            <h4 className="fw-bold mb-3" style={{ color: 'var(--primary)' }}>
               Classes
             </h4>
             <ul className="nav flex-column">
@@ -72,7 +84,7 @@ const ListStudent = () => {
                     style={{
                       border: 'none',
                       backgroundColor:
-                        classId === cls.id ? '#00ced1' : 'transparent',
+                        classId === cls.id ? 'var(--primary)' : 'transparent',
                       color: classId === cls.id ? 'white' : 'black',
                       width: '100%',
                       textAlign: 'left',
@@ -94,61 +106,75 @@ const ListStudent = () => {
 
           {/* Main Content */}
           <div className="col-md-10 p-4">
-            <h3 className="fw-bold mb-4" style={{ color: '#00CED1' }}>
+            <h3 className="fw-bold mb-4" style={{ color: 'var(--primary)' }}>
               Student List: {className || 'Unspecified'}
             </h3>
 
             {error ? (
               <p style={{ color: 'red' }}>Error: {error}</p>
             ) : (
-              <table
-                className="table table-bordered text-center"
-                style={{ fontSize: '0.95rem' }}
-              >
-                <thead style={{ backgroundColor: '#00CED1', color: 'white' }}>
-                  <tr>
-                    <th style={{ width: '5%' }}>#</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th style={{ width: '20%' }}>Profile</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {students.length > 0 ? (
-                    students.map((student, index) => (
-                      <tr key={student.id}>
-                        <td>{index + 1}</td>
-                        <td>{student.name}</td>
-                        <td>{student.email || 'Not updated'}</td>
-                        <td>
-                          <button
-                            className="btn btn-sm"
-                            style={{
-                              backgroundColor: '#00CED1',
-                              color: 'white',
-                              padding: '2px 12px',
-                              borderRadius: '20px',
-                              fontSize: '0.85rem',
-                              fontWeight: 'bold',
-                            }}
-                            onClick={() =>
-                              navigate('/student/profile', {
-                                state: { studentId: student.id },
-                              })
-                            }
-                          >
-                            View
-                          </button>
-                        </td>
-                      </tr>
-                    ))
-                  ) : (
+              <>
+                <table
+                  className="table table-bordered text-center"
+                  style={{ fontSize: '0.95rem' }}
+                >
+                  <thead
+                    style={{
+                      backgroundColor: 'var(--primary)',
+                      color: 'white',
+                    }}
+                  >
                     <tr>
-                      <td colSpan={4}>No students in this class</td>
+                      <th style={{ width: '5%' }}>#</th>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th style={{ width: '20%' }}>Profile</th>
                     </tr>
-                  )}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {currentStudents.length > 0 ? (
+                      currentStudents.map((student, index) => (
+                        <tr key={student.id}>
+                          <td>{indexOfFirstStudent + index + 1}</td>
+                          <td>{student.name}</td>
+                          <td>{student.email || 'Not updated'}</td>
+                          <td>
+                            <button
+                              className="btn btn-sm"
+                              style={{
+                                backgroundColor: 'var(--primary)',
+                                color: 'white',
+                                padding: '2px 12px',
+                                borderRadius: '20px',
+                                fontSize: '0.85rem',
+                                fontWeight: 'bold',
+                              }}
+                              onClick={() =>
+                                navigate('/student/profile', {
+                                  state: { studentId: student.id },
+                                })
+                              }
+                            >
+                              View
+                            </button>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan={4}>No students in this class</td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+                {totalPages > 1 && (
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage}
+                  />
+                )}
+              </>
             )}
           </div>
         </div>
