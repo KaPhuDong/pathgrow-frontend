@@ -36,7 +36,7 @@ function Home() {
           <nav className="col-md-2 d-none d-md-block bg-white border-end p-3">
             <h4
               className="fw-bold mb-3"
-              style={{ color: '#00CED1', fontWeight: '700' }}
+              style={{ color: 'var(--primary)', fontWeight: '700' }}
             >
               Classes
             </h4>
@@ -68,7 +68,7 @@ function Home() {
           <div className="col-md-10 p-4">
             <h3
               className="fw-bold mb-4"
-              style={{ color: '#00CED1', fontWeight: '700' }}
+              style={{ color: 'var(--primary)', fontWeight: '700' }}
             >
               All Classes
             </h3>
