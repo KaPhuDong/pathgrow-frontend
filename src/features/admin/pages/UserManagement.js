@@ -6,6 +6,7 @@ import FilterDropdown from '../components/FilterDropdown';
 import SearchBar from '../components/SearchBar';
 import UserTable from '../components/UserTable';
 import { NavLink } from 'react-router-dom';
+import ToastNotification from '../../../components/ui/ToastNotification';
 
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
@@ -14,6 +15,8 @@ const UserManagement = () => {
   const [searchName, setSearchName] = useState('');
   const [showAddUserModal, setShowAddUserModal] = useState(false);
   const [updateUser, setUpdateUser] = useState(null);
+  const [toastMessage, setToastMessage] = useState('');
+  const [showToast, setShowToast] = useState(false);
 
   useEffect(() => {
     const getUsers = async () => {
@@ -36,10 +39,13 @@ const UserManagement = () => {
         setUsers((prev) =>
           prev.map((user) => (user.id === userData.id ? updated : user))
         );
+        setToastMessage('User updated successfully!');
       } else {
         const added = await userApi.addUser(userData);
         setUsers((prev) => [...prev, added]);
+        setToastMessage('User added successfully!');
       }
+      setShowToast(true);
       setShowAddUserModal(false);
       setUpdateUser(null);
     } catch (error) {
@@ -115,6 +121,7 @@ const UserManagement = () => {
 
         {(showAddUserModal || updateUser) && (
           <AddUserModal
+            users={users}
             onAddUser={handleAddOrUpdateUser}
             onClose={() => {
               setShowAddUserModal(false);
@@ -124,6 +131,12 @@ const UserManagement = () => {
           />
         )}
       </div>
+      {showToast && (
+        <ToastNotification
+          message={toastMessage}
+          onClose={() => setShowToast(false)}
+        />
+      )}
     </Main>
   );
 };

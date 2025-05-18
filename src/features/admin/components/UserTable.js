@@ -8,7 +8,7 @@ const UserTable = ({ users, onEdit, onDelete }) => (
         <tr>
           <th>Full name</th>
           <th>Email</th>
-          <th>Password</th>
+          {/* <th>Password</th> */}
           <th style={{ width: '120px' }}>Action</th>
         </tr>
       </thead>
@@ -18,7 +18,7 @@ const UserTable = ({ users, onEdit, onDelete }) => (
             <tr key={index}>
               <td>{user.name}</td>
               <td>{user.email}</td>
-              <td>{user.password}</td>
+              {/* <td>{user.password}</td> */}
               <td>
                 <ActionButtons
                   onEdit={() => onEdit(user)}
@@ -29,7 +29,7 @@ const UserTable = ({ users, onEdit, onDelete }) => (
           ))
         ) : (
           <tr>
-            <td colSpan="4">No users found.</td>
+            <td colSpan="3">No users found.</td>
           </tr>
         )}
       </tbody>
