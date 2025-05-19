@@ -4,12 +4,12 @@ import { FaTrash, FaPen } from 'react-icons/fa';
 const ActionButtons = ({ onEdit, onDelete }) => (
   <div className="d-flex justify-content-center gap-2">
     <FaPen
-      style={{ color: '#00cece', cursor: 'pointer' }}
+      style={{ color: 'var(--primary)', cursor: 'pointer' }}
       onClick={onEdit}
       title="Edit"
     />
     <FaTrash
-      style={{ color: '#fe5d26', cursor: 'pointer' }}
+      style={{ color: 'var(--secondary)', cursor: 'pointer' }}
       onClick={onDelete}
       title="Delete"
     />

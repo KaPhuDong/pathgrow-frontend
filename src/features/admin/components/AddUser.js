@@ -1,6 +1,6 @@
-import react, { useState } from "react";
+import react, { useState, useEffect } from "react";
 
-const AddUserModal = ({onClose, onAddUser, updateUser})=> {
+const AddUserModal = ({onClose, onAddUser, updateUser, users})=> {
     const [formData, setFormData] = useState(
         updateUser ||
         {
@@ -10,15 +10,27 @@ const AddUserModal = ({onClose, onAddUser, updateUser})=> {
         role: ""
         }
     )
+    const [emailError, setEmailError] = useState("");
     const handleChange = (e) => {
-        const {name, value} = e.target;
-        setFormData((prev => ({...prev, [name]: value})));
-    }
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+        if (name === "email") setEmailError(""); // reset lỗi khi nhập lại
+    };
     const handleSubmit = (e) => {
         e.preventDefault();
+        // Kiểm tra trùng email nếu là thêm mới
+        if (!updateUser) {
+            const emailExists = users.some(
+                (user) => user.email.toLowerCase() === formData.email.toLowerCase()
+            );
+            if (emailExists) {
+                setEmailError("This email is already in use.");
+                return;
+            }
+        }
         onAddUser(formData);
-        if(!updateUser) {
-          setFormData({ name: "", email: "", password: "", role: "" });
+        if (!updateUser) {
+        setFormData({ name: "", email: "", password: "", role: "" });
         }
     }
     return (
@@ -51,7 +63,9 @@ const AddUserModal = ({onClose, onAddUser, updateUser})=> {
                         onChange={handleChange}
                         required
                     />
-
+                    {emailError && (
+                        <p style={{ color: "red", marginTop: "4px" }}>{emailError}</p>
+                    )}
                     <label htmlFor="password">Password</label>
                     <input
                         type="password"

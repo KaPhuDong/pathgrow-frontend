@@ -6,6 +6,8 @@ import FilterDropdown from '../components/FilterDropdown';
 import SearchBar from '../components/SearchBar';
 import UserTable from '../components/UserTable';
 import { NavLink } from 'react-router-dom';
+import ToastNotification from '../../../components/ui/ToastNotification';
+import Pagination from '../../../components/ui/Pagination';
 
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
@@ -14,6 +16,12 @@ const UserManagement = () => {
   const [searchName, setSearchName] = useState('');
   const [showAddUserModal, setShowAddUserModal] = useState(false);
   const [updateUser, setUpdateUser] = useState(null);
+  const [toastMessage, setToastMessage] = useState('');
+  const [showToast, setShowToast] = useState(false);
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 7;
 
   useEffect(() => {
     const getUsers = async () => {
@@ -36,10 +44,13 @@ const UserManagement = () => {
         setUsers((prev) =>
           prev.map((user) => (user.id === userData.id ? updated : user))
         );
+        setToastMessage('User updated successfully!');
       } else {
         const added = await userApi.addUser(userData);
         setUsers((prev) => [...prev, added]);
+        setToastMessage('User added successfully!');
       }
+      setShowToast(true);
       setShowAddUserModal(false);
       setUpdateUser(null);
     } catch (error) {
@@ -74,6 +85,13 @@ const UserManagement = () => {
     return filtered.sort((a, b) => (a.role === 'teacher' ? -1 : 1));
   };
 
+  const filteredUsers = getUsers();
+  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+  const currentItems = filteredUsers.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
   return (
     <Main>
       <div className="user-management container py-4">
@@ -83,12 +101,14 @@ const UserManagement = () => {
             Log out
           </NavLink>
         </div>
-
         <div className="user-management__controls d-flex gap-3 align-items-center justify-content-between mb-4">
           <div className="d-flex gap-3 align-items-center">
             <FilterDropdown
               filterRole={filterRole}
-              setFilterRole={setFilterRole}
+              setFilterRole={(role) => {
+                setFilterRole(role);
+                setCurrentPage(1);
+              }}
             />
             <button
               className="btn btn-add-user btn-admin-add-user"
@@ -100,21 +120,30 @@ const UserManagement = () => {
           <SearchBar
             filterName={filterName}
             setFilterName={setFilterName}
-            setSearchName={setSearchName}
+            setSearchName={(name) => {
+              setSearchName(name);
+              setCurrentPage(1);
+            }}
           />
         </div>
-
         <UserTable
-          users={getUsers()}
+          users={currentItems}
           onEdit={(user) => {
             setUpdateUser(user);
             setShowAddUserModal(true);
           }}
           onDelete={handleDeleteUser}
         />
-
+        {totalPages > 1 && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={(page) => setCurrentPage(page)}
+          />
+        )}
         {(showAddUserModal || updateUser) && (
           <AddUserModal
+            users={users}
             onAddUser={handleAddOrUpdateUser}
             onClose={() => {
               setShowAddUserModal(false);
@@ -124,6 +153,12 @@ const UserManagement = () => {
           />
         )}
       </div>
+      {showToast && (
+        <ToastNotification
+          message={toastMessage}
+          onClose={() => setShowToast(false)}
+        />
+      )}
     </Main>
   );
 };
