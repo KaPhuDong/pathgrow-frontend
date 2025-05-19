@@ -65,6 +65,45 @@ const fetchNotificationsByUser = async (userId) => {
   return response.data;
 };
 
+// study-plans api
+const fetchWeeks = async () => {
+  const response = await axios.get('/weekly-study-plans');
+  return response.data;
+};
+
+const createWeek = async (weekData) => {
+  const response = await axios.post('/weekly-study-plans', weekData);
+  return response.data;
+};
+
+const deleteWeek = async (id) => {
+  const response = await axios.delete(`/weekly-study-plans/${id}`);
+  return response.data;
+};
+
+const updateWeek = async (id, updatedData) => {
+  const response = await axios.put(`/weekly-study-plans/${id}`, updatedData);
+  return response.data;
+};
+
+// weekly-goals api
+const getWeeklyGoals = (studyPlanId) => {
+  return axios.get(`/weekly-goals/${studyPlanId}`);
+};
+
+const createWeeklyGoal = (goal) => {
+  return axios.post('/weekly-goals', goal);
+};
+
+const updateWeeklyGoal = (id, updatedData) => {
+  return axios.put(`/weekly-goals/${id}`, updatedData);
+};
+
+const deleteWeeklyGoal = (id) => {
+  return axios.delete(`/weekly-goals/${id}`);
+};
+
+// export
 export default {
   fetchSemesters,
   fetchSubjects,
@@ -74,4 +113,12 @@ export default {
   fetchQA,
   sendQuestion,
   fetchNotificationsByUser,
+  fetchWeeks,
+  createWeek,
+  deleteWeek,
+  updateWeek,
+  getWeeklyGoals,
+  createWeeklyGoal,
+  updateWeeklyGoal,
+  deleteWeeklyGoal,
 };

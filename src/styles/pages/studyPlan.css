@@ -3,15 +3,6 @@
   padding: 50px;
 }
 
-/* Top Navigation */
-.top-bar {
-  display: flex;
-  gap: 30px;
-  /* justify-content: space-between; */
-  /* align-items: center; */
-  margin-bottom: 24px;
-}
-
 .active-tab,
 .inactive-tab {
   padding: 10px 20px;
@@ -44,8 +35,6 @@
 }
 
 /* Learning Targets */
-
-
 
 /* .learning-target, */
 .learning-journal {
@@ -155,12 +144,11 @@
   outline: none;
 }
 
-
 /* Note Section */
 .note-section {
   background-color: #fefefe;
   padding: 16px;
-  border-left: 5px solid #2196F3;
+  border-left: 5px solid #2196f3;
   border-radius: 8px;
   margin-bottom: 30px;
 }

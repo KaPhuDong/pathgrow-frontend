@@ -37,7 +37,6 @@ const LearningTarget = () => {
           formulate your learning target as precisely as possible)
         </small>
       </p>
-      php-template Sao chép Chỉnh sửa
       <div className="goal-table">
         {goals.map((goal, index) => (
           <div
