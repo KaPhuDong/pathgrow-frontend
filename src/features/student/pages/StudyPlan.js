@@ -20,7 +20,7 @@ const StudyPlan = () => {
       .then((data) => {
         const formattedWeeks = data.map((week, index) => ({
           id: week.id,
-          title: week.name || `Week ${index + 1}`,
+          title: week.name || `Week No.${index + 1}`,
           startDate: week.start_date,
           endDate: week.end_date,
           isEditing: false,
@@ -31,6 +31,8 @@ const StudyPlan = () => {
         console.error('Failed to fetch weeks:', error);
       });
   }, []);
+
+  const selectedWeekId = weeks[selectedWeek]?.id;
 
   return (
     <Main>
@@ -45,12 +47,12 @@ const StudyPlan = () => {
         <br />
         <TabSwitcher activeTab={activeTab} setActiveTab={setActiveTab} />
 
-        <LearningTarget />
+        <LearningTarget weekId={selectedWeekId} />
         <br />
         <br />
         <br />
 
-        <LearningJournal />
+        <LearningJournal weekId={selectedWeekId} />
 
         {activeTab === 'in-class' ? <InClassTable /> : <SelfStudyTable />}
 
