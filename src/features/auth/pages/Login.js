@@ -14,15 +14,7 @@ function Login() {
     e.preventDefault();
 
     const result = await auth.login(email, password);
-
     if (result.success) {
-      // Lấy token từ kết quả trả về (thay 'token' bằng đúng key nếu khác)
-      const token = result.token || result.accessToken;
-
-      if (token) {
-        localStorage.setItem('token', token); // Lưu token vào localStorage
-      }
-
       const role = result.user.role;
 
       if (role === 'admin') navigate('/admin/user/management');

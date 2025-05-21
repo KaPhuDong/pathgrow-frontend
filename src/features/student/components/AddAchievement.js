@@ -72,7 +72,7 @@ const AddAchievement = ({onClose, onAddAchievement, updateAchievement}) => {
                 setFormData({ image: "", title: "", description: "" });
                 setImageFile(null);
             }
-            onClose(); // Đóng modal
+            onClose(); 
         } catch (error) {
             console.error(`${updateAchievement ? "Lỗi khi cập nhật" : "Lỗi khi tải lên"} thành tựu`, error);
         } finally {

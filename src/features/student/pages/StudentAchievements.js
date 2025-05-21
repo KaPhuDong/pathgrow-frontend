@@ -54,6 +54,8 @@ const StudentAchievements = () => {
 
         if (res.ok) {
             setAchievements((prev) => prev.filter((item) => item.id !== id));
+            setToastMessage("Achievement deleted successfully!");
+            setShowToast(true);
         } else {
             console.error("Failed to delete achievement.");
         }
