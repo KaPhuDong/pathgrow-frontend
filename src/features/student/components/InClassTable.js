@@ -242,7 +242,7 @@ const InClassTable = forwardRef(
                     onClick={() => handleRemoveRow(index)}
                     style={{ padding: '2px 6px' }}
                   >
-                    ❌
+                    <i class="fa-solid fa-xmark"></i>
                   </button>
                 </td>
               </tr>

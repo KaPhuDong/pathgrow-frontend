@@ -106,7 +106,12 @@ const deleteWeeklyGoal = (id) => {
 // in-class-plans and self-study-plans api
 const fetchInClassPlanIdByWeek = async (weeklyStudyPlanId) => {
   const response = await axios.get(`/in-class-plans/${weeklyStudyPlanId}`);
-  return response.data; // giả sử response.data = { id: 35, weekly_study_plan_id: 27 }
+  return response.data;
+};
+
+const fetchSelfStudyPlanIdByWeek = async (weeklyStudyPlanId) => {
+  const response = await axios.get(`/self-study-plans/${weeklyStudyPlanId}`);
+  return response.data;
 };
 
 const createInClassPlan = async (data) => {
@@ -200,4 +205,5 @@ export default {
   fetchInClassSubjects,
   fetchSelfStudySubjects,
   fetchInClassPlanIdByWeek,
+  fetchSelfStudyPlanIdByWeek,
 };

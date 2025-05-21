@@ -134,7 +134,7 @@ const LearningTarget = forwardRef(({ weekId }, ref) => {
                 onClick={() => handleDeleteGoal(goal.id)}
                 style={{ marginLeft: '8px' }}
               >
-                ❌
+                <i class="fa-solid fa-xmark"></i>
               </button>
             </div>
           </div>
