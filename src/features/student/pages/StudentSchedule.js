@@ -6,17 +6,15 @@ import interactionPlugin from '@fullcalendar/interaction';
 import axios from 'axios';
 import Main from './Main';
 
-// 🎨 Màu preset cho sự kiện
 const presetColors = [
+  { name: 'Green', value: '#d9f2d9' },
+  { name: 'Pink', value: '#ffccf2' },
+  { name: 'Yellow', value: '#ffffcc' },
   { name: 'Blue', value: '#cfe9ff' },
   { name: 'Orange', value: '#ffe5cc' },
   { name: 'Purple', value: '#e6ccff' },
-  { name: 'Green', value: '#d9f2d9' },
-  { name: 'Pink', value: '#ffccf2' },
-  { name: 'Yellow', value: '#ffffcc' }
 ];
 
-// 🧩 Form thêm sự kiện
 const AddEvent = ({ datetime, onAdd, onCancel }) => {
   const [title, setTitle] = useState('');
   const [selectedColor, setSelectedColor] = useState(presetColors[0].value);
@@ -47,7 +45,7 @@ const AddEvent = ({ datetime, onAdd, onCancel }) => {
   const endDate = new Date(datetime.end);
 
   return (
-    <div className="event-form" style={{ background: '#fff', padding: 20, borderRadius: 8, boxShadow: '0 0 8px rgba(0,0,0,0.15)', width: 300 }}>
+    <div className="event-form" style={{ background: '#fff', padding: 20, borderRadius: 8, boxShadow: '0 0 8px rgba(0,0,0,0.15)', width: 300, position: 'absolute', zIndex: 10000, top: 100, left: 100 }}>
       <h3>Add Event</h3>
       <p><strong>From:</strong> {startDate.toLocaleString()}</p>
       <p><strong>To:</strong> {endDate.toLocaleString()}</p>
@@ -95,13 +93,11 @@ const AddEvent = ({ datetime, onAdd, onCancel }) => {
   );
 };
 
-// 🗑️ Form xác nhận xóa sự kiện
 const DeleteEvent = ({ eventInfo, onConfirm, onCancel, position }) => {
   if (!eventInfo || !position) return null;
 
   return (
     <div
-      className="delete-modal"
       style={{
         position: 'absolute',
         top: position.y,
@@ -130,19 +126,16 @@ const DeleteEvent = ({ eventInfo, onConfirm, onCancel, position }) => {
   );
 };
 
-// 📅 Component chính StudentSchedule
 const StudentSchedule = () => {
   const [events, setEvents] = useState([]);
   const [selectedRange, setSelectedRange] = useState(null);
   const [formPosition, setFormPosition] = useState(null);
   const [deleteInfo, setDeleteInfo] = useState(null);
 
-  // Lấy header Authorization nếu cần
   const getAuthHeader = () => ({
     Authorization: `Bearer ${localStorage.getItem('token')}`,
   });
 
-  // Lấy sự kiện từ API
   const fetchEvents = async () => {
     try {
       const res = await axios.get('http://localhost:8000/api/student-calendar', {
@@ -150,7 +143,6 @@ const StudentSchedule = () => {
         withCredentials: true,
       });
 
-      // Map dữ liệu API về dạng FullCalendar
       const formatted = res.data.map((e) => ({
         id: String(e.id),
         title: e.title,
@@ -169,7 +161,6 @@ const StudentSchedule = () => {
     fetchEvents();
   }, []);
 
-  // Khi chọn vùng thời gian trên lịch (kéo chuột chọn)
   const handleSelect = (selectInfo) => {
     const { jsEvent } = selectInfo;
     setDeleteInfo(null);
@@ -177,14 +168,12 @@ const StudentSchedule = () => {
     setSelectedRange({ start: selectInfo.start, end: selectInfo.end });
   };
 
-  // Khi click vào ngày trên lịch sidebar nhỏ
   const handleDateClick = (arg) => {
     setDeleteInfo(null);
     setFormPosition({ x: arg.jsEvent.pageX, y: arg.jsEvent.pageY });
     setSelectedRange({ start: arg.date, end: arg.date });
   };
 
-  // Thêm event mới lên API và fetch lại events
   const addEvent = async (newEvent) => {
     try {
       const startDate = new Date(newEvent.start);
@@ -217,28 +206,19 @@ const StudentSchedule = () => {
       await fetchEvents();
       setSelectedRange(null);
     } catch (error) {
-      if (error.response) {
-        console.error('API error response:', error.response.data);
-      } else {
-        console.error('Failed to add event:', error.message);
-      }
+      console.error('Failed to add event:', error);
     }
   };
 
   const cancelAdd = () => setSelectedRange(null);
 
-  // Click event để xóa
   const handleEventClick = (clickInfo) => {
     const { jsEvent, event } = clickInfo;
     setSelectedRange(null);
     setFormPosition(null);
-    setDeleteInfo({
-      event,
-      position: { x: jsEvent.pageX, y: jsEvent.pageY },
-    });
+    setDeleteInfo({ event, position: { x: jsEvent.pageX, y: jsEvent.pageY } });
   };
 
-  // Xác nhận xóa event trên API
   const confirmDelete = async (eventInfo) => {
     const id = String(eventInfo.id);
     try {
@@ -258,8 +238,7 @@ const StudentSchedule = () => {
   return (
     <Main>
       <div className="calendar-wrapper" style={{ position: 'relative', minHeight: '700px', display: 'flex', gap: '20px' }}>
-        {/* Sidebar lịch tháng nhỏ */}
-        <div className="calendar-sidebar" style={{ width: '280px' }}>
+        <div style={{ width: '280px' }}>
           <FullCalendar
             plugins={[dayGridPlugin]}
             initialView="dayGridMonth"
@@ -269,12 +248,10 @@ const StudentSchedule = () => {
             selectable={true}
             dateClick={handleDateClick}
             dayHeaderFormat={{ weekday: 'narrow' }}
-            className="mini-calendar"
           />
         </div>
 
-        {/* Lịch tuần chính */}
-        <div className="calendar-main" style={{ flexGrow: 1, position: 'relative' }}>
+        <div style={{ flexGrow: 1, position: 'relative' }}>
           <FullCalendar
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             initialView="timeGridWeek"
@@ -288,28 +265,12 @@ const StudentSchedule = () => {
             selectable={true}
             select={handleSelect}
             eventClick={handleEventClick}
-            className="weekly-calendar"
           />
 
-          {/* Form thêm sự kiện */}
           {selectedRange && formPosition && (
-            <div
-              style={{
-                position: 'absolute',
-                left: formPosition.x - 310,
-                top: formPosition.y,
-                zIndex: 1000,
-              }}
-            >
-              <AddEvent
-                datetime={selectedRange}
-                onAdd={addEvent}
-                onCancel={cancelAdd}
-              />
-            </div>
+            <AddEvent datetime={selectedRange} onAdd={addEvent} onCancel={cancelAdd} />
           )}
 
-          {/* Form xác nhận xóa sự kiện */}
           {deleteInfo && (
             <DeleteEvent
               eventInfo={deleteInfo.event}
