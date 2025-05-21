@@ -87,8 +87,8 @@ const updateWeek = async (id, updatedData) => {
 };
 
 // weekly-goals api
-const getWeeklyGoals = (studyPlanId) => {
-  return axios.get(`/weekly-goals/${studyPlanId}`);
+const getWeeklyGoals = (weeklyStudyPlanId) => {
+  return axios.get(`/weekly-goals/${weeklyStudyPlanId}`);
 };
 
 const createWeeklyGoal = (goal) => {
@@ -101,6 +101,67 @@ const updateWeeklyGoal = (id, updatedData) => {
 
 const deleteWeeklyGoal = (id) => {
   return axios.delete(`/weekly-goals/${id}`);
+};
+
+// in-class-plans and self-study-plans api
+const createInClassPlan = async (data) => {
+  const response = await axios.post('/in-class-plans', data);
+  return response.data;
+};
+
+const createSelfStudyPlan = async (data) => {
+  const response = await axios.post('/self-study-plans', data);
+  return response.data;
+};
+
+const deleteInClassPlan = async (id) => {
+  const response = await axios.delete(`/in-class-plans/${id}`);
+  return response.data;
+};
+
+const deleteSelfStudyPlan = async (id) => {
+  const response = await axios.delete(`/self-study-plans/${id}`);
+  return response.data;
+};
+
+// in-class-subjects and self-study-subjects api
+const createInClassSubject = async (data) => {
+  const response = await axios.post('/in-class-subjects', data);
+  return response.data;
+};
+
+const createSelfStudySubject = async (data) => {
+  const response = await axios.post('/self-study-subjects', data);
+  return response.data;
+};
+
+const deleteInClassSubject = async (id) => {
+  const response = await axios.delete(`/in-class-subjects/${id}`);
+  return response.data;
+};
+
+const deleteSelfStudySubject = async (id) => {
+  const response = await axios.delete(`/self-study-subjects/${id}`);
+  return response.data;
+};
+
+const updateInClassSubject = async (id, updatedData) => {
+  const response = await axios.put(`/in-class-subjects/${id}`, updatedData);
+  return response.data;
+};
+const updateSelfStudySubject = async (id, updatedData) => {
+  const response = await axios.put(`/self-study-subjects/${id}`, updatedData);
+  return response.data;
+};
+
+const fetchInClassSubjects = async (weeklyStudyPlanId) => {
+  const response = await axios.get(`/in-class-subjects/${weeklyStudyPlanId}`);
+  return response.data;
+};
+
+const fetchSelfStudySubjects = async (weeklyStudyPlanId) => {
+  const response = await axios.get(`/self-study-subjects/${weeklyStudyPlanId}`);
+  return response.data;
 };
 
 // export
@@ -121,4 +182,16 @@ export default {
   createWeeklyGoal,
   updateWeeklyGoal,
   deleteWeeklyGoal,
+  createInClassPlan,
+  createSelfStudyPlan,
+  deleteInClassPlan,
+  deleteSelfStudyPlan,
+  createInClassSubject,
+  createSelfStudySubject,
+  deleteInClassSubject,
+  deleteSelfStudySubject,
+  updateInClassSubject,
+  updateSelfStudySubject,
+  fetchInClassSubjects,
+  fetchSelfStudySubjects,
 };

@@ -80,10 +80,8 @@
   border-right: 1px solid #ccc;
   background-color: white;
   font-weight: bold;
-  color: red;
-}
-.goal-textarea::placeholder {
-  color: red;
+  color: var(--dark);
+  text-align: center;
 }
 
 .goal-textarea {
@@ -94,7 +92,7 @@
   font-family: inherit;
   box-sizing: border-box;
   outline: none;
-  color: red;
+  color: var(--dark);
   font-weight: bold;
   text-align: center;
   background-color: white;

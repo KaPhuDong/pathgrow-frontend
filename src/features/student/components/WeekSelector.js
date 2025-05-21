@@ -14,7 +14,21 @@ const WeekSelector = ({ weeks, setWeeks, selectedWeek, setSelectedWeek }) => {
         end_date: nextWeek.toISOString().split('T')[0],
       };
 
+      // 1. Tạo tuần mới
       const newWeek = await api.createWeek(newWeekData);
+      console.log(newWeek.id);
+
+      // 2. Tạo in_class_plan gắn với weekly_study_plan_id
+      const newPlan = await api.createInClassPlan({
+        weekly_study_plan_id: newWeek.id,
+      });
+
+      // 3. Tạo in_class_subject gắn với in_class_plan_id
+      await api.createInClassSubject({
+        in_class_plan_id: newPlan.id,
+      });
+
+      // 4. Cập nhật UI
       setWeeks([
         ...weeks,
         {

@@ -1,10 +1,15 @@
-import React, { useState, useEffect } from 'react';
+// LearningTarget.jsx
+import React, {
+  useState,
+  useEffect,
+  forwardRef,
+  useImperativeHandle,
+} from 'react';
 import api from '../../../api/student/api';
 
-const LearningTarget = ({ weekId }) => {
+const LearningTarget = forwardRef(({ weekId }, ref) => {
   const [goals, setGoals] = useState([]);
 
-  // Hàm lấy danh sách mục tiêu từ backend
   const fetchGoals = async () => {
     try {
       const response = await api.getWeeklyGoals(weekId);
@@ -13,7 +18,8 @@ const LearningTarget = ({ weekId }) => {
         const formattedGoals = data.map((item) => ({
           id: item.id,
           text: item.name || '',
-          checked: item.completed === 1,
+          checked: item.completed === true || item.completed === 1,
+          isDirty: false,
         }));
         setGoals(formattedGoals);
       } else {
@@ -32,13 +38,16 @@ const LearningTarget = ({ weekId }) => {
     }
   }, [weekId]);
 
-  // Thêm mục tiêu mới
+  useImperativeHandle(ref, () => ({
+    getCurrentData: () => goals,
+  }));
+
   const handleAddGoal = async () => {
     try {
       const newGoal = {
         weekly_study_plan_id: weekId,
         name: `Goal No.${goals.length + 1}`,
-        completed: 0,
+        completed: false,
       };
       const response = await api.createWeeklyGoal(newGoal);
       const createdGoal = response.data;
@@ -47,7 +56,9 @@ const LearningTarget = ({ weekId }) => {
         {
           id: createdGoal.id,
           text: createdGoal.name || '',
-          checked: createdGoal.completed === 1,
+          checked:
+            createdGoal.completed === true || createdGoal.completed === 1,
+          isDirty: false,
         },
       ]);
     } catch (error) {
@@ -55,7 +66,6 @@ const LearningTarget = ({ weekId }) => {
     }
   };
 
-  // Xóa mục tiêu
   const handleDeleteGoal = async (id) => {
     try {
       await api.deleteWeeklyGoal(id);
@@ -65,28 +75,20 @@ const LearningTarget = ({ weekId }) => {
     }
   };
 
-  // Cập nhật nội dung mục tiêu
-  const handleInputChange = async (id, newText) => {
-    try {
-      await api.updateWeeklyGoal(id, { name: newText });
-      setGoals((prev) =>
-        prev.map((goal) => (goal.id === id ? { ...goal, text: newText } : goal))
-      );
-    } catch (error) {
-      console.error('Lỗi khi cập nhật mục tiêu:', error);
-    }
+  const handleInputChange = (id, newText) => {
+    setGoals((prev) =>
+      prev.map((goal) =>
+        goal.id === id ? { ...goal, text: newText, isDirty: true } : goal
+      )
+    );
   };
 
-  // Cập nhật trạng thái hoàn thành
-  const handleCheck = async (id, checked) => {
-    try {
-      await api.updateWeeklyGoal(id, { completed: checked ? 1 : 0 });
-      setGoals((prev) =>
-        prev.map((goal) => (goal.id === id ? { ...goal, checked } : goal))
-      );
-    } catch (error) {
-      console.error('Lỗi khi cập nhật trạng thái mục tiêu:', error);
-    }
+  const handleCheck = (id, checked) => {
+    setGoals((prev) =>
+      prev.map((goal) =>
+        goal.id === id ? { ...goal, checked, isDirty: true } : goal
+      )
+    );
   };
 
   return (
@@ -121,7 +123,6 @@ const LearningTarget = ({ weekId }) => {
             </div>
             <div style={{ flex: 1 }}>
               <textarea
-                placeholder={`Goal No. ${index + 1}`}
                 value={goal.text}
                 onChange={(e) => handleInputChange(goal.id, e.target.value)}
                 className="goal-textarea"
@@ -144,6 +145,6 @@ const LearningTarget = ({ weekId }) => {
       </div>
     </section>
   );
-};
+});
 
 export default LearningTarget;

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+// StudyPlan.jsx
+import React, { useState, useEffect, useRef } from 'react';
 import Main from './Main';
 import WeekSelector from '../components/WeekSelector';
 import TabSwitcher from '../components/TabSwitcher';
@@ -8,11 +9,18 @@ import InClassTable from '../components/InClassTable';
 import SelfStudyTable from '../components/SelfStudyTable';
 import NoteSection from '../components/NoteSection';
 import api from '../../../api/student/api';
+import ToastNotification from '../../../components/ui/ToastNotification';
 
 const StudyPlan = () => {
   const [weeks, setWeeks] = useState([]);
   const [selectedWeek, setSelectedWeek] = useState(0);
   const [activeTab, setActiveTab] = useState('in-class');
+
+  const [toastMessage, setToastMessage] = useState('');
+
+  const inClassRef = useRef(null);
+  const selfStudyRef = useRef(null);
+  const learningTargetRef = useRef(null);
 
   useEffect(() => {
     api
@@ -34,9 +42,52 @@ const StudyPlan = () => {
 
   const selectedWeekId = weeks[selectedWeek]?.id;
 
+  const handleSave = async () => {
+    const subjects = inClassRef.current?.getCurrentData?.() || [];
+    const dirtySubjects = subjects.filter((s) => s.isDirty && s.id);
+
+    const goals = learningTargetRef.current?.getCurrentData?.() || [];
+    const dirtyGoals = goals.filter((g) => g.isDirty && g.id);
+
+    try {
+      await Promise.all(
+        dirtySubjects.map((subject) =>
+          api.updateInClassSubject(subject.id, {
+            date: subject.date,
+            subject_id: subject.subject_id,
+            my_lesson: subject.my_lesson,
+            self_assessment: subject.self_assessment,
+            my_difficulties: subject.my_difficulties,
+            my_plan: subject.my_plan,
+            problem_solved: subject.problem_solved,
+          })
+        )
+      );
+
+      await Promise.all(
+        dirtyGoals.map((goal) =>
+          api.updateWeeklyGoal(goal.id, {
+            name: goal.text,
+            completed: goal.checked ? 1 : 0,
+          })
+        )
+      );
+
+      setToastMessage('Saved successfully!');
+    } catch (err) {
+      setToastMessage('Failed to save!');
+    }
+  };
+
   return (
     <Main>
       <div className="container-study-plan">
+        {toastMessage && (
+          <ToastNotification
+            message={toastMessage}
+            onClose={() => setToastMessage('')}
+          />
+        )}
         <WeekSelector
           weeks={weeks}
           setWeeks={setWeeks}
@@ -45,17 +96,21 @@ const StudyPlan = () => {
         />
         <br />
         <br />
-        <TabSwitcher activeTab={activeTab} setActiveTab={setActiveTab} />
-
-        <LearningTarget weekId={selectedWeekId} />
+        <TabSwitcher
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          onSave={handleSave}
+        />
+        <LearningTarget ref={learningTargetRef} weekId={selectedWeekId} />
         <br />
         <br />
         <br />
-
         <LearningJournal weekId={selectedWeekId} />
-
-        {activeTab === 'in-class' ? <InClassTable /> : <SelfStudyTable />}
-
+        {activeTab === 'in-class' ? (
+          <InClassTable ref={inClassRef} weekId={selectedWeekId} />
+        ) : (
+          <SelfStudyTable ref={selfStudyRef} weekId={selectedWeekId} />
+        )}
         <NoteSection />
       </div>
     </Main>
