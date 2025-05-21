@@ -1,0 +1,22 @@
+.add-achievement-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.add-achievement-modal label {
+    margin-bottom: 5px;
+}
+.textarea-description {
+    width: 100%;
+    resize: vertical;
+    min-height: 100px;
+    border-radius: 10px;
+}
