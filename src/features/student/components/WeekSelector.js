@@ -22,11 +22,12 @@ const WeekSelector = ({ weeks, setWeeks, selectedWeek, setSelectedWeek }) => {
       const newPlan = await api.createInClassPlan({
         weekly_study_plan_id: newWeek.id,
       });
+      console.log(newPlan.id);
 
       // 3. Tạo in_class_subject gắn với in_class_plan_id
-      await api.createInClassSubject({
-        in_class_plan_id: newPlan.id,
-      });
+      // await api.createInClassSubject({
+      //   in_class_plan_id: newPlan.id,
+      // });
 
       // 4. Cập nhật UI
       setWeeks([

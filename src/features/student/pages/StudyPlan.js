@@ -1,4 +1,3 @@
-// StudyPlan.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import Main from './Main';
 import WeekSelector from '../components/WeekSelector';
@@ -13,14 +12,16 @@ import ToastNotification from '../../../components/ui/ToastNotification';
 
 const StudyPlan = () => {
   const [weeks, setWeeks] = useState([]);
+  const [inClassPlanId, setInClassPlanId] = useState(null);
   const [selectedWeek, setSelectedWeek] = useState(0);
   const [activeTab, setActiveTab] = useState('in-class');
-
   const [toastMessage, setToastMessage] = useState('');
 
   const inClassRef = useRef(null);
   const selfStudyRef = useRef(null);
   const learningTargetRef = useRef(null);
+
+  const selectedWeekId = weeks[selectedWeek]?.id;
 
   useEffect(() => {
     api
@@ -40,7 +41,29 @@ const StudyPlan = () => {
       });
   }, []);
 
-  const selectedWeekId = weeks[selectedWeek]?.id;
+  useEffect(() => {
+    const fetchInClassPlanId = async () => {
+      if (selectedWeekId) {
+        try {
+          const response = await api.fetchInClassPlanIdByWeek(selectedWeekId);
+          if (response?.id) {
+            setInClassPlanId(response.id);
+          } else {
+            setInClassPlanId(null);
+          }
+        } catch (error) {
+          console.error('Failed to fetch inClassPlanId:', error);
+          setInClassPlanId(null);
+        }
+      }
+    };
+
+    fetchInClassPlanId();
+  }, [selectedWeekId, activeTab]);
+
+  const handleSetInClassPlanId = (id) => {
+    setInClassPlanId(id);
+  };
 
   const handleSave = async () => {
     const subjects = inClassRef.current?.getCurrentData?.() || [];
@@ -101,15 +124,31 @@ const StudyPlan = () => {
           setActiveTab={setActiveTab}
           onSave={handleSave}
         />
-        <LearningTarget ref={learningTargetRef} weekId={selectedWeekId} />
+        <LearningTarget
+          ref={learningTargetRef}
+          weekId={selectedWeekId}
+          inClassPlanId={inClassPlanId}
+        />
         <br />
         <br />
         <br />
-        <LearningJournal weekId={selectedWeekId} />
+        <LearningJournal
+          weekId={selectedWeekId}
+          inClassPlanId={inClassPlanId}
+        />
         {activeTab === 'in-class' ? (
-          <InClassTable ref={inClassRef} weekId={selectedWeekId} />
+          <InClassTable
+            ref={inClassRef}
+            weekId={selectedWeekId}
+            inClassPlanId={inClassPlanId}
+            setInClassPlanId={handleSetInClassPlanId}
+          />
         ) : (
-          <SelfStudyTable ref={selfStudyRef} weekId={selectedWeekId} />
+          <SelfStudyTable
+            ref={selfStudyRef}
+            weekId={selectedWeekId}
+            studyPlanId={inClassPlanId}
+          />
         )}
         <NoteSection />
       </div>
