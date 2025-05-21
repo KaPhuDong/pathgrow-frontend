@@ -259,8 +259,8 @@ const StudentSchedule = () => {
             headerToolbar={{ start: 'prev,today,next', center: 'title', end: '' }}
             events={events}
             allDaySlot={false}
-            slotMinTime="07:00:00"
-            slotMaxTime="19:00:00"
+            slotMinTime="00:00:00"
+            slotMaxTime="24:00:00"
             height="auto"
             selectable={true}
             select={handleSelect}

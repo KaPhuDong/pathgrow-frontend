@@ -33,6 +33,10 @@
   padding: 20px;
 }
 
+.fc-header-toolbar.fc-toolbar.fc-toolbar-ltr {
+  width: 280px;
+}
+
 /* =================== FULLCALENDAR GLOBAL =================== */
 .fc .fc-toolbar-title {
   font-size: 20px;
