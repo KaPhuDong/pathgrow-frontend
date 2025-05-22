@@ -30,7 +30,8 @@ const StudentRoutes = [
   {
     path: '/student/achievements',
     element: <StudentAchievements />,
-   {
+  },
+  {
     path: '/student/schedule',
     element: <StudentSchedule />,
   },

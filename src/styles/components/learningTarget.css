@@ -4,10 +4,85 @@
   flex-direction: column;
 }
 
+.goal-row {
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
+
 .goal-textarea {
   width: 100%;
   resize: vertical;
-  min-height: 60px;
-  padding: 6px;
+  border: none;
   font-size: 14px;
+  font-family: inherit;
+  box-sizing: border-box;
+  outline: none;
+  color: var(--dark);
+  font-weight: bold;
+  background-color: white;
+  resize: none;
+  padding: 20px;
+}
+
+.goal-checkbox,
+.delete-button {
+  padding: 0 20px;
+}
+
+.goals label {
+  margin-right: 20px;
+  display: inline-block;
+  margin-top: 10px;
+}
+
+.goal-table {
+  border: 1px solid #ccc;
+  margin-top: 15px;
+  text-align: center;
+  padding: 20px 0;
+  gap: 15px;
+}
+
+.goal-cell {
+  padding: 10px;
+  border-right: 1px solid #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+}
+
+.goal-cell:last-child {
+  border-right: none;
+}
+
+.goal-label {
+  padding: 8px;
+  border-top: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  background-color: white;
+  font-weight: bold;
+  color: var(--dark);
+  text-align: center;
+}
+
+.goal-label:last-child {
+  border-right: none;
+}
+
+.delete-icon {
+  color: var(--secondary);
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.checkbox {
+  width: 18px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.delete-icon {
+  font-size: 25px;
 }

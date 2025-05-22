@@ -1,74 +1,88 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import api from '../../../api/student/api';
 
-const getWeekRange = (startDate) => {
-  const end = new Date(startDate);
-  end.setDate(end.getDate() + 6);
-  return {
-    start: startDate.toISOString().split('T')[0],
-    end: end.toISOString().split('T')[0],
-  };
-};
+const WeekSelector = ({ weeks, setWeeks, selectedWeek, setSelectedWeek }) => {
+  const handleAddWeek = async () => {
+    try {
+      const today = new Date();
+      const nextWeek = new Date();
+      nextWeek.setDate(today.getDate() + 6);
 
-const WeekSelector = ({ selectedWeek, setSelectedWeek }) => {
-  const [weeks, setWeeks] = useState([]);
+      const newWeekData = {
+        name: `Week ${weeks.length + 1}`,
+        start_date: today.toISOString().split('T')[0],
+        end_date: nextWeek.toISOString().split('T')[0],
+      };
 
-  useEffect(() => {
-    const today = new Date();
-    const { start, end } = getWeekRange(today);
-    setWeeks([
-      {
-        id: 1,
-        title: 'Week 1',
-        startDate: start,
-        endDate: end,
-        isEditing: false,
-      },
-    ]);
-  }, []);
+      // 1. Tạo tuần mới
+      const newWeek = await api.createWeek(newWeekData);
+      console.log(newWeek.id);
 
-  const handleAddWeek = () => {
-    const newId = weeks.length + 1;
-    const lastWeek = weeks[weeks.length - 1];
-    const nextStart = new Date(lastWeek.endDate);
-    nextStart.setDate(nextStart.getDate() + 1);
-    const { start, end } = getWeekRange(nextStart);
+      // 2. Tạo in_class_plan gắn với weekly_study_plan_id
+      const newPlan = await api.createInClassPlan({
+        weekly_study_plan_id: newWeek.id,
+      });
+      console.log(newPlan.id);
 
-    setWeeks([
-      ...weeks,
-      {
-        id: newId,
-        title: `Week ${newId}`,
-        startDate: start,
-        endDate: end,
-        isEditing: false,
-      },
-    ]);
-  };
+      // 3. Tạo self_study_plan gắn với weekly_study_plan_id
+      const newSelfStudyPlan = await api.createSelfStudyPlan({
+        weekly_study_plan_id: newWeek.id,
+      });
+      console.log(newSelfStudyPlan.id);
 
-  const handleDeleteWeek = (id) => {
-    if (weeks.length === 1) {
-      alert('You must have at least one week.');
-      return;
-    }
-
-    const updated = weeks.filter((week) => week.id !== id);
-    setWeeks(updated);
-
-    if (selectedWeek >= updated.length) {
-      setSelectedWeek(updated.length - 1);
+      // 4. Cập nhật UI
+      setWeeks([
+        ...weeks,
+        {
+          ...newWeek,
+          title: newWeek.name,
+          startDate: newWeek.start_date,
+          endDate: newWeek.end_date,
+          isEditing: false,
+        },
+      ]);
+    } catch (err) {
+      console.error('Failed to add new week:', err);
+      alert('Failed to add new week');
     }
   };
 
-  const handleToggleEdit = (index) => {
-    const updated = [...weeks];
-    updated[index].isEditing = !updated[index].isEditing;
-    setWeeks(updated);
+  const handleDeleteWeek = async (id) => {
+    try {
+      await api.deleteWeek(id);
+      const filtered = weeks.filter((w) => w.id !== id);
+      setWeeks(filtered);
+      if (selectedWeek >= filtered.length) {
+        setSelectedWeek(filtered.length - 1);
+      }
+    } catch (err) {
+      console.error('Failed to delete week:', err);
+      alert('Failed to delete the week');
+    }
   };
 
-  const handleChange = (index, field, value) => {
-    const updated = [...weeks];
-    updated[index][field] = value;
-    setWeeks(updated);
+  const handleSaveEdit = async (index) => {
+    const week = weeks[index];
+    try {
+      const updated = await api.updateWeek(week.id, {
+        name: week.title,
+        start_date: week.startDate,
+        end_date: week.endDate,
+      });
+      const updatedWeeks = [...weeks];
+      updatedWeeks[index] = {
+        ...updatedWeeks[index],
+        ...updated,
+        isEditing: false,
+        title: updated.name,
+        startDate: updated.start_date,
+        endDate: updated.end_date,
+      };
+      setWeeks(updatedWeeks);
+    } catch (err) {
+      console.error('Failed to update week:', err);
+      alert('Failed to update the week');
+    }
   };
 
   return (
@@ -89,50 +103,59 @@ const WeekSelector = ({ selectedWeek, setSelectedWeek }) => {
           }}
         >
           {week.isEditing ? (
-            <input
-              type="text"
-              value={week.title}
-              onChange={(e) => handleChange(index, 'title', e.target.value)}
-              onClick={(e) => e.stopPropagation()}
-              className="week-title-input"
-              style={{ marginBottom: '6px', padding: '4px' }}
-            />
+            <>
+              <input
+                type="text"
+                value={week.title}
+                onChange={(e) => {
+                  const updated = [...weeks];
+                  updated[index].title = e.target.value;
+                  setWeeks(updated);
+                }}
+                onClick={(e) => e.stopPropagation()}
+                className="week-title-input"
+                style={{ marginBottom: '6px', padding: '4px' }}
+              />
+              <div className="week-dates-edit" style={{ marginBottom: '6px' }}>
+                <input
+                  type="date"
+                  value={week.startDate}
+                  onChange={(e) => {
+                    const updated = [...weeks];
+                    updated[index].startDate = e.target.value;
+                    setWeeks(updated);
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                  style={{ marginRight: '6px' }}
+                />
+                <span> - </span>
+                <input
+                  type="date"
+                  value={week.endDate}
+                  onChange={(e) => {
+                    const updated = [...weeks];
+                    updated[index].endDate = e.target.value;
+                    setWeeks(updated);
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                  style={{ marginLeft: '6px' }}
+                />
+              </div>
+            </>
           ) : (
-            <div
-              className="week-title"
-              style={{ fontWeight: 'bold', marginBottom: '6px' }}
-            >
-              {week.title}
-            </div>
+            <>
+              <div
+                className="week-title"
+                style={{ fontWeight: 'bold', marginBottom: '6px' }}
+              >
+                {week.title}
+              </div>
+              <div className="week-date" style={{ marginBottom: '6px' }}>
+                {week.startDate} - {week.endDate}
+              </div>
+            </>
           )}
 
-          {week.isEditing ? (
-            <div className="week-dates-edit" style={{ marginBottom: '6px' }}>
-              <input
-                type="date"
-                value={week.startDate}
-                onChange={(e) =>
-                  handleChange(index, 'startDate', e.target.value)
-                }
-                onClick={(e) => e.stopPropagation()}
-                style={{ marginRight: '6px' }}
-              />
-              <span> - </span>
-              <input
-                type="date"
-                value={week.endDate}
-                onChange={(e) => handleChange(index, 'endDate', e.target.value)}
-                onClick={(e) => e.stopPropagation()}
-                style={{ marginLeft: '6px' }}
-              />
-            </div>
-          ) : (
-            <div className="week-date" style={{ marginBottom: '6px' }}>
-              {week.startDate} - {week.endDate}
-            </div>
-          )}
-
-          {/* Hiển thị nút Edit / Delete chỉ khi tuần đang được chọn */}
           {selectedWeek === index && (
             <div
               className="week-actions"
@@ -140,7 +163,15 @@ const WeekSelector = ({ selectedWeek, setSelectedWeek }) => {
               onClick={(e) => e.stopPropagation()}
             >
               <button
-                onClick={() => handleToggleEdit(index)}
+                onClick={() =>
+                  week.isEditing
+                    ? handleSaveEdit(index)
+                    : setWeeks((prev) => {
+                        const updated = [...prev];
+                        updated[index].isEditing = true;
+                        return updated;
+                      })
+                }
                 style={{ padding: '4px 8px', cursor: 'pointer' }}
               >
                 {week.isEditing ? '✔️ Save' : 'Edit'}
