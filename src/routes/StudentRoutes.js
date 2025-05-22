@@ -4,7 +4,7 @@ import StudyPlan from '../features/student/pages/StudyPlan';
 import Notifications from '../features/student/pages/Notifications';
 import StudentAccount from '../features/student/pages/StudentAccount';
 import StudentAchievements from '../features/student/pages/StudentAchievements';
-
+import StudentSchedule from '../features/student/pages/StudentSchedule';
 
 const StudentRoutes = [
   {
@@ -30,6 +30,9 @@ const StudentRoutes = [
   {
     path: '/student/achievements',
     element: <StudentAchievements />,
+   {
+    path: '/student/schedule',
+    element: <StudentSchedule />,
   },
 ];
 
