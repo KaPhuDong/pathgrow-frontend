@@ -105,20 +105,13 @@ const LearningTarget = forwardRef(({ weekId }, ref) => {
       </p>
       <div className="goal-table">
         {goals.map((goal, index) => (
-          <div
-            key={goal.id}
-            className="goal-row"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              marginBottom: '10px',
-            }}
-          >
-            <div style={{ marginRight: '10px' }}>
+          <div key={goal.id} className="goal-row">
+            <div className="goal-checkbox">
               <input
                 type="checkbox"
                 checked={goal.checked}
                 onChange={(e) => handleCheck(goal.id, e.target.checked)}
+                className="checkbox"
               />
             </div>
             <div style={{ flex: 1 }}>
@@ -132,16 +125,18 @@ const LearningTarget = forwardRef(({ weekId }, ref) => {
             <div>
               <button
                 onClick={() => handleDeleteGoal(goal.id)}
-                style={{ marginLeft: '8px' }}
+                className="delete-button"
               >
-                <i class="fa-solid fa-xmark"></i>
+                <i className="fa-solid fa-xmark delete-icon"></i>
               </button>
             </div>
           </div>
         ))}
       </div>
       <div style={{ textAlign: 'right', marginTop: '10px' }}>
-        <button onClick={handleAddGoal}>+ Add Goal</button>
+        <button className="add-goal-button" onClick={handleAddGoal}>
+          Add Goal
+        </button>
       </div>
     </section>
   );

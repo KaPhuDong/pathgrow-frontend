@@ -114,7 +114,7 @@ const UserManagement = () => {
               className="btn btn-add-user btn-admin-add-user"
               onClick={() => setShowAddUserModal(true)}
             >
-              + New user
+              + New user 
             </button>
           </div>
           <SearchBar

@@ -34,18 +34,9 @@
   margin-left: 900px;
 }
 
-/* Learning Targets */
-
-/* .learning-target, */
 .learning-journal {
   background-color: #f3f1e7;
   padding: 15px;
-}
-
-.goals label {
-  margin-right: 20px;
-  display: inline-block;
-  margin-top: 10px;
 }
 
 .learning-target {
@@ -53,55 +44,6 @@
   padding: 15px;
 }
 
-.goal-table {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  border: 1px solid #ccc;
-  margin-top: 15px;
-  text-align: center;
-}
-
-.goal-cell {
-  padding: 10px;
-  border-right: 1px solid #ccc;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 40px;
-}
-
-.goal-cell:last-child {
-  border-right: none;
-}
-
-.goal-label {
-  padding: 8px;
-  border-top: 1px solid #ccc;
-  border-right: 1px solid #ccc;
-  background-color: white;
-  font-weight: bold;
-  color: var(--dark);
-  text-align: center;
-}
-
-.goal-textarea {
-  width: 100%;
-  resize: vertical; /* Cho phép người dùng kéo để điều chỉnh độ cao */
-  border: none;
-  font-size: 14px;
-  font-family: inherit;
-  box-sizing: border-box;
-  outline: none;
-  color: var(--dark);
-  font-weight: bold;
-  text-align: center;
-  background-color: white;
-  resize: none;
-}
-
-.goal-label:last-child {
-  border-right: none;
-}
 /* Section Title */
 .section-title {
   font-size: 18px;
@@ -134,7 +76,7 @@
 
 .log-table textarea {
   width: 100%;
-  font-size: 14px;
+  height: 150px;
   border: none;
   resize: vertical;
   box-sizing: border-box;

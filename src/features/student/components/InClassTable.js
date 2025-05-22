@@ -127,7 +127,9 @@ const InClassTable = forwardRef(
         <table className="log-table">
           <thead>
             <tr>
-              <th className="table-header">Date</th>
+              <th className="table-header" style={{ width: '125px' }}>
+                Date
+              </th>
               <th className="table-header">Skills/Module</th>
               <th className="table-header">
                 My lesson
@@ -146,10 +148,12 @@ const InClassTable = forwardRef(
               </th>
               <th className="table-header">My difficulties</th>
               <th className="table-header">My Plan</th>
-              <th className="table-header">Problem solved</th>
+              <th className="table-header" style={{ width: '140px' }}>
+                Problem solved
+              </th>
               <th
                 className="table-header"
-                style={{ width: '65px', textAlign: 'center' }}
+                style={{ width: '70px', textAlign: 'center' }}
               >
                 Action
               </th>
@@ -157,17 +161,18 @@ const InClassTable = forwardRef(
           </thead>
           <tbody>
             {rows.map((row, index) => (
-              <tr key={index}>
-                <td>
+              <tr key={index} style={{ height: '150px' }}>
+                <td className="table-cell">
                   <input
                     type="date"
                     value={row.date || ''}
                     onChange={(e) =>
                       handleChange(index, 'date', e.target.value)
                     }
+                    style={{ width: '105px' }}
                   />
                 </td>
-                <td>
+                <td className="table-cell">
                   <select
                     className="form-select"
                     value={row.subject_id || ''}
@@ -183,7 +188,7 @@ const InClassTable = forwardRef(
                     ))}
                   </select>
                 </td>
-                <td>
+                <td className="table-cell">
                   <textarea
                     rows="2"
                     value={row.my_lesson || ''}
@@ -192,7 +197,7 @@ const InClassTable = forwardRef(
                     }
                   />
                 </td>
-                <td>
+                <td className="table-cell">
                   <select
                     className="form-select"
                     value={row.self_assessment || ''}
@@ -206,7 +211,7 @@ const InClassTable = forwardRef(
                     <option value="3">3</option>
                   </select>
                 </td>
-                <td>
+                <td className="table-cell">
                   <textarea
                     rows="2"
                     value={row.my_difficulties || ''}
@@ -215,7 +220,7 @@ const InClassTable = forwardRef(
                     }
                   />
                 </td>
-                <td>
+                <td className="table-cell">
                   <textarea
                     rows="2"
                     value={row.my_plan || ''}
@@ -224,7 +229,7 @@ const InClassTable = forwardRef(
                     }
                   />
                 </td>
-                <td>
+                <td className="table-cell">
                   <select
                     className="form-select"
                     value={row.problem_solved || ''}
@@ -237,12 +242,12 @@ const InClassTable = forwardRef(
                     <option value="Not yet">Not yet</option>
                   </select>
                 </td>
-                <td style={{ textAlign: 'center' }}>
+                <td style={{ textAlign: 'center' }} className="table-cell">
                   <button
                     onClick={() => handleRemoveRow(index)}
                     style={{ padding: '2px 6px' }}
                   >
-                    <i class="fa-solid fa-xmark"></i>
+                    <i class="fa-solid fa-xmark delete-icon"></i>
                   </button>
                 </td>
               </tr>
@@ -254,7 +259,9 @@ const InClassTable = forwardRef(
                 colSpan="8"
                 style={{ textAlign: 'right', paddingTop: '10px' }}
               >
-                <button onClick={handleAddRow}>Add Row</button>
+                <button className="add-row-button" onClick={handleAddRow}>
+                  Add Row
+                </button>
               </td>
             </tr>
           </tfoot>

@@ -132,8 +132,12 @@ const InClassTable = forwardRef(
         <table className="log-table">
           <thead>
             <tr>
-              <th className="table-header">Date</th>
-              <th className="table-header">Skills/Module</th>
+              <th className="table-header" style={{ width: '125px' }}>
+                Date
+              </th>
+              <th className="table-header" style={{ width: '125px' }}>
+                Skills/Module
+              </th>
               <th className="table-header">
                 My lesson
                 <br />
@@ -149,7 +153,7 @@ const InClassTable = forwardRef(
               <th className="table-header">Notes</th>
               <th
                 className="table-header"
-                style={{ width: '65px', textAlign: 'center' }}
+                style={{ width: '70px', textAlign: 'center' }}
               >
                 Action
               </th>
@@ -158,16 +162,17 @@ const InClassTable = forwardRef(
           <tbody>
             {rows.map((row, index) => (
               <tr key={index}>
-                <td>
+                <td className="table-cell">
                   <input
                     type="date"
                     value={row.date || ''}
                     onChange={(e) =>
                       handleChange(index, 'date', e.target.value)
                     }
+                    style={{ width: '105px' }}
                   />
                 </td>
-                <td>
+                <td className="table-cell">
                   <select
                     className="form-select"
                     value={row.subject_id || ''}
@@ -183,7 +188,7 @@ const InClassTable = forwardRef(
                     ))}
                   </select>
                 </td>
-                <td>
+                <td className="table-cell">
                   <textarea
                     rows="2"
                     value={row.my_lesson || ''}
@@ -192,7 +197,7 @@ const InClassTable = forwardRef(
                     }
                   />
                 </td>
-                <td>
+                <td className="table-cell">
                   <textarea
                     rows="2"
                     value={row.time_allocation || ''}
@@ -201,7 +206,7 @@ const InClassTable = forwardRef(
                     }
                   />
                 </td>
-                <td>
+                <td className="table-cell">
                   <textarea
                     rows="2"
                     value={row.learning_resources || ''}
@@ -210,7 +215,7 @@ const InClassTable = forwardRef(
                     }
                   />
                 </td>
-                <td>
+                <td className="table-cell">
                   <textarea
                     rows="2"
                     value={row.learning_activities || ''}
@@ -219,7 +224,7 @@ const InClassTable = forwardRef(
                     }
                   />
                 </td>
-                <td>
+                <td className="table-cell">
                   <select
                     className="form-select"
                     value={row.concentration || ''}
@@ -233,7 +238,7 @@ const InClassTable = forwardRef(
                     <option value="Not sure">Not sure</option>
                   </select>
                 </td>
-                <td>
+                <td className="table-cell">
                   <select
                     className="form-select"
                     value={row.plan_follow_reflection || ''}
@@ -251,7 +256,7 @@ const InClassTable = forwardRef(
                     <option value="Not sure">Not sure</option>
                   </select>
                 </td>
-                <td>
+                <td className="table-cell">
                   <textarea
                     rows="2"
                     value={row.evaluation || ''}
@@ -260,7 +265,7 @@ const InClassTable = forwardRef(
                     }
                   />
                 </td>
-                <td>
+                <td className="table-cell">
                   <textarea
                     rows="2"
                     value={row.reinforcing_learning || ''}
@@ -273,7 +278,7 @@ const InClassTable = forwardRef(
                     }
                   />
                 </td>
-                <td>
+                <td className="table-cell">
                   <textarea
                     rows="2"
                     value={row.notes || ''}
@@ -282,12 +287,12 @@ const InClassTable = forwardRef(
                     }
                   />
                 </td>
-                <td style={{ textAlign: 'center' }}>
+                <td style={{ textAlign: 'center' }} className="table-cell">
                   <button
                     onClick={() => handleRemoveRow(index)}
                     style={{ padding: '2px 6px' }}
                   >
-                    <i class="fa-solid fa-xmark"></i>
+                    <i class="fa-solid fa-xmark delete-icon"></i>
                   </button>
                 </td>
               </tr>
@@ -299,7 +304,9 @@ const InClassTable = forwardRef(
                 colSpan="12"
                 style={{ textAlign: 'right', paddingTop: '10px' }}
               >
-                <button onClick={handleAddRow}>Add Row</button>
+                <button className="add-row-button" onClick={handleAddRow}>
+                  Add Row
+                </button>
               </td>
             </tr>
           </tfoot>
