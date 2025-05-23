@@ -14,7 +14,7 @@ const AdminRoutes = [
     element: <ClassesManagement />,
   },
   {
-    path: '/admin/classes/detail/:className', // ✅ ROUTE MỚI
+    path: '/admin/classes/management/:id',
     element: <ClassDetail />,
   },
 ];

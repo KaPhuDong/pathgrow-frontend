@@ -1,8 +1,16 @@
-// src/components/DeleteModal.js
-import React, { useState } from 'react';
-import '../../../styles/components/deleteClassModalManagement.css';
+// src/components/DeleteClassModal.js
+import React, { useState } from "react";
+import "../../../styles/components/deleteClassModalManagement.css";
+import axios from "axios";
 
-const DeleteClassModal = ({ isOpen, onClose, data, onDelete, tab }) => {
+const DeleteClassModal = ({
+  isOpen,
+  onClose,
+  data,
+  onDelete,
+  tab,
+  classId,
+}) => {
   const [selectedIds, setSelectedIds] = useState([]);
 
   const handleCheckboxChange = (id) => {
@@ -11,10 +19,40 @@ const DeleteClassModal = ({ isOpen, onClose, data, onDelete, tab }) => {
     );
   };
 
-  const handleDelete = () => {
-    const updatedData = data.filter((item) => !selectedIds.includes(item.id));
-    onDelete(updatedData);
-    onClose();
+  const handleDelete = async () => {
+    if (selectedIds.length === 0) return alert("Vui lòng chọn phần tử cần xoá");
+
+    try {
+      if (tab === "subjects") {
+        await axios.post(
+          `http://localhost:8000/api/classesManagement/${classId}/remove-subjects`,
+          {
+            subjects: selectedIds,
+          }
+        );
+      } else if (tab === "students") {
+        await axios.post(
+          `http://localhost:8000/api/classesManagement/remove-students`,
+          {
+            students: selectedIds,
+          }
+        );
+      } else if (tab === "teachers") {
+        await axios.post(
+          `http://localhost:8000/api/classesManagement/remove-teachers`,
+          {
+            teachers: selectedIds,
+          }
+        );
+      }
+
+      const updatedData = data.filter((item) => !selectedIds.includes(item.id));
+      onDelete(updatedData);
+      onClose();
+    } catch (err) {
+      console.error("Lỗi khi xoá:", err);
+      alert("Xoá thất bại.");
+    }
   };
 
   if (!isOpen) return null;
@@ -26,20 +64,24 @@ const DeleteClassModal = ({ isOpen, onClose, data, onDelete, tab }) => {
         <div className="delete-list">
           {data.map((item) => (
             <label key={item.id} className="delete-item">
+              <span className="item-name">
+                {tab === "subjects" ? item.name : `${item.name}`}
+              </span>
               <input
                 type="checkbox"
                 checked={selectedIds.includes(item.id)}
                 onChange={() => handleCheckboxChange(item.id)}
               />
-              {tab === 'subjects'
-                ? `${item.subject} - ${item.teacher}`
-                : `${item.name}`}
             </label>
           ))}
         </div>
         <div className="modal-actions">
-          <button className="btn delete" onClick={handleDelete}>Delete</button>
-          <button className="btn cancel" onClick={onClose}>Cancel</button>
+          <button className="btn delete" onClick={handleDelete}>
+            Delete
+          </button>
+          <button className="btn cancel" onClick={onClose}>
+            Cancel
+          </button>
         </div>
       </div>
     </div>
