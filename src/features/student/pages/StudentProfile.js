@@ -16,6 +16,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const presetColors = [
   { name: 'Green', value: '#d9f2d9' },
@@ -195,7 +196,39 @@ const DeleteEvent = ({ eventInfo, onConfirm, onCancel, position }) => {
   );
 };
 
-
+// Achievements
+const AchievementList = ({ achievements }) => {
+  return (
+    <div className="achievement-wrapper" style={{ marginTop: '20px', flexDirection: 'column' }}>
+      <Link to="/student/achievements" style={{ textDecoration: 'none', color: 'inherit' }}>
+        <h3>Achievements</h3>
+      </Link>
+      {achievements.length === 0 ? (
+        <p>No achievements yet.</p>
+      ) : (
+        <div className="achievement-list" style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
+          {achievements.slice(0, 3).map((ach) => (
+            <div className="achievement-card" key={ach.id} style={{ width: '350px', border: '1px solid #ccc', borderRadius: '8px', overflow: 'hidden' }}>
+              <div className="achievement-image">
+                <img
+                  src={ach.image_url}
+                  alt="achievement"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+              </div>
+              <div className="achievement-info" style={{ padding: '10px' }}>
+                <h4 className="achievement-title">
+                  <strong>{ach.title}</strong>
+                </h4>
+                <p className="achievement-description">{ach.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
 
 
 const StudentProfile = () => {
@@ -203,6 +236,7 @@ const StudentProfile = () => {
   const [selectedRange, setSelectedRange] = useState(null);
   const [formPosition, setFormPosition] = useState(null);
   const [deleteInfo, setDeleteInfo] = useState(null);
+  const [achievements, setAchievements] = useState([]);
 
   const getAuthHeader = () => ({
     Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -232,8 +266,20 @@ const StudentProfile = () => {
     }
   };
 
+  //Achievements
+  const fetchAchievements = async () => {
+    try {
+      const res = await axios.get('http://localhost:8000/api/achievements', {
+        headers: getAuthHeader(),
+      });
+      setAchievements(res.data.achievements);
+    } catch (err) {
+      console.error('Error fetching achievements:', err);
+    }
+  };
   useEffect(() => {
     fetchEvents();
+    fetchAchievements();
   }, []);
 
   const handleSelect = (selectInfo) => {
@@ -431,6 +477,10 @@ const StudentProfile = () => {
             </div>
           </div>
 
+          {/* Achievement */}
+          <div className='student-achievement-into-profile'>
+             <AchievementList achievements={achievements} />
+          </div>
           <div
             className="calendar-wrapper"
             style={{
