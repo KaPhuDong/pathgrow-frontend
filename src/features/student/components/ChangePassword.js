@@ -1,6 +1,6 @@
-import React, {useState} from "react";
-import { Eye, EyeOff } from "lucide-react";
-import axios from "axios";
+import React, { useState } from 'react';
+import { Eye, EyeOff } from 'lucide-react';
+import axios from 'axios';
 
 const ChangePassword = ({
   showPasswordModal,
@@ -9,9 +9,9 @@ const ChangePassword = ({
   setShowToast,
 }) => {
   const [passwordData, setPasswordData] = useState({
-    current_password: "",
-    new_password: "",
-    new_password_confirmation: "",
+    current_password: '',
+    new_password: '',
+    new_password_confirmation: '',
   });
   const [passwordErrors, setPasswordErrors] = useState({});
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
@@ -29,13 +29,14 @@ const ChangePassword = ({
   const handleChangePassword = async () => {
     const errors = {};
     if (!passwordData.current_password) {
-      errors.current_password = "Please enter your current password.";
+      errors.current_password = 'Please enter your current password.';
     }
-    if (passwordData.new_password.length < 8) {
-      errors.new_password = "New password must be at least 8 characters.";
+    if (passwordData.new_password.length < 6) {
+      errors.new_password = 'New password must be at least 6 characters.';
     }
     if (passwordData.new_password !== passwordData.new_password_confirmation) {
-      errors.new_password_confirmation = "Password confirmation does not match.";
+      errors.new_password_confirmation =
+        'Password confirmation does not match.';
     }
 
     setPasswordErrors(errors);
@@ -43,27 +44,27 @@ const ChangePassword = ({
     if (Object.keys(errors).length > 0) return;
 
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem('token');
       await axios.post(
-        "http://127.0.0.1:8000/api/student/account/change-password",
+        'http://127.0.0.1:8000/api/student/account/change-password',
         passwordData,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      setToastMessage("Password changed successfully!");
+      setToastMessage('Password changed successfully!');
       setShowToast(true);
       closeModal();
     } catch (error) {
       const serverError = error.response?.data?.error;
-      if (serverError && serverError.includes("current password")) {
+      if (serverError && serverError.includes('current password')) {
         setPasswordErrors((prev) => ({
           ...prev,
-          current_password: "Current password is incorrect.",
+          current_password: 'Current password is incorrect.',
         }));
       } else {
         setToastMessage(
-          "Failed to change password: " +
+          'Failed to change password: ' +
             (error.response?.data?.error || error.message)
         );
         setShowToast(true);
@@ -74,9 +75,9 @@ const ChangePassword = ({
 
   const handleClose = () => {
     setPasswordData({
-      current_password: "",
-      new_password: "",
-      new_password_confirmation: "",
+      current_password: '',
+      new_password: '',
+      new_password_confirmation: '',
     });
     setPasswordErrors({});
     setShowCurrentPassword(false);
@@ -90,7 +91,7 @@ const ChangePassword = ({
   return (
     <div
       className="modal fade show"
-      style={{ display: "block", backgroundColor: "rgba(0,0,0,0.5)" }}
+      style={{ display: 'block', backgroundColor: 'rgba(0,0,0,0.5)' }}
       tabIndex="-1"
       role="dialog"
       aria-modal="true"
@@ -99,7 +100,11 @@ const ChangePassword = ({
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title">Change Password</h5>
-            <button type="button" className="btn-close" onClick={handleClose}></button>
+            <button
+              type="button"
+              className="btn-close"
+              onClick={handleClose}
+            ></button>
           </div>
           <div className="modal-body">
             {/* Current Password */}
@@ -107,7 +112,7 @@ const ChangePassword = ({
               <label className="form-label">Current Password</label>
               <div className="input-group">
                 <input
-                  type={showCurrentPassword ? "text" : "password"}
+                  type={showCurrentPassword ? 'text' : 'password'}
                   name="current_password"
                   className="form-control"
                   value={passwordData.current_password}
@@ -121,7 +126,11 @@ const ChangePassword = ({
                   className="btn btn-outline-secondary"
                   onClick={() => setShowCurrentPassword((prev) => !prev)}
                 >
-                  {showCurrentPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  {showCurrentPassword ? (
+                    <EyeOff size={16} />
+                  ) : (
+                    <Eye size={16} />
+                  )}
                 </button>
               </div>
               {passwordErrors.current_password && (
@@ -136,7 +145,7 @@ const ChangePassword = ({
               <label className="form-label">New Password</label>
               <div className="input-group">
                 <input
-                  type={showNewPassword ? "text" : "password"}
+                  type={showNewPassword ? 'text' : 'password'}
                   name="new_password"
                   className="form-control"
                   value={passwordData.new_password}
@@ -151,7 +160,9 @@ const ChangePassword = ({
                 </button>
               </div>
               {passwordErrors.new_password && (
-                <small className="text-danger">{passwordErrors.new_password}</small>
+                <small className="text-danger">
+                  {passwordErrors.new_password}
+                </small>
               )}
             </div>
 
@@ -160,7 +171,7 @@ const ChangePassword = ({
               <label className="form-label">Confirm New Password</label>
               <div className="input-group">
                 <input
-                  type={showConfirmPassword ? "text" : "password"}
+                  type={showConfirmPassword ? 'text' : 'password'}
                   name="new_password_confirmation"
                   className="form-control"
                   value={passwordData.new_password_confirmation}
@@ -171,7 +182,11 @@ const ChangePassword = ({
                   className="btn btn-outline-secondary"
                   onClick={() => setShowConfirmPassword((prev) => !prev)}
                 >
-                  {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  {showConfirmPassword ? (
+                    <EyeOff size={16} />
+                  ) : (
+                    <Eye size={16} />
+                  )}
                 </button>
               </div>
               {passwordErrors.new_password_confirmation && (
@@ -186,7 +201,7 @@ const ChangePassword = ({
             <button
               type="button"
               className="btn btn-secondary"
-              style={{ backgroundColor: "var(--secondary)", border: "none" }}
+              style={{ backgroundColor: 'var(--secondary)', border: 'none' }}
               onClick={handleClose}
             >
               Cancel
