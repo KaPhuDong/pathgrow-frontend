@@ -4,6 +4,7 @@
 @import './toastNotification.css';
 @import './weekSelector.css';
 @import './learningTarget.css';
-@import './tableHeader.css';
+@import './tablePlans.css';
 @import './pagination.css';
 @import './addAchievement.css';
+@import './addButton.css';

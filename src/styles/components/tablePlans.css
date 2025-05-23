@@ -2,3 +2,7 @@
   text-align: center !important;
   overflow-wrap: break-word;
 }
+
+.table-cell {
+  vertical-align: middle;
+}
