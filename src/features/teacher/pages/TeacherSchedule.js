@@ -20,11 +20,28 @@ const AddEvent = ({ datetime, onAdd, onCancel }) => {
     const [selectedColor, setSelectedColor] = useState(presetColors[0].value);
     const initialized = useRef(false);
     const [description, setDescription] = useState('');
-    const [date, setDate] = useState('');
-    const [time, setTime] = useState('');
+
     const [selectedClass, setSelectedClass] = useState('All Classes');
     const [selectedStudent, setSelectedStudent] = useState('All students');
     const [reminder, setReminder] = useState('');
+
+    const inputStyle = {
+        width: '100%',
+        padding: 8,
+        borderRadius: 6,
+        border: '1px solid #ccc',
+        marginTop: 4,
+    };
+
+    const buttonStyle = {
+        backgroundColor: '#00bfa6',
+        color: '#fff',
+        border: 'none',
+        padding: '10px 16px',
+        borderRadius: 8,
+        cursor: 'pointer',
+        fontWeight: 'bold',
+    };
 
     useEffect(() => {
         if (!initialized.current) {
@@ -58,7 +75,7 @@ const AddEvent = ({ datetime, onAdd, onCancel }) => {
                 padding: 20,
                 borderRadius: 12,
                 boxShadow: '0 0 10px rgba(0,0,0,0.1)',
-                width: 350,
+                width: 600,
                 position: 'absolute',
                 zIndex: 10000,
                 top: 100,
@@ -68,159 +85,81 @@ const AddEvent = ({ datetime, onAdd, onCancel }) => {
             <h3 style={{ color: '#00bfa6', marginBottom: 20 }}>Set Schedule</h3>
 
             <form onSubmit={handleSubmit}>
-                <div style={{ marginBottom: 12 }}>
-                    <label>Title</label>
-                    <input
-                        type="text"
-                        placeholder="Enter deadline title"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        required
-                        style={{
-                            width: '100%',
-                            padding: 8,
-                            borderRadius: 6,
-                            border: '1px solid #ccc',
-                            marginTop: 4,
-                        }}
-                    />
+                <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+                    {/* Left column */}
+                    <div style={{ flex: 1, minWidth: 250 }}>
+                        <div style={{ marginBottom: 12 }}>
+                            <label>Title</label>
+                            <input
+                                type="text"
+                                placeholder="Enter deadline title"
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                                required
+                                style={inputStyle}
+                            />
+                        </div>
+
+                        <div style={{ marginBottom: 12 }}>
+                            <label>Class</label>
+                            <select
+                                value={selectedClass}
+                                onChange={(e) => setSelectedClass(e.target.value)}
+                                style={inputStyle}
+                            >
+                                <option>All Classes</option>
+                            </select>
+                        </div>
+
+                        <div style={{ marginBottom: 12 }}>
+                            <label>Add Reminder</label>
+                            <input
+                                type="text"
+                                placeholder="1 hour before"
+                                value={reminder}
+                                onChange={(e) => setReminder(e.target.value)}
+                                style={inputStyle}
+                            />
+                        </div>
+                    </div>
+
+                    {/* Right column */}
+                    <div style={{ flex: 1, minWidth: 250 }}>
+                        <div style={{ marginBottom: 12 }}>
+                            <label>Description</label>
+                            <input
+                                type="text"
+                                placeholder="Enter description"
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                                style={inputStyle}
+                            />
+                        </div>
+
+                        <div style={{ marginBottom: 12 }}>
+                            <label>Student</label>
+                            <select
+                                value={selectedStudent}
+                                onChange={(e) => setSelectedStudent(e.target.value)}
+                                style={inputStyle}
+                            >
+                                <option>All students</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
 
-                <div style={{ marginBottom: 12 }}>
-                    <label>Description</label>
-                    <input
-                        type="text"
-                        placeholder="Enter description"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        style={{
-                            width: '100%',
-                            padding: 8,
-                            borderRadius: 6,
-                            border: '1px solid #ccc',
-                            marginTop: 4,
-                        }}
-                    />
-                </div>
-
-                <div style={{ marginBottom: 12 }}>
-                    <label>Date</label>
-                    <input
-                        type="date"
-                        value={date}
-                        onChange={(e) => setDate(e.target.value)}
-                        style={{
-                            width: '100%',
-                            padding: 8,
-                            borderRadius: 6,
-                            border: '1px solid #ccc',
-                            marginTop: 4,
-                        }}
-                    />
-                </div>
-
-                <div style={{ marginBottom: 12 }}>
-                    <label>Time</label>
-                    <input
-                        type="time"
-                        value={time}
-                        onChange={(e) => setTime(e.target.value)}
-                        style={{
-                            width: '100%',
-                            padding: 8,
-                            borderRadius: 6,
-                            border: '1px solid #ccc',
-                            marginTop: 4,
-                        }}
-                    />
-                </div>
-
-                <div style={{ marginBottom: 12 }}>
-                    <label>Class</label>
-                    <select
-                        value={selectedClass}
-                        onChange={(e) => setSelectedClass(e.target.value)}
-                        style={{
-                            width: '100%',
-                            padding: 8,
-                            borderRadius: 6,
-                            border: '1px solid #ccc',
-                            marginTop: 4,
-                        }}
-                    >
-                        <option>All Classes</option>
-                        {/* thêm option khác nếu cần */}
-                    </select>
-                </div>
-
-                <div style={{ marginBottom: 12 }}>
-                    <label>Student</label>
-                    <select
-                        value={selectedStudent}
-                        onChange={(e) => setSelectedStudent(e.target.value)}
-                        style={{
-                            width: '100%',
-                            padding: 8,
-                            borderRadius: 6,
-                            border: '1px solid #ccc',
-                            marginTop: 4,
-                        }}
-                    >
-                        <option>All students</option>
-                        {/* thêm option khác nếu cần */}
-                    </select>
-                </div>
-
-                <div style={{ marginBottom: 20 }}>
-                    <label>Add Reminder</label>
-                    <input
-                        type="text"
-                        placeholder="1 hour before"
-                        value={reminder}
-                        onChange={(e) => setReminder(e.target.value)}
-                        style={{
-                            width: '100%',
-                            padding: 8,
-                            borderRadius: 6,
-                            border: '1px solid #ccc',
-                            marginTop: 4,
-                        }}
-                    />
-                </div>
-
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <button
-                        type="button"
-                        onClick={onCancel}
-                        style={{
-                            backgroundColor: '#00bfa6',
-                            color: '#fff',
-                            border: 'none',
-                            padding: '10px 16px',
-                            borderRadius: 8,
-                            cursor: 'pointer',
-                            fontWeight: 'bold',
-                        }}
-                    >
+                <div style={{ marginTop: 20, display: 'flex', justifyContent: 'space-between' }}>
+                    <button type="button" onClick={onCancel} style={buttonStyle}>
                         Cancel
                     </button>
-                    <button
-                        type="submit"
-                        style={{
-                            backgroundColor: '#00bfa6',
-                            color: '#fff',
-                            border: 'none',
-                            padding: '10px 16px',
-                            borderRadius: 8,
-                            cursor: 'pointer',
-                            fontWeight: 'bold',
-                        }}
-                    >
+                    <button type="submit" style={buttonStyle}>
                         Set Deadline
                     </button>
                 </div>
             </form>
         </div>
+
 
     );
 };
