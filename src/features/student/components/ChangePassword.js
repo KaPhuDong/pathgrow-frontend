@@ -31,8 +31,8 @@ const ChangePassword = ({
     if (!passwordData.current_password) {
       errors.current_password = "Please enter your current password.";
     }
-    if (passwordData.new_password.length < 8) {
-      errors.new_password = "New password must be at least 8 characters.";
+    if (passwordData.new_password.length < 6) {
+      errors.new_password = "New password must be at least 6 characters.";
     }
     if (passwordData.new_password !== passwordData.new_password_confirmation) {
       errors.new_password_confirmation = "Password confirmation does not match.";
