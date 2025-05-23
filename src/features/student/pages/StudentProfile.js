@@ -3,9 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import Main from './Main';
 
 import avatar from '../../../assets/images/avatar.png';
-import playsport from '../../../assets/images/playsport.png';
-import penguin from '../../../assets/images/penguin.png';
-import star from '../../../assets/images/star.png';
+import banner from '../../../assets/images/banner.png';
 import classroom from '../../../assets/images/classroom.png';
 import msNhan from '../../../assets/images/msNhan.png';
 import msTrang from '../../../assets/images/msTrang.png';
@@ -370,65 +368,79 @@ const StudentProfile = () => {
         <div className="content-header">
           <div className="content-info container">
             <div className="profile">
+              <div className='profile-info'>
+                <p className='message'>"Learning is a never-ending journey—every step forward builds a brighter future!"</p>
+              </div>
               <div className="img-profile">
-                <img src={avatar}></img>
-                <i className="edit-icon fa-regular fa-pen-to-square"></i>
+                <img src={banner} alt="banner" />
               </div>
             </div>
-            <span className="student-name">SEVENTEEN</span>
           </div>
         </div>
 
         <div className="content-description container">
-          <div className="about-me">
-            <div className="about-icon">
-              <i className="icon-user fa-solid fa-user"></i>
-              <span className="about-name">About me</span>
+          {/* Calendar */}
+          <div
+            className="calendar-wrapper"
+            style={{
+              position: 'relative',
+              minHeight: '700px',
+              display: 'flex',
+              gap: '20px',
+            }}
+          >
+            <div style={{ width: '280px' }}>
+              <FullCalendar
+                plugins={[dayGridPlugin]}
+                initialView="dayGridMonth"
+                initialDate="2025-05-15"
+                headerToolbar={{ left: 'title', right: 'prev,next' }}
+                height="auto"
+                selectable={true}
+                dateClick={handleDateClick}
+                dayHeaderFormat={{ weekday: 'narrow' }}
+              />
             </div>
-            <div className="about-description">
-              I'm a second-year student at Passerelles Numériques Vietnam, an
-              NGO providing 3-year IT training to underprivileged youth. I'm
-              really into learning English because I love how beautiful the
-              language is. But it was difficult for me to conquer it easy, but
-              because to be able to find a job easily in the IT intrusdy.
+
+            <div style={{ flexGrow: 1, position: 'relative' }}>
+              <FullCalendar
+                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                initialView="timeGridWeek"
+                initialDate="2025-05-15"
+                headerToolbar={{
+                  start: 'prev,today,next',
+                  center: 'title',
+                  end: '',
+                }}
+                events={events}
+                allDaySlot={false}
+                slotMinTime="00:00:00"
+                slotMaxTime="12:00:00"
+                height="auto"
+                selectable={true}
+                select={handleSelect}
+                eventClick={handleEventClick}
+              />
+
+              {selectedRange && formPosition && (
+                <AddEvent
+                  datetime={selectedRange}
+                  onAdd={addEvent}
+                  onCancel={cancelAdd}
+                />
+              )}
+
+              {deleteInfo && (
+                <DeleteEvent
+                  eventInfo={deleteInfo.event}
+                  position={deleteInfo.position}
+                  onConfirm={confirmDelete}
+                  onCancel={cancelDelete}
+                />
+              )}
             </div>
           </div>
-
-          <div className="fact-about">
-            <div className="fact-icon">
-              <i
-                className="icon-fact fa-solid fa-list-check"
-                style={{ marginTop: '5px' }}
-              ></i>
-              <span className="fact-name">Fact</span>
-            </div>
-            <div className="group-card">
-              <div className="card">
-                <img src={playsport} className="card-img-top" alt="..." />
-                <div className="card-body">
-                  <h5 className="card-title">Fact No .1</h5>
-                  <p className="card-text">
-                    I'm a person who loves sports and outdoor activities.
-                  </p>
-                </div>
-              </div>
-              <div className="card">
-                <img src={penguin} className="card-img-top" alt="..." />
-                <div className="card-body">
-                  <h5 className="card-title">Fact No .2</h5>
-                  <p className="card-text">I very like Penguin.</p>
-                </div>
-              </div>
-              <div className="card">
-                <img src={star} className="card-img-top" alt="..." />
-                <div className="card-body">
-                  <h5 className="card-title">Fact No .3</h5>
-                  <p className="card-text">I'm a person who loves stars.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
+          {/* Classes */}
           <div className="class-objects">
             <div className="class-icon">
               <img src={classroom} className="icon-class"></img>
@@ -475,71 +487,10 @@ const StudentProfile = () => {
                 </div>
               </a>
             </div>
-          </div>
-
+          </div> 
           {/* Achievement */}
           <div className='student-achievement-into-profile'>
              <AchievementList achievements={achievements} />
-          </div>
-          <div
-            className="calendar-wrapper"
-            style={{
-              position: 'relative',
-              minHeight: '700px',
-              display: 'flex',
-              gap: '20px',
-            }}
-          >
-            <div style={{ width: '280px' }}>
-              <FullCalendar
-                plugins={[dayGridPlugin]}
-                initialView="dayGridMonth"
-                initialDate="2025-05-15"
-                headerToolbar={{ left: 'title', right: 'prev,next' }}
-                height="auto"
-                selectable={true}
-                dateClick={handleDateClick}
-                dayHeaderFormat={{ weekday: 'narrow' }}
-              />
-            </div>
-
-            <div style={{ flexGrow: 1, position: 'relative' }}>
-              <FullCalendar
-                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-                initialView="timeGridWeek"
-                initialDate="2025-05-15"
-                headerToolbar={{
-                  start: 'prev,today,next',
-                  center: 'title',
-                  end: '',
-                }}
-                events={events}
-                allDaySlot={false}
-                slotMinTime="00:00:00"
-                slotMaxTime="24:00:00"
-                height="auto"
-                selectable={true}
-                select={handleSelect}
-                eventClick={handleEventClick}
-              />
-
-              {selectedRange && formPosition && (
-                <AddEvent
-                  datetime={selectedRange}
-                  onAdd={addEvent}
-                  onCancel={cancelAdd}
-                />
-              )}
-
-              {deleteInfo && (
-                <DeleteEvent
-                  eventInfo={deleteInfo.event}
-                  position={deleteInfo.position}
-                  onConfirm={confirmDelete}
-                  onCancel={cancelDelete}
-                />
-              )}
-            </div>
           </div>
         </div>
       </div>
