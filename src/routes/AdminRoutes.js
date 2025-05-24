@@ -1,4 +1,7 @@
 import UserManagement from '../features/admin/pages/UserManagement';
+import ClassesManagement from '../features/admin/pages/ClassesManagement';
+import ClassDetail from '../features/admin/components/ClassDetail';
+
 
 const AdminRoutes = [
   {
@@ -8,7 +11,11 @@ const AdminRoutes = [
 
   {
     path: '/admin/classes/management',
-    // element: <ClassManagement />,
+    element: <ClassesManagement />,
+  },
+  {
+    path: '/admin/classes/management/:id',
+    element: <ClassDetail />,
   },
 ];
 
