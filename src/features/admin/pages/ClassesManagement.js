@@ -4,16 +4,20 @@ import Main from './Main';
 import AddClassModal from '../components/AddClassModal';
 import ClassCard from '../components/ClassCard';
 import { NavLink } from 'react-router-dom';
-import api from '../../../api/student/api';
+import api from '../../../api/admin/api';
 
 const Header = ({ onNewClassClick, searchTerm, onSearchChange }) => (
   <div className="header">
     <div className="title-class">
       <h1>Classes Management</h1>
-      <NavLink to="/logout" className="logout">Log out →</NavLink>
+      <NavLink to="/logout" className="logout">
+        Log out →
+      </NavLink>
     </div>
     <div className="header-controls">
-      <button className="new-class" onClick={onNewClassClick}>+ New Class</button>
+      <button className="new-class" onClick={onNewClassClick}>
+        + New Class
+      </button>
       <input
         type="text"
         placeholder="Tìm kiếm theo tên hoặc số học sinh..."
@@ -28,7 +32,9 @@ const Header = ({ onNewClassClick, searchTerm, onSearchChange }) => (
 const ClassList = ({ classes }) => (
   <div className="class-list">
     {classes.length === 0 ? (
-      <p style={{ textAlign: 'center', marginTop: '2rem' }}>Không tìm thấy lớp phù hợp.</p>
+      <p style={{ textAlign: 'center', marginTop: '2rem' }}>
+        Không tìm thấy lớp phù hợp.
+      </p>
     ) : (
       classes.map((classItem) => (
         <ClassCard
@@ -57,24 +63,26 @@ function ClassesManagement() {
   }, []);
 
   const fetchClasses = () => {
-    api.fetchClasses
-      .then(response => setClasses(response.data))
-      .catch(error => console.error('Lỗi khi lấy danh sách lớp học:', error));
+    api
+      .fetchClasses()
+      .then((data) => setClasses(data))
+      .catch((error) => console.error('Lỗi khi lấy danh sách lớp học:', error));
   };
 
   const handleAddClass = (newClass) => {
-    api.post('/classesManagement', {
-      name: newClass.name,
-      color: newClass.color,
-    })
-    .then(() => {
-      fetchClasses();
-      handleCloseModal();
-    })
-    .catch(error => {
-      console.error('Lỗi khi thêm lớp học:', error);
-      alert('Không thể thêm lớp học. Vui lòng kiểm tra dữ liệu.');
-    });
+    api
+      .addClass({
+        name: newClass.name,
+        color: newClass.color,
+      })
+      .then(() => {
+        fetchClasses();
+        handleCloseModal();
+      })
+      .catch((error) => {
+        console.error('Lỗi khi thêm lớp học:', error);
+        alert('Không thể thêm lớp học. Vui lòng kiểm tra dữ liệu.');
+      });
   };
 
   const filteredClasses = classes.filter((cls) => {

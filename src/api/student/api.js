@@ -5,11 +5,6 @@ const fetchSemesters = async () => {
   return response.data;
 };
 
-const fetchClasses = async () => {
-  const response = await axios.get('/classesManagement');
-  return response.data;
-};
-
 const fetchSubjects = async () => {
   const response = await axios.get('/subjects');
   return response.data;
@@ -182,7 +177,6 @@ const fetchSelfStudySubjects = async (weeklyStudyPlanId) => {
 // export
 export default {
   fetchSemesters,
-  fetchClasses,
   fetchSubjects,
   fetchGoal,
   saveGoal,
