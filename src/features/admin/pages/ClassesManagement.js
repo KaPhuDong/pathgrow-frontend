@@ -4,7 +4,7 @@ import Main from './Main';
 import AddClassModal from '../components/AddClassModal';
 import ClassCard from '../components/ClassCard';
 import { NavLink } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../../api/student/api';
 
 const Header = ({ onNewClassClick, searchTerm, onSearchChange }) => (
   <div className="header">
@@ -57,18 +57,19 @@ function ClassesManagement() {
   }, []);
 
   const fetchClasses = () => {
-    axios.get('http://localhost:8000/api/classesManagement')
+    api.fetchClasses
       .then(response => setClasses(response.data))
       .catch(error => console.error('Lỗi khi lấy danh sách lớp học:', error));
   };
 
   const handleAddClass = (newClass) => {
-    axios.post('http://localhost:8000/api/classesManagement', {
+    api.post('/classesManagement', {
       name: newClass.name,
       color: newClass.color,
     })
     .then(() => {
       fetchClasses();
+      handleCloseModal();
     })
     .catch(error => {
       console.error('Lỗi khi thêm lớp học:', error);

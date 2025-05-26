@@ -1,12 +1,11 @@
-// src/pages/ClassDetail.js
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
 import Main from "../pages/Main";
 import AddInfoClassModal from "../components/AddInfoClassModal";
 import DeleteModal from "../components/DeleteClassModal";
 import RenameClassModal from "../components/RenameClassModal";
 import "../../../styles/components/classDetailManagement.css";
+import api from '../../../api/student/api';  // import api của bạn
 
 const ClassDetail = () => {
   const { id } = useParams();
@@ -24,16 +23,22 @@ const ClassDetail = () => {
   const [showOptions, setShowOptions] = useState(false);
 
   const [searchTerm, setSearchTerm] = useState("");
+  const [availableItems, setAvailableItems] = useState([]);
 
+  // Fetch class detail
   useEffect(() => {
-    axios
-      .get(`http://localhost:8000/api/classesManagement/${id}`)
-      .then((res) => {
-        const data = res.data;
-        setName(data.name);
-        setSubjects(data.subjects || []);
-        setStudents(data.students || []);
-        setTeachers(data.teachers || []);
+    // giả sử api.fetchClasses trả về tất cả lớp, ta lọc lấy lớp theo id
+    api.fetchClasses()
+      .then((data) => {
+        const cls = data.find(c => c.id === +id);
+        if (!cls) {
+          alert("Không tìm thấy lớp.");
+          return;
+        }
+        setName(cls.name);
+        setSubjects(cls.subjects || []);
+        setStudents(cls.students || []);
+        setTeachers(cls.teachers || []);
       })
       .catch((err) => {
         console.error("Lỗi khi tải dữ liệu lớp:", err);
@@ -41,15 +46,16 @@ const ClassDetail = () => {
       });
   }, [id]);
 
+  // Xóa lớp
   const handleDeleteClass = () => {
     if (!window.confirm(`Bạn có chắc chắn muốn xoá lớp "${name}" không?`)) return;
 
-    axios.delete(`http://localhost:8000/api/classesManagement/${id}`)
+    api.deleteClass(id)
       .then(() => {
         alert(`Lớp "${name}" đã được xoá.`);
         navigate('/admin/classes/management');
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('Lỗi khi xoá lớp:', error);
         alert('Không thể xoá lớp.');
       });
@@ -63,8 +69,35 @@ const ClassDetail = () => {
       : teachers;
 
   const filteredData = tabData.filter((item) =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+    (item.name || item.subject)?.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  // Tải danh sách có thể thêm
+  const fetchAvailableItems = async () => {
+    try {
+      if (activeTab === "subjects") {
+        const allSubjects = await api.fetchSubjects();
+        return allSubjects.filter(
+          (s) => !subjects.some((curr) => curr.id === s.id)
+        );
+      } else if (activeTab === "students" || activeTab === "teachers") {
+        const role = activeTab === "students" ? "student" : "teacher";
+        const users = await api.fetchUsersByRole(role);
+        return users.filter(
+          (u) => !tabData.some((curr) => curr.id === u.id)
+        );
+      }
+    } catch (err) {
+      console.error("Lỗi khi tải danh sách:", err);
+      return [];
+    }
+  };
+
+  const handleAddClick = async () => {
+    const items = await fetchAvailableItems();
+    setAvailableItems(items);
+    setShowAddModal(true);
+  };
 
   const handleSave = (updatedData) => {
     if (activeTab === "subjects") setSubjects(updatedData);
@@ -72,8 +105,42 @@ const ClassDetail = () => {
     else if (activeTab === "teachers") setTeachers(updatedData);
   };
 
-  const handleDeleteConfirmed = handleSave;
-  const handleAddItems = handleSave;
+  // Thêm mục vào lớp
+  const handleAddItems = async (updatedData) => {
+    const selected = updatedData.filter(
+      (item) => !tabData.some((curr) => curr.id === item.id)
+    );
+    const ids = selected.map((item) => item.id);
+
+    try {
+      if (activeTab === "subjects") {
+        await api.addSubjectsToClass(id, ids);
+        setSubjects(updatedData);
+      } else if (activeTab === "students") {
+        await api.addStudentsToClass(id, ids);
+        setStudents(updatedData);
+      } else if (activeTab === "teachers") {
+        await api.addTeachersToClass(id, ids);
+        setTeachers(updatedData);
+      }
+    } catch (err) {
+      console.error("Lỗi khi thêm:", err);
+      alert("Không thể thêm mục.");
+    }
+  };
+
+  // Đổi tên lớp
+  const handleRenameClass = (newName) => {
+    api.renameClass(id, newName)
+      .then(() => {
+        setName(newName);
+        alert("Đã đổi tên lớp.");
+      })
+      .catch((err) => {
+        console.error("Lỗi khi đổi tên lớp:", err);
+        alert("Không thể đổi tên lớp.");
+      });
+  };
 
   return (
     <Main>
@@ -84,17 +151,15 @@ const ClassDetail = () => {
             <button onClick={() => setShowOptions(!showOptions)}>⋮</button>
             {showOptions && (
               <ul className="dropdown-options">
-                <li
-                  onClick={() => {
-                    setShowRenameModal(true);
-                    setShowOptions(false);
-                  }}
-                >
+                <li onClick={() => {
+                  setShowRenameModal(true);
+                  setShowOptions(false);
+                }}>
                   Rename class
                 </li>
                 <li onClick={() => {
-                  handleDeleteClass();   
-                  setShowOptions(false); 
+                  handleDeleteClass();
+                  setShowOptions(false);
                 }}>
                   Delete class
                 </li>
@@ -113,35 +178,19 @@ const ClassDetail = () => {
           />
           <div className="info-and-buttons">
             <div className="info-boxes">
-              <div
-                className={`info-box ${activeTab === "subjects" ? "active" : ""}`}
-                onClick={() => setActiveTab("subjects")}
-              >
+              <div className={`info-box ${activeTab === "subjects" ? "active" : ""}`} onClick={() => setActiveTab("subjects")}>
                 {subjects.length} <span>Subjects</span>
               </div>
-              <div
-                className={`info-box ${activeTab === "students" ? "active" : ""}`}
-                onClick={() => setActiveTab("students")}
-              >
+              <div className={`info-box ${activeTab === "students" ? "active" : ""}`} onClick={() => setActiveTab("students")}>
                 {students.length} <span>Students</span>
               </div>
-              <div
-                className={`info-box ${activeTab === "teachers" ? "active" : ""}`}
-                onClick={() => setActiveTab("teachers")}
-              >
+              <div className={`info-box ${activeTab === "teachers" ? "active" : ""}`} onClick={() => setActiveTab("teachers")}>
                 {teachers.length} <span>Responsible Teacher</span>
               </div>
             </div>
             <div className="btn-group">
-              <button onClick={() => setShowAddModal(true)} className="btn add">
-                Add
-              </button>
-              <button
-                onClick={() => setShowDeleteModal(true)}
-                className="btn delete"
-              >
-                Delete
-              </button>
+              <button onClick={handleAddClick} className="btn add">Add</button>
+              <button onClick={() => setShowDeleteModal(true)} className="btn delete">Delete</button>
             </div>
           </div>
         </div>
@@ -166,42 +215,40 @@ const ClassDetail = () => {
             </tr>
           </thead>
           <tbody>
-  {filteredData.length > 0 ? (
-    filteredData.map((item, index) => (
-      <tr key={item.id}>
-        <td>{index + 1}</td>
-        {activeTab === "subjects" && <td>{item.name}</td>}
-        {activeTab === "students" && (
-          <>
-            <td>{item.name}</td>
-            <td>{item.email}</td>
-          </>
-        )}
-        {activeTab === "teachers" && (
-          <>
-            <td>{item.name}</td>
-            <td>{item.email}</td>
-          </>
-        )}
-      </tr>
-    ))
-  ) : (
-    <tr>
-      <td colSpan={activeTab === "subjects" ? 2 : 3} style={{ textAlign: "center", padding: "20px" }}>
-        Không tìm thấy kết quả phù hợp.
-      </td>
-    </tr>
-  )}
-</tbody>
-
+            {filteredData.length > 0 ? (
+              filteredData.map((item, index) => (
+                <tr key={item.id}>
+                  <td>{index + 1}</td>
+                  {activeTab === "subjects" && <td>{item.name}</td>}
+                  {activeTab === "students" && (
+                    <>
+                      <td>{item.name}</td>
+                      <td>{item.email}</td>
+                    </>
+                  )}
+                  {activeTab === "teachers" && (
+                    <>
+                      <td>{item.name}</td>
+                      <td>{item.email}</td>
+                    </>
+                  )}
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={activeTab === "subjects" ? 2 : 3} style={{ textAlign: "center", padding: "20px" }}>
+                  Không tìm thấy kết quả phù hợp.
+                </td>
+              </tr>
+            )}
+          </tbody>
         </table>
 
-        {/* Modals */}
         <AddInfoClassModal
           isOpen={showAddModal}
           onClose={() => setShowAddModal(false)}
           tab={activeTab}
-          availableItems={[]}
+          availableItems={availableItems}
           currentItems={tabData}
           onAdd={handleAddItems}
         />
@@ -209,30 +256,19 @@ const ClassDetail = () => {
         <DeleteModal
           isOpen={showDeleteModal}
           onClose={() => setShowDeleteModal(false)}
-          data={filteredData}
-          onDelete={handleDeleteConfirmed}
-          tab={activeTab}
-          classId={id}
+          onConfirm={() => {
+            handleDeleteClass();
+            setShowDeleteModal(false);
+          }}
+          title="Xóa lớp học"
+          message={`Bạn có chắc muốn xóa lớp "${name}"?`}
         />
 
         <RenameClassModal
           isOpen={showRenameModal}
           onClose={() => setShowRenameModal(false)}
           currentName={name}
-          onRename={(newName) => {
-            axios
-              .put(`http://localhost:8000/api/classesManagement/${id}`, {
-                name: newName,
-              })
-              .then(() => {
-                setName(newName);
-                alert("Đã đổi tên lớp.");
-              })
-              .catch((err) => {
-                console.error("Lỗi khi đổi tên lớp:", err);
-                alert("Không thể đổi tên lớp.");
-              });
-          }}
+          onRename={handleRenameClass}
         />
       </div>
     </Main>
