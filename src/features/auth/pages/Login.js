@@ -17,7 +17,7 @@ function Login() {
     if (result.success) {
       const role = result.user.role;
 
-      if (role === 'admin') navigate('/admin/user/management');
+      if (role === 'admin') navigate('/admin/users/management');
       else if (role === 'teacher') navigate('/teacher/home');
       else navigate('/student/profile');
     } else {

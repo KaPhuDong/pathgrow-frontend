@@ -30,7 +30,7 @@ function Home() {
 
   return (
     <Main>
-      <div className="container-fluid vh-100">
+      <div className="vh-100">
         <div className="row h-100">
           {/* Sidebar */}
           <nav className="col-md-2 d-none d-md-block bg-white border-end p-3">

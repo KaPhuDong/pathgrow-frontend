@@ -6,331 +6,387 @@ import interactionPlugin from '@fullcalendar/interaction';
 import axios from 'axios';
 import Main from './Main';
 
-
-
 const AddEvent = ({ datetime, onAdd, onCancel }) => {
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
-    const [selectedClass, setSelectedClass] = useState('all');
-    const [reminder, setReminder] = useState('');
-    const [classOptions, setClassOptions] = useState([]);
-    const initialized = useRef(false);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [selectedClass, setSelectedClass] = useState('all');
+  const [reminder, setReminder] = useState('');
+  const [classOptions, setClassOptions] = useState([]);
+  const initialized = useRef(false);
 
+  const inputStyle = {
+    width: '100%',
+    padding: 8,
+    borderRadius: 6,
+    border: '1px solid #ccc',
+    marginTop: 4,
+  };
 
-    const inputStyle = {
-        width: '100%',
-        padding: 8,
-        borderRadius: 6,
-        border: '1px solid #ccc',
-        marginTop: 4,
+  useEffect(() => {
+    if (!initialized.current) {
+      initialized.current = true;
+    }
+  }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!title) return;
+
+    const newEvent = {
+      title,
+
+      start: new Date(datetime.start).toISOString(),
+      end: new Date(datetime.end).toISOString(),
     };
 
-    useEffect(() => {
-        if (!initialized.current) {
-            initialized.current = true;
-        }
-    }, []);
+    onAdd(newEvent);
+  };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (!title) return;
+  const startDate = new Date(datetime.start);
+  const endDate = new Date(datetime.end);
 
-        const newEvent = {
-            title,
-            
-            start: new Date(datetime.start).toISOString(),
-            end: new Date(datetime.end).toISOString(),
-        };
+  return (
+    <div
+      className="event-form"
+      style={{
+        background: '#e6f4ec',
+        padding: 20,
+        borderRadius: 12,
+        boxShadow: '0 0 10px rgba(0,0,0,0.1)',
+        width: 600,
+        position: 'absolute',
+        zIndex: 10000,
+        top: 100,
+        left: 100,
+      }}
+    >
+      <h3>Add Event</h3>
+      <p>
+        <strong>From:</strong> {startDate.toLocaleString()}
+      </p>
+      <p>
+        <strong>To:</strong> {endDate.toLocaleString()}
+      </p>
 
-        onAdd(newEvent);
-    };
+      <form onSubmit={handleSubmit}>
+        <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+          <div style={{ flex: 1, minWidth: 250 }}>
+            <div style={{ marginBottom: 12 }}>
+              <label>Title</label>
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                style={inputStyle}
+                placeholder="Enter Title"
+                required
+              />
+            </div>
 
-    const startDate = new Date(datetime.start);
-    const endDate = new Date(datetime.end);
+            <div style={{ marginBottom: 12 }}>
+              <label>Class</label>
+              <select
+                value={selectedClass}
+                onChange={(e) => setSelectedClass(e.target.value)}
+                style={inputStyle}
+              >
+                <option value="all">All Classes</option>
+                {classOptions.map((cls) => (
+                  <option key={cls.id} value={cls.id}>
+                    {cls.name}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-    return (
-        <div
-            className="event-form"
-            style={{
-                background: '#e6f4ec',
-                padding: 20,
-                borderRadius: 12,
-                boxShadow: '0 0 10px rgba(0,0,0,0.1)',
-                width: 600,
-                position: 'absolute',
-                zIndex: 10000,
-                top: 100,
-                left: 100,
-            }}
-        >
-            <h3>Add Event</h3>
-            <p><strong>From:</strong> {startDate.toLocaleString()}</p>
-            <p><strong>To:</strong> {endDate.toLocaleString()}</p>
+            <div style={{ marginBottom: 12 }}>
+              <label>Add Reminder</label>
+              <input
+                type="text"
+                value={reminder}
+                onChange={(e) => setReminder(e.target.value)}
+                style={inputStyle}
+                placeholder="e.g., 1 hour before"
+              />
+            </div>
+          </div>
 
-            <form onSubmit={handleSubmit}>
-                <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-                    <div style={{ flex: 1, minWidth: 250 }}>
-                        <div style={{ marginBottom: 12 }}>
-                            <label>Title</label>
-                            <input
-                                type="text"
-                                value={title}
-                                onChange={(e) => setTitle(e.target.value)}
-                                style={inputStyle}
-                                placeholder="Enter Title"
-                                required
-                            />
-                        </div>
+          <div style={{ flex: 1, minWidth: 250 }}>
+            <div style={{ marginBottom: 12 }}>
+              <label>Description</label>
+              <input
+                type="text"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                style={inputStyle}
+                placeholder="Enter description"
+                required
+              />
+            </div>
 
-                        <div style={{ marginBottom: 12 }}>
-                            <label>Class</label>
-                            <select
-                                value={selectedClass}
-                                onChange={(e) => setSelectedClass(e.target.value)}
-                                style={inputStyle}
-                            >
-                                <option value="all">All Classes</option>
-                                {classOptions.map((cls) => (
-                                    <option key={cls.id} value={cls.id}>
-                                        {cls.name}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-
-                        <div style={{ marginBottom: 12 }}>
-                            <label>Add Reminder</label>
-                            <input
-                                type="text"
-                                value={reminder}
-                                onChange={(e) => setReminder(e.target.value)}
-                                style={inputStyle}
-                                placeholder="e.g., 1 hour before"
-                            />
-                        </div>
-                    </div>
-
-                    <div style={{ flex: 1, minWidth: 250 }}>
-                        <div style={{ marginBottom: 12 }}>
-                            <label>Description</label>
-                            <input
-                                type="text"
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
-                                style={inputStyle}
-                                placeholder="Enter description"
-                                required
-                            />
-                        </div>
-
-                        <div style={{ marginBottom: 12 }}>
-                            <label>Student</label>
-                            <select disabled style={inputStyle}>
-                                <option>All students</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="form-buttons" style={{ marginTop: 16, display: 'flex', justifyContent: 'space-between' }}>
-                    <button type="button" onClick={onCancel} style={{ padding: '6px 12px' }}>Cancel</button>
-                    <button type="submit" style={{ padding: '6px 12px' }}>Add</button>
-                </div>
-            </form>
+            <div style={{ marginBottom: 12 }}>
+              <label>Student</label>
+              <select disabled style={inputStyle}>
+                <option>All students</option>
+              </select>
+            </div>
+          </div>
         </div>
-    );
+
+        <div
+          className="form-buttons"
+          style={{
+            marginTop: 16,
+            display: 'flex',
+            justifyContent: 'space-between',
+          }}
+        >
+          <button
+            type="button"
+            onClick={onCancel}
+            style={{ padding: '6px 12px' }}
+          >
+            Cancel
+          </button>
+          <button type="submit" style={{ padding: '6px 12px' }}>
+            Add
+          </button>
+        </div>
+      </form>
+    </div>
+  );
 };
 
 const DeleteEvent = ({ eventInfo, onConfirm, onCancel, position }) => {
-    if (!eventInfo || !position) return null;
+  if (!eventInfo || !position) return null;
 
-    return (
-        <div
-            style={{
-                position: 'absolute',
-                top: position.y,
-                left: position.x,
-                backgroundColor: '#fff',
-                border: '1px solid #ccc',
-                padding: '16px',
-                borderRadius: '8px',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-                zIndex: 10000,
-                width: 260,
-                maxWidth: '90vw',
-            }}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="delete-event-title"
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        top: position.y,
+        left: position.x,
+        backgroundColor: '#fff',
+        border: '1px solid #ccc',
+        padding: '16px',
+        borderRadius: '8px',
+        boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+        zIndex: 10000,
+        width: 260,
+        maxWidth: '90vw',
+      }}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="delete-event-title"
+    >
+      <p id="delete-event-title" style={{ marginBottom: '12px' }}>
+        Do you want to delete event: <strong>{eventInfo.title}</strong>?
+      </p>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <button
+          onClick={onCancel}
+          type="button"
+          style={{ padding: '6px 12px' }}
         >
-            <p id="delete-event-title" style={{ marginBottom: '12px' }}>
-                Do you want to delete event: <strong>{eventInfo.title}</strong>?
-            </p>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <button onClick={onCancel} type="button" style={{ padding: '6px 12px' }}>Cancel</button>
-                <button onClick={() => onConfirm(eventInfo)} type="button" style={{ padding: '6px 12px', backgroundColor: 'red', color: '#fff', border: 'none', borderRadius: 4 }}>Delete</button>
-            </div>
-        </div>
-    );
+          Cancel
+        </button>
+        <button
+          onClick={() => onConfirm(eventInfo)}
+          type="button"
+          style={{
+            padding: '6px 12px',
+            backgroundColor: 'red',
+            color: '#fff',
+            border: 'none',
+            borderRadius: 4,
+          }}
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  );
 };
 
 const TeacherSchedule = () => {
-    const [events, setEvents] = useState([]);
-    const [selectedRange, setSelectedRange] = useState(null);
-    const [formPosition, setFormPosition] = useState(null);
-    const [deleteInfo, setDeleteInfo] = useState(null);
+  const [events, setEvents] = useState([]);
+  const [selectedRange, setSelectedRange] = useState(null);
+  const [formPosition, setFormPosition] = useState(null);
+  const [deleteInfo, setDeleteInfo] = useState(null);
 
-    const getAuthHeader = () => ({
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-    });
+  const getAuthHeader = () => ({
+    Authorization: `Bearer ${localStorage.getItem('token')}`,
+  });
 
-    const fetchEvents = async () => {
-        try {
-            const res = await axios.get('http://localhost:8000/api/teacher-schedule', {
-                headers: getAuthHeader(),
-                withCredentials: true,
-            });
-
-            const formatted = res.data.map((e) => ({
-                id: String(e.id),
-                title: e.title,
-                start: `${e.date}T${e.start_time}`,
-                end: `${e.date}T${e.end_time}`,
-                backgroundColor: e.color || '#cfe9ff',
-            }));
-
-            setEvents(formatted);
-        } catch (err) {
-            console.error('Error fetching study plans:', err);
+  const fetchEvents = async () => {
+    try {
+      const res = await axios.get(
+        'http://localhost:8000/api/teacher-schedule',
+        {
+          headers: getAuthHeader(),
+          withCredentials: true,
         }
-    };
+      );
 
-    useEffect(() => {
-        fetchEvents();
-    }, []);
+      const formatted = res.data.map((e) => ({
+        id: String(e.id),
+        title: e.title,
+        start: `${e.date}T${e.start_time}`,
+        end: `${e.date}T${e.end_time}`,
+        backgroundColor: e.color || '#cfe9ff',
+      }));
 
-    const handleSelect = (selectInfo) => {
-        const { jsEvent } = selectInfo;
-        setDeleteInfo(null);
-        setFormPosition({ x: jsEvent.pageX, y: jsEvent.pageY });
-        setSelectedRange({ start: selectInfo.start, end: selectInfo.end });
-    };
+      setEvents(formatted);
+    } catch (err) {
+      console.error('Error fetching study plans:', err);
+    }
+  };
 
-    const handleDateClick = (arg) => {
-        setDeleteInfo(null);
-        setFormPosition({ x: arg.jsEvent.pageX, y: arg.jsEvent.pageY });
-        setSelectedRange({ start: arg.date, end: arg.date });
-    };
+  useEffect(() => {
+    fetchEvents();
+  }, []);
 
-    const addEvent = async (newEvent) => {
-        try {
-            const startDate = new Date(newEvent.start);
-            const endDate = new Date(newEvent.end);
+  const handleSelect = (selectInfo) => {
+    const { jsEvent } = selectInfo;
+    setDeleteInfo(null);
+    setFormPosition({ x: jsEvent.pageX, y: jsEvent.pageY });
+    setSelectedRange({ start: selectInfo.start, end: selectInfo.end });
+  };
 
-            const date = startDate.toISOString().split('T')[0];
-            const start_time = startDate.toTimeString().split(' ')[0];
-            const end_time = endDate.toTimeString().split(' ')[0];
+  const handleDateClick = (arg) => {
+    setDeleteInfo(null);
+    setFormPosition({ x: arg.jsEvent.pageX, y: arg.jsEvent.pageY });
+    setSelectedRange({ start: arg.date, end: arg.date });
+  };
 
-            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-            const day_of_week = days[startDate.getDay()];
+  const addEvent = async (newEvent) => {
+    try {
+      const startDate = new Date(newEvent.start);
+      const endDate = new Date(newEvent.end);
 
-            const payload = {
-                title: newEvent.title,
-                day_of_week,
-                date,
-                start_time,
-                end_time,
-                color: newEvent.color,
-            };
+      const date = startDate.toISOString().split('T')[0];
+      const start_time = startDate.toTimeString().split(' ')[0];
+      const end_time = endDate.toTimeString().split(' ')[0];
 
-            await axios.post('http://localhost:8000/api/teacher-schedule', payload, {
-                headers: {
-                    ...getAuthHeader(),
-                    'Content-Type': 'application/json',
-                },
-                withCredentials: true,
-            });
+      const days = [
+        'Sunday',
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
+      ];
+      const day_of_week = days[startDate.getDay()];
 
-            await fetchEvents();
-            setSelectedRange(null);
-        } catch (error) {
-            console.error('Failed to add event:', error);
-        }
-    };
+      const payload = {
+        title: newEvent.title,
+        day_of_week,
+        date,
+        start_time,
+        end_time,
+        color: newEvent.color,
+      };
 
-    const cancelAdd = () => setSelectedRange(null);
+      await axios.post('http://localhost:8000/api/teacher-schedule', payload, {
+        headers: {
+          ...getAuthHeader(),
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+      });
 
-    const handleEventClick = (clickInfo) => {
-        const { jsEvent, event } = clickInfo;
-        setSelectedRange(null);
-        setFormPosition(null);
-        setDeleteInfo({ event, position: { x: jsEvent.pageX, y: jsEvent.pageY } });
-    };
+      await fetchEvents();
+      setSelectedRange(null);
+    } catch (error) {
+      console.error('Failed to add event:', error);
+    }
+  };
 
-    const confirmDelete = async (eventInfo) => {
-        const id = String(eventInfo.id);
-        try {
-            await axios.delete(`http://localhost:8000/api/teacher-schedule/${id}`, {
-                headers: getAuthHeader(),
-                withCredentials: true,
-            });
-            setEvents((prev) => prev.filter((e) => e.id !== id));
-            setDeleteInfo(null);
-        } catch (err) {
-            console.error('Failed to delete event:', err);
-        }
-    };
+  const cancelAdd = () => setSelectedRange(null);
 
-    const cancelDelete = () => setDeleteInfo(null);
+  const handleEventClick = (clickInfo) => {
+    const { jsEvent, event } = clickInfo;
+    setSelectedRange(null);
+    setFormPosition(null);
+    setDeleteInfo({ event, position: { x: jsEvent.pageX, y: jsEvent.pageY } });
+  };
 
-    return (
-        <Main>
-            <div className="calendar-wrapper" style={{ position: 'relative', minHeight: '700px', display: 'flex', gap: '20px' }}>
-                <div style={{ width: '280px' }}>
-                    <FullCalendar
-                        plugins={[dayGridPlugin]}
-                        initialView="dayGridMonth"
-                        initialDate="2025-05-15"
-                        headerToolbar={{ left: 'title', right: 'prev,next' }}
-                        height="auto"
-                        selectable={true}
-                        dateClick={handleDateClick}
-                        dayHeaderFormat={{ weekday: 'narrow' }}
-                    />
-                </div>
+  const confirmDelete = async (eventInfo) => {
+    const id = String(eventInfo.id);
+    try {
+      await axios.delete(`http://localhost:8000/api/teacher-schedule/${id}`, {
+        headers: getAuthHeader(),
+        withCredentials: true,
+      });
+      setEvents((prev) => prev.filter((e) => e.id !== id));
+      setDeleteInfo(null);
+    } catch (err) {
+      console.error('Failed to delete event:', err);
+    }
+  };
 
-                <div style={{ flexGrow: 1, position: 'relative' }}>
-                    <FullCalendar
-                        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-                        initialView="timeGridWeek"
-                        initialDate="2025-05-15"
-                        headerToolbar={{ start: 'prev,today,next', center: 'title', end: '' }}
-                        events={events}
-                        allDaySlot={false}
-                        slotMinTime="00:00:00"
-                        slotMaxTime="24:00:00"
-                        height="auto"
-                        selectable={true}
-                        select={handleSelect}
-                        eventClick={handleEventClick}
-                    />
+  const cancelDelete = () => setDeleteInfo(null);
 
-                    {selectedRange && formPosition && (
-                        <AddEvent datetime={selectedRange} onAdd={addEvent} onCancel={cancelAdd} />
-                    )}
+  return (
+    <Main>
+      <div
+        className="calendar-wrapper"
+        style={{ minHeight: '700px', display: 'flex', gap: '20px' }}
+      >
+        <div style={{ width: '280px' }}>
+          <FullCalendar
+            plugins={[dayGridPlugin]}
+            initialView="dayGridMonth"
+            initialDate="2025-05-15"
+            headerToolbar={{ left: 'title', right: 'prev,next' }}
+            height="auto"
+            selectable={true}
+            dateClick={handleDateClick}
+            dayHeaderFormat={{ weekday: 'narrow' }}
+          />
+        </div>
 
-                    {deleteInfo && (
-                        <DeleteEvent
-                            eventInfo={deleteInfo.event}
-                            position={deleteInfo.position}
-                            onConfirm={confirmDelete}
-                            onCancel={cancelDelete}
-                        />
-                    )}
-                </div>
-            </div>
-        </Main>
-    );
+        <div style={{ flexGrow: 1, position: 'relative' }}>
+          <FullCalendar
+            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+            initialView="timeGridWeek"
+            initialDate="2025-05-15"
+            headerToolbar={{
+              start: 'prev,today,next',
+              center: 'title',
+              end: '',
+            }}
+            events={events}
+            allDaySlot={false}
+            slotMinTime="00:00:00"
+            slotMaxTime="24:00:00"
+            height="auto"
+            selectable={true}
+            select={handleSelect}
+            eventClick={handleEventClick}
+          />
+
+          {selectedRange && formPosition && (
+            <AddEvent
+              datetime={selectedRange}
+              onAdd={addEvent}
+              onCancel={cancelAdd}
+            />
+          )}
+
+          {deleteInfo && (
+            <DeleteEvent
+              eventInfo={deleteInfo.event}
+              position={deleteInfo.position}
+              onConfirm={confirmDelete}
+              onCancel={cancelDelete}
+            />
+          )}
+        </div>
+      </div>
+    </Main>
+  );
 };
 
 export default TeacherSchedule;
