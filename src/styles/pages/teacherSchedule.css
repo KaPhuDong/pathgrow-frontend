@@ -1,0 +1,13 @@
+
+.main-teacher-schedule {
+    display: flex;
+    gap: 20px;
+    margin: 40px;
+}
+
+
+
+.main-calendar {
+    flex-grow: 1;
+    position: relative;
+}

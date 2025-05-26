@@ -6,16 +6,23 @@ import interactionPlugin from '@fullcalendar/interaction';
 import axios from 'axios';
 import Main from './Main';
 
-
+// const presetColors = [
+//     { name: 'Green', value: '#d9f2d9' },
+//     { name: 'Pink', value: '#ffccf2' },
+//     { name: 'Yellow', value: '#ffffcc' },
+//     { name: 'Blue', value: '#cfe9ff' },
+//     { name: 'Orange', value: '#ffe5cc' },
+//     { name: 'Purple', value: '#e6ccff' },
+// ];
 
 const AddEvent = ({ datetime, onAdd, onCancel }) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
+    // const [selectedColor, setSelectedColor] = useState(presetColors[0].value);
     const [selectedClass, setSelectedClass] = useState('all');
     const [reminder, setReminder] = useState('');
     const [classOptions, setClassOptions] = useState([]);
     const initialized = useRef(false);
-
 
     const inputStyle = {
         width: '100%',
@@ -25,8 +32,35 @@ const AddEvent = ({ datetime, onAdd, onCancel }) => {
         marginTop: 4,
     };
 
+    const buttonStyle = {
+        backgroundColor: '#00bfa6',
+        color: '#fff',
+        border: 'none',
+        padding: '10px 16px',
+        borderRadius: 8,
+        cursor: 'pointer',
+        fontWeight: 'bold',
+    };
+
     useEffect(() => {
+        const fetchClasses = async () => {
+            try {
+                const res = await axios.get('http://localhost:8000/api/classes', {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                    withCredentials: true,
+                });
+                setClassOptions(res.data);
+            } catch (err) {
+                console.error('Error fetching classes:', err);
+            }
+        };
+
+        fetchClasses();
+
         if (!initialized.current) {
+            // setSelectedColor(presetColors[0].value);
             initialized.current = true;
         }
     }, []);
@@ -37,16 +71,16 @@ const AddEvent = ({ datetime, onAdd, onCancel }) => {
 
         const newEvent = {
             title,
-            
             start: new Date(datetime.start).toISOString(),
             end: new Date(datetime.end).toISOString(),
+            // color: selectedColor,
+            description,
+            class_id: selectedClass !== 'all' ? selectedClass : null,
+            reminder,
         };
 
         onAdd(newEvent);
     };
-
-    const startDate = new Date(datetime.start);
-    const endDate = new Date(datetime.end);
 
     return (
         <div
@@ -63,10 +97,7 @@ const AddEvent = ({ datetime, onAdd, onCancel }) => {
                 left: 100,
             }}
         >
-            <h3>Add Event</h3>
-            <p><strong>From:</strong> {startDate.toLocaleString()}</p>
-            <p><strong>To:</strong> {endDate.toLocaleString()}</p>
-
+            <h3 style={{ color: '#00bfa6', marginBottom: 20 }}>Set Schedule</h3>
             <form onSubmit={handleSubmit}>
                 <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
                     <div style={{ flex: 1, minWidth: 250 }}>
@@ -77,7 +108,6 @@ const AddEvent = ({ datetime, onAdd, onCancel }) => {
                                 value={title}
                                 onChange={(e) => setTitle(e.target.value)}
                                 style={inputStyle}
-                                placeholder="Enter Title"
                                 required
                             />
                         </div>
@@ -119,7 +149,6 @@ const AddEvent = ({ datetime, onAdd, onCancel }) => {
                                 onChange={(e) => setDescription(e.target.value)}
                                 style={inputStyle}
                                 placeholder="Enter description"
-                                required
                             />
                         </div>
 
@@ -131,6 +160,15 @@ const AddEvent = ({ datetime, onAdd, onCancel }) => {
                         </div>
                     </div>
                 </div>
+
+                {/* <div style={{ marginTop: 20, display: 'flex', justifyContent: 'space-between' }}>
+                    <button type="button" onClick={onCancel} style={buttonStyle}>
+                        Cancel
+                    </button>
+                    <button type="submit" onClick={onAdd} style={buttonStyle}>
+                        Set Deadline
+                    </button>
+                </div> */}
 
                 <div className="form-buttons" style={{ marginTop: 16, display: 'flex', justifyContent: 'space-between' }}>
                     <button type="button" onClick={onCancel} style={{ padding: '6px 12px' }}>Cancel</button>
@@ -161,14 +199,20 @@ const DeleteEvent = ({ eventInfo, onConfirm, onCancel, position }) => {
             }}
             role="dialog"
             aria-modal="true"
-            aria-labelledby="delete-event-title"
         >
-            <p id="delete-event-title" style={{ marginBottom: '12px' }}>
+            <p style={{ marginBottom: '12px' }}>
                 Do you want to delete event: <strong>{eventInfo.title}</strong>?
             </p>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <button onClick={onCancel} type="button" style={{ padding: '6px 12px' }}>Cancel</button>
-                <button onClick={() => onConfirm(eventInfo)} type="button" style={{ padding: '6px 12px', backgroundColor: 'red', color: '#fff', border: 'none', borderRadius: 4 }}>Delete</button>
+                <button onClick={onCancel} style={{ padding: '6px 12px' }}>
+                    Cancel
+                </button>
+                <button
+                    onClick={() => onConfirm(eventInfo)}
+                    style={{ padding: '6px 12px', backgroundColor: 'red', color: '#fff', border: 'none', borderRadius: 4 }}
+                >
+                    Delete
+                </button>
             </div>
         </div>
     );
@@ -177,7 +221,6 @@ const DeleteEvent = ({ eventInfo, onConfirm, onCancel, position }) => {
 const TeacherSchedule = () => {
     const [events, setEvents] = useState([]);
     const [selectedRange, setSelectedRange] = useState(null);
-    const [formPosition, setFormPosition] = useState(null);
     const [deleteInfo, setDeleteInfo] = useState(null);
 
     const getAuthHeader = () => ({
@@ -201,7 +244,7 @@ const TeacherSchedule = () => {
 
             setEvents(formatted);
         } catch (err) {
-            console.error('Error fetching study plans:', err);
+            console.error('Error fetching events:', err);
         }
     };
 
@@ -212,42 +255,37 @@ const TeacherSchedule = () => {
     const handleSelect = (selectInfo) => {
         const { jsEvent } = selectInfo;
         setDeleteInfo(null);
-        setFormPosition({ x: jsEvent.pageX, y: jsEvent.pageY });
-        setSelectedRange({ start: selectInfo.start, end: selectInfo.end });
+        setSelectedRange({ start: selectInfo.start, end: selectInfo.end, x: jsEvent.pageX, y: jsEvent.pageY });
     };
 
     const handleDateClick = (arg) => {
         setDeleteInfo(null);
-        setFormPosition({ x: arg.jsEvent.pageX, y: arg.jsEvent.pageY });
-        setSelectedRange({ start: arg.date, end: arg.date });
+        setSelectedRange({ start: arg.date, end: arg.date, x: arg.jsEvent.pageX, y: arg.jsEvent.pageY });
     };
 
     const addEvent = async (newEvent) => {
         try {
             const startDate = new Date(newEvent.start);
             const endDate = new Date(newEvent.end);
-
             const date = startDate.toISOString().split('T')[0];
             const start_time = startDate.toTimeString().split(' ')[0];
             const end_time = endDate.toTimeString().split(' ')[0];
-
-            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-            const day_of_week = days[startDate.getDay()];
+            const day_of_week = startDate.toLocaleDateString('en-US', { weekday: 'long' });
 
             const payload = {
                 title: newEvent.title,
+                description: newEvent.description,
                 day_of_week,
                 date,
                 start_time,
                 end_time,
-                color: newEvent.color,
+                // color: newEvent.color,
+                class_id: newEvent.class_id,
+                reminder: newEvent.reminder,
             };
 
             await axios.post('http://localhost:8000/api/teacher-schedule', payload, {
-                headers: {
-                    ...getAuthHeader(),
-                    'Content-Type': 'application/json',
-                },
+                headers: { ...getAuthHeader(), 'Content-Type': 'application/json' },
                 withCredentials: true,
             });
 
@@ -261,10 +299,8 @@ const TeacherSchedule = () => {
     const cancelAdd = () => setSelectedRange(null);
 
     const handleEventClick = (clickInfo) => {
-        const { jsEvent, event } = clickInfo;
+        setDeleteInfo({ event: clickInfo.event, position: { x: clickInfo.jsEvent.pageX, y: clickInfo.jsEvent.pageY } });
         setSelectedRange(null);
-        setFormPosition(null);
-        setDeleteInfo({ event, position: { x: jsEvent.pageX, y: jsEvent.pageY } });
     };
 
     const confirmDelete = async (eventInfo) => {
@@ -285,7 +321,7 @@ const TeacherSchedule = () => {
 
     return (
         <Main>
-            <div className="calendar-wrapper" style={{ position: 'relative', minHeight: '700px', display: 'flex', gap: '20px' }}>
+            <div className='main-teacher-schedule' style={{ position: 'relative', minHeight: '700px', display: 'flex', gap: '20px' }}>
                 <div style={{ width: '280px' }}>
                     <FullCalendar
                         plugins={[dayGridPlugin]}
@@ -298,33 +334,32 @@ const TeacherSchedule = () => {
                         dayHeaderFormat={{ weekday: 'narrow' }}
                     />
                 </div>
-
                 <div style={{ flexGrow: 1, position: 'relative' }}>
                     <FullCalendar
                         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
                         initialView="timeGridWeek"
-                        initialDate="2025-05-15"
                         headerToolbar={{ start: 'prev,today,next', center: 'title', end: '' }}
                         events={events}
                         allDaySlot={false}
                         slotMinTime="00:00:00"
                         slotMaxTime="24:00:00"
-                        height="auto"
-                        selectable={true}
+                        selectable
                         select={handleSelect}
                         eventClick={handleEventClick}
                     />
-
-                    {selectedRange && formPosition && (
-                        <AddEvent datetime={selectedRange} onAdd={addEvent} onCancel={cancelAdd} />
+                    {selectedRange && (
+                        <AddEvent
+                            datetime={{ start: selectedRange.start, end: selectedRange.end }}
+                            onAdd={addEvent}
+                            onCancel={cancelAdd}
+                        />
                     )}
-
                     {deleteInfo && (
                         <DeleteEvent
                             eventInfo={deleteInfo.event}
-                            position={deleteInfo.position}
                             onConfirm={confirmDelete}
                             onCancel={cancelDelete}
+                            position={deleteInfo.position}
                         />
                     )}
                 </div>
