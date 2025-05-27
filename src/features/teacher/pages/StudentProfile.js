@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { useParams } from 'react-router-dom';
 
 import Main2 from './Main2';
+import api from '../../../api/teacher/api';
 
 import avatar from '../../../assets/images/avatar.png';
 import banner from '../../../assets/images/banner.png';
@@ -13,7 +15,7 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import axios from 'axios';
+
 import { Link } from 'react-router-dom';
 
 const presetColors = [
@@ -29,6 +31,14 @@ const AddEvent = ({ datetime, onAdd, onCancel }) => {
   const [title, setTitle] = useState('');
   const [selectedColor, setSelectedColor] = useState(presetColors[0].value);
   const initialized = useRef(false);
+
+  const inputStyle = {
+    width: '100%',
+    padding: 8,
+    borderRadius: 6,
+    border: '1px solid #ccc',
+    marginTop: 4,
+  };
 
   useEffect(() => {
     if (!initialized.current) {
@@ -78,44 +88,18 @@ const AddEvent = ({ datetime, onAdd, onCancel }) => {
       </p>
 
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Title:</label>
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-            autoFocus
-            style={{
-              width: '100%',
-              padding: 6,
-              marginTop: 4,
-              marginBottom: 12,
-            }}
-          />
-        </div>
-
-        <div style={{ marginTop: 10 }}>
-          <label>Choose Color:</label>
-          <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
-            {presetColors.map((color) => (
-              <div
-                key={color.value}
-                onClick={() => setSelectedColor(color.value)}
-                title={color.name}
-                style={{
-                  backgroundColor: color.value,
-                  width: 24,
-                  height: 24,
-                  borderRadius: '50%',
-                  cursor: 'pointer',
-                  border:
-                    selectedColor === color.value
-                      ? '3px solid #000'
-                      : '1px solid #ccc',
-                }}
+        <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+          <div style={{ flex: 1, minWidth: 250 }}>
+            <div style={{ marginBottom: 12 }}>
+              <label>Title</label>
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                style={inputStyle}
+                required
               />
-            ))}
+            </div>
           </div>
         </div>
 
@@ -150,14 +134,14 @@ const DeleteEvent = ({ eventInfo, onConfirm, onCancel, position }) => {
     <div
       style={{
         position: 'absolute',
-        top: position.y,
-        left: position.x,
+        top: position.y - 80,
+        left: position.x - 500,
         backgroundColor: '#fff',
         border: '1px solid #ccc',
         padding: '16px',
         borderRadius: '8px',
         boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-        zIndex: 10,
+        zIndex: 10000,
         width: 260,
         maxWidth: '90vw',
       }}
@@ -253,47 +237,35 @@ const StudentProfile = () => {
   const [deleteInfo, setDeleteInfo] = useState(null);
   const [achievements, setAchievements] = useState([]);
 
-  const getAuthHeader = () => ({
-    Authorization: `Bearer ${localStorage.getItem('token')}`,
-  });
+  const { studentId } = useParams();
 
-  const fetchEvents = async () => {
-    try {
-      const res = await axios.get(
-        'http://localhost:8000/api/student-calendar',
-        {
-          headers: getAuthHeader(),
-          withCredentials: true,
-        }
-      );
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const data = await api.getStudentCalendar(studentId);
+        const formatted = data.map((e) => ({
+          id: String(e.id),
+          title: e.title,
+          start: `${e.date}T${e.start_time}`,
+          end: `${e.date}T${e.end_time}`,
+          color: e.color || '#cfe9ff',
+        }));
+        setEvents(formatted);
+      } catch (err) {
+        console.error('Error fetching study plans:', err);
+      }
+    };
 
-      const formatted = res.data.map((e) => ({
-        id: String(e.id),
-        title: e.title,
-        start: `${e.date}T${e.start_time}`,
-        end: `${e.date}T${e.end_time}`,
-        backgroundColor: e.color || '#cfe9ff',
-      }));
-
-      setEvents(formatted);
-    } catch (err) {
-      console.error('Error fetching study plans:', err);
-    }
-  };
+    if (studentId) fetchEvents();
+  }, [studentId]);
 
   //Achievements
-  const fetchAchievements = async () => {
-    try {
-      const res = await axios.get('http://localhost:8000/api/achievements', {
-        headers: getAuthHeader(),
-      });
-      setAchievements(res.data.achievements);
-    } catch (err) {
-      console.error('Error fetching achievements:', err);
-    }
-  };
   useEffect(() => {
-    fetchEvents();
+    const fetchAchievements = async () => {
+      const data = await api.getAchievements(studentId);
+      setAchievements(data.achievements);
+    };
+
     fetchAchievements();
   }, []);
 
@@ -339,21 +311,23 @@ const StudentProfile = () => {
         color: newEvent.color,
       };
 
-      await axios.post('http://localhost:8000/api/student-calendar', payload, {
-        headers: {
-          ...getAuthHeader(),
-          'Content-Type': 'application/json',
-        },
-        withCredentials: true,
-      });
+      await api.addSchedule(studentId, payload);
 
-      await fetchEvents();
+      // Reload events
+      const refreshedData = await api.getStudentCalendar(studentId);
+      const formatted = refreshedData.map((e) => ({
+        id: String(e.id),
+        title: e.title,
+        start: `${e.date}T${e.start_time}`,
+        end: `${e.date}T${e.end_time}`,
+        color: e.color || '#cfe9ff',
+      }));
+      setEvents(formatted);
       setSelectedRange(null);
     } catch (error) {
       console.error('Failed to add event:', error);
     }
   };
-
   const cancelAdd = () => setSelectedRange(null);
 
   const handleEventClick = (clickInfo) => {
@@ -366,10 +340,7 @@ const StudentProfile = () => {
   const confirmDelete = async (eventInfo) => {
     const id = String(eventInfo.id);
     try {
-      await axios.delete(`http://localhost:8000/api/student-calendar/${id}`, {
-        headers: getAuthHeader(),
-        withCredentials: true,
-      });
+      await api.deleteSchedule(studentId, id);
       setEvents((prev) => prev.filter((e) => e.id !== id));
       setDeleteInfo(null);
     } catch (err) {
