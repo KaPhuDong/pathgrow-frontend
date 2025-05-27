@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Main from './Main';
+import Main1 from './Main1';
 import api from '../../../api/teacher/api';
 
 function Home() {
@@ -29,7 +29,7 @@ function Home() {
   };
 
   return (
-    <Main>
+    <Main1>
       <div className="vh-100">
         <div className="row h-100">
           {/* Sidebar */}
@@ -109,7 +109,7 @@ function Home() {
           </div>
         </div>
       </div>
-    </Main>
+    </Main1>
   );
 }
 

@@ -153,6 +153,7 @@ a {
   color: black;
 }
 
-a:hover {
+a:hover,
+h2:hover {
   color: unset;
 }

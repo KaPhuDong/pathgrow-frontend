@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Main from './Main';
+import Main1 from './Main1';
 import { useLocation, useNavigate } from 'react-router-dom';
 import api from '../../../api/teacher/api';
 import Pagination from '../../../components/ui/Pagination';
@@ -67,7 +67,7 @@ const ListStudent = () => {
   const totalPages = Math.ceil(students.length / studentsPerPage);
 
   return (
-    <Main>
+    <Main1>
       <div className="vh-100">
         <div className="row h-100">
           {/* Sidebar */}
@@ -150,9 +150,12 @@ const ListStudent = () => {
                                 fontWeight: 'bold',
                               }}
                               onClick={() =>
-                                navigate('/student/profile', {
-                                  state: { studentId: student.id },
-                                })
+                                navigate(
+                                  `/teacher/view-student-profile/${student.id}`,
+                                  {
+                                    state: { studentId: student.id },
+                                  }
+                                )
                               }
                             >
                               View
@@ -179,7 +182,7 @@ const ListStudent = () => {
           </div>
         </div>
       </div>
-    </Main>
+    </Main1>
   );
 };
 

@@ -1,17 +1,24 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { useParams } from 'react-router-dom';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import axios from 'axios';
-import Main1 from './Main1';
+import api from '../../../api/teacher/api';
+import Main2 from './Main2';
+
+const presetColors = [
+  { name: 'Green', value: '#d9f2d9' },
+  { name: 'Pink', value: '#ffccf2' },
+  { name: 'Yellow', value: '#ffffcc' },
+  { name: 'Blue', value: '#cfe9ff' },
+  { name: 'Orange', value: '#ffe5cc' },
+  { name: 'Purple', value: '#e6ccff' },
+];
 
 const AddEvent = ({ datetime, onAdd, onCancel }) => {
   const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [selectedClass, setSelectedClass] = useState('all');
-  const [reminder, setReminder] = useState('');
-  const [classOptions, setClassOptions] = useState([]);
+  const [selectedColor, setSelectedColor] = useState(presetColors[0].value);
   const initialized = useRef(false);
 
   const inputStyle = {
@@ -24,6 +31,7 @@ const AddEvent = ({ datetime, onAdd, onCancel }) => {
 
   useEffect(() => {
     if (!initialized.current) {
+      setSelectedColor(presetColors[0].value);
       initialized.current = true;
     }
   }, []);
@@ -34,9 +42,9 @@ const AddEvent = ({ datetime, onAdd, onCancel }) => {
 
     const newEvent = {
       title,
-
       start: new Date(datetime.start).toISOString(),
       end: new Date(datetime.end).toISOString(),
+      color: selectedColor,
     };
 
     onAdd(newEvent);
@@ -49,11 +57,11 @@ const AddEvent = ({ datetime, onAdd, onCancel }) => {
     <div
       className="event-form"
       style={{
-        background: '#e6f4ec',
+        background: '#fff',
         padding: 20,
-        borderRadius: 12,
-        boxShadow: '0 0 10px rgba(0,0,0,0.1)',
-        width: 600,
+        borderRadius: 8,
+        boxShadow: '0 0 8px rgba(0,0,0,0.15)',
+        width: 300,
         position: 'absolute',
         zIndex: 10,
         top: 100,
@@ -78,57 +86,8 @@ const AddEvent = ({ datetime, onAdd, onCancel }) => {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 style={inputStyle}
-                placeholder="Enter Title"
                 required
               />
-            </div>
-
-            <div style={{ marginBottom: 12 }}>
-              <label>Class</label>
-              <select
-                value={selectedClass}
-                onChange={(e) => setSelectedClass(e.target.value)}
-                style={inputStyle}
-              >
-                <option value="all">All Classes</option>
-                {classOptions.map((cls) => (
-                  <option key={cls.id} value={cls.id}>
-                    {cls.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div style={{ marginBottom: 12 }}>
-              <label>Add Reminder</label>
-              <input
-                type="text"
-                value={reminder}
-                onChange={(e) => setReminder(e.target.value)}
-                style={inputStyle}
-                placeholder="e.g., 1 hour before"
-              />
-            </div>
-          </div>
-
-          <div style={{ flex: 1, minWidth: 250 }}>
-            <div style={{ marginBottom: 12 }}>
-              <label>Description</label>
-              <input
-                type="text"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                style={inputStyle}
-                placeholder="Enter description"
-                required
-              />
-            </div>
-
-            <div style={{ marginBottom: 12 }}>
-              <label>Student</label>
-              <select disabled style={inputStyle}>
-                <option>All students</option>
-              </select>
             </div>
           </div>
         </div>
@@ -164,14 +123,14 @@ const DeleteEvent = ({ eventInfo, onConfirm, onCancel, position }) => {
     <div
       style={{
         position: 'absolute',
-        top: position.y,
-        left: position.x,
+        top: position.y - 80,
+        left: position.x - 500,
         backgroundColor: '#fff',
         border: '1px solid #ccc',
         padding: '16px',
         borderRadius: '8px',
         boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-        zIndex: 10,
+        zIndex: 10000,
         width: 260,
         maxWidth: '90vw',
       }}
@@ -208,43 +167,33 @@ const DeleteEvent = ({ eventInfo, onConfirm, onCancel, position }) => {
   );
 };
 
-const TeacherSchedule = () => {
+const StudentSchedule = () => {
   const [events, setEvents] = useState([]);
   const [selectedRange, setSelectedRange] = useState(null);
   const [formPosition, setFormPosition] = useState(null);
   const [deleteInfo, setDeleteInfo] = useState(null);
 
-  const getAuthHeader = () => ({
-    Authorization: `Bearer ${localStorage.getItem('token')}`,
-  });
-
-  const fetchEvents = async () => {
-    try {
-      const res = await axios.get(
-        'http://localhost:8000/api/teacher-schedule',
-        {
-          headers: getAuthHeader(),
-          withCredentials: true,
-        }
-      );
-
-      const formatted = res.data.map((e) => ({
-        id: String(e.id),
-        title: e.title,
-        start: `${e.date}T${e.start_time}`,
-        end: `${e.date}T${e.end_time}`,
-        backgroundColor: e.color || '#cfe9ff',
-      }));
-
-      setEvents(formatted);
-    } catch (err) {
-      console.error('Error fetching study plans:', err);
-    }
-  };
+  const { studentId } = useParams();
 
   useEffect(() => {
-    fetchEvents();
-  }, []);
+    const fetchEvents = async () => {
+      try {
+        const data = await api.getStudentCalendar(studentId);
+        const formatted = data.map((e) => ({
+          id: String(e.id),
+          title: e.title,
+          start: `${e.date}T${e.start_time}`,
+          end: `${e.date}T${e.end_time}`,
+          color: e.color || '#cfe9ff',
+        }));
+        setEvents(formatted);
+      } catch (err) {
+        console.error('Error fetching study plans:', err);
+      }
+    };
+
+    if (studentId) fetchEvents();
+  }, [studentId]);
 
   const handleSelect = (selectInfo) => {
     const { jsEvent } = selectInfo;
@@ -288,15 +237,18 @@ const TeacherSchedule = () => {
         color: newEvent.color,
       };
 
-      await axios.post('http://localhost:8000/api/teacher-schedule', payload, {
-        headers: {
-          ...getAuthHeader(),
-          'Content-Type': 'application/json',
-        },
-        withCredentials: true,
-      });
+      await api.addSchedule(studentId, payload);
 
-      await fetchEvents();
+      // Reload events
+      const refreshedData = await api.getStudentCalendar(studentId);
+      const formatted = refreshedData.map((e) => ({
+        id: String(e.id),
+        title: e.title,
+        start: `${e.date}T${e.start_time}`,
+        end: `${e.date}T${e.end_time}`,
+        color: e.color || '#cfe9ff',
+      }));
+      setEvents(formatted);
       setSelectedRange(null);
     } catch (error) {
       console.error('Failed to add event:', error);
@@ -315,10 +267,7 @@ const TeacherSchedule = () => {
   const confirmDelete = async (eventInfo) => {
     const id = String(eventInfo.id);
     try {
-      await axios.delete(`http://localhost:8000/api/teacher-schedule/${id}`, {
-        headers: getAuthHeader(),
-        withCredentials: true,
-      });
+      await api.deleteSchedule(studentId, id);
       setEvents((prev) => prev.filter((e) => e.id !== id));
       setDeleteInfo(null);
     } catch (err) {
@@ -329,16 +278,21 @@ const TeacherSchedule = () => {
   const cancelDelete = () => setDeleteInfo(null);
 
   return (
-    <Main1>
+    <Main2>
       <div
         className="calendar-wrapper"
-        style={{ minHeight: '700px', display: 'flex', gap: '20px' }}
+        style={{
+          position: 'relative',
+          minHeight: '700px',
+          display: 'flex',
+          gap: '20px',
+        }}
       >
         <div style={{ width: '280px' }}>
           <FullCalendar
             plugins={[dayGridPlugin]}
             initialView="dayGridMonth"
-            initialDate="2025-05-15"
+            initialDate={new Date().toISOString().split('T')[0]}
             headerToolbar={{ left: 'title', right: 'prev,next' }}
             height="auto"
             selectable={true}
@@ -351,7 +305,7 @@ const TeacherSchedule = () => {
           <FullCalendar
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             initialView="timeGridWeek"
-            initialDate="2025-05-15"
+            initialDate={new Date().toISOString().split('T')[0]}
             headerToolbar={{
               start: 'prev,today,next',
               center: 'title',
@@ -372,6 +326,7 @@ const TeacherSchedule = () => {
               datetime={selectedRange}
               onAdd={addEvent}
               onCancel={cancelAdd}
+              position={formPosition}
             />
           )}
 
@@ -385,8 +340,8 @@ const TeacherSchedule = () => {
           )}
         </div>
       </div>
-    </Main1>
+    </Main2>
   );
 };
 
-export default TeacherSchedule;
+export default StudentSchedule;

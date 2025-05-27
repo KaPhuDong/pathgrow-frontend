@@ -8,7 +8,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 999;
+  z-index: 10;
 }
 
 .modal {
@@ -30,9 +30,9 @@
 }
 
 .delete-list {
-  flex: 1; 
+  flex: 1;
   margin-bottom: 15px;
-  padding-right: 8px; 
+  padding-right: 8px;
 }
 
 .modal .delete-item {
@@ -44,14 +44,13 @@
   /* border-bottom: 1px solid #eee;  */
 }
 
-
 .item-name {
   width: 300px;
-  flex: 1;             /* Tên sẽ chiếm phần còn lại nếu cần */
+  flex: 1; /* Tên sẽ chiếm phần còn lại nếu cần */
   word-break: break-word;
 }
 
-.delete-item input[type="checkbox"] {
+.delete-item input[type='checkbox'] {
   width: 30px;
   margin-left: 12px;
   transform: scale(1.2);
