@@ -170,43 +170,88 @@
 }
 
 /* 3-dot Dropdown Menu */
-.options-menu {
-  position: absolute;
-  top: 30px;
-  right: 30px;
-  background-color: white;
-  border-radius: 6px;
-  z-index: 100;
-  font-size: 24px;
+.header-with-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
 }
 
-.options-menu ul {
+.options-menu {
+  position: relative;
+  display: inline-block;
+}
+
+.options-menu button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 4px;
+  width: 32px;
+  height: 32px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dropdown-options {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  margin-top: 8px;
   list-style: none;
   padding: 0;
-  margin: 0;
+  width: 140px;
+  z-index: 10;
 }
 
-.dropdown-options li{
-  font-size: 16px;
-}
-.options-menu li {
-  padding: 3px 20px;
+.dropdown-options li {
+  padding: 3px 12px 5px;
   cursor: pointer;
-  white-space: nowrap;
-  transition: background-color 0.2s ease;
 }
 
-.options-menu li:hover {
-  background-color: #f5f5f5;
+.dropdown-options li:hover {
+  background-color: #f0f0f0;
 }
 
-/* 3-dot Icon */
-.options-button {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  background: transparent;
+
+/* phân trang */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  position: fixed;
+  bottom: 0;
+  left: 100px;
+  width: 100%;
+  /* background: white; */
+  padding: 20px 0;
+  z-index: 5;
+  /* border-top: 1px solid #ddd; */
+}
+
+.pagination-container button {
+  padding: 0.3rem 0.8rem;
   border: none;
+  background-color: #eee;
+  border-radius: 5px;
   cursor: pointer;
-  font-size: 20px;
+  border: 1px solid #ccc;
+}
+
+.pagination-container button.active {
+  background-color: var(--primary);
+  color: white;
+}
+
+.pagination-container button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }

@@ -20,7 +20,7 @@ const Header = ({ onNewClassClick, searchTerm, onSearchChange }) => (
       </button>
       <input
         type="text"
-        placeholder="Tìm kiếm theo tên hoặc số học sinh..."
+        placeholder="Search by name or student..."
         className="search"
         value={searchTerm}
         onChange={(e) => onSearchChange(e.target.value)}
@@ -54,6 +54,8 @@ function ClassesManagement() {
   const [showModal, setShowModal] = useState(false);
   const [classes, setClasses] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
 
   const handleOpenModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
@@ -62,11 +64,15 @@ function ClassesManagement() {
     fetchClasses();
   }, []);
 
+  useEffect(() => {
+    setCurrentPage(1); // Reset page khi search
+  }, [searchTerm]);
+
   const fetchClasses = () => {
     api
       .fetchClasses()
       .then((data) => setClasses(data))
-      .catch((error) => console.error('Lỗi khi lấy danh sách lớp học:', error));
+      .catch((error) => console.error('Failed to fetch the class list:', error));
   };
 
   const handleAddClass = (newClass) => {
@@ -80,17 +86,23 @@ function ClassesManagement() {
         handleCloseModal();
       })
       .catch((error) => {
-        console.error('Lỗi khi thêm lớp học:', error);
-        alert('Không thể thêm lớp học. Vui lòng kiểm tra dữ liệu.');
+        console.error('Failed to add class:', error);
+        alert('Failed to add the class. Please review the data.');
       });
   };
 
-  const filteredClasses = classes.filter((cls) => {
+  const filteredClassesAll = classes.filter((cls) => {
     const term = searchTerm.toLowerCase();
     const nameMatch = cls.name.toLowerCase().includes(term);
     const studentsMatch = !isNaN(term) && cls.students === parseInt(term);
     return nameMatch || studentsMatch;
   });
+
+  const totalPages = Math.ceil(filteredClassesAll.length / itemsPerPage);
+  const paginatedClasses = filteredClassesAll.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
     <Main>
@@ -101,8 +113,37 @@ function ClassesManagement() {
             searchTerm={searchTerm}
             onSearchChange={setSearchTerm}
           />
-          <ClassList classes={filteredClasses} />
+          <ClassList classes={paginatedClasses} />
+
+          {totalPages > 1 && (
+            <div className="pagination">
+              <button
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+              >
+                &lt; Prev
+              </button>
+              {Array.from({ length: totalPages }, (_, i) => (
+                <button
+                  key={i + 1}
+                  onClick={() => setCurrentPage(i + 1)}
+                  className={currentPage === i + 1 ? 'active' : ''}
+                >
+                  {i + 1}
+                </button>
+              ))}
+              <button
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                }
+                disabled={currentPage === totalPages}
+              >
+                Next &gt;
+              </button>
+            </div>
+          )}
         </div>
+
         {showModal && (
           <AddClassModal
             onClose={handleCloseModal}
