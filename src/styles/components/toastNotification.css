@@ -7,7 +7,7 @@
   padding: 14px 20px;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  z-index: 9999;
+  z-index: 10;
   animation: slideIn 0.3s ease-out;
   font-weight: 500;
 }

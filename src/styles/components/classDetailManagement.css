@@ -45,7 +45,7 @@
 }
 
 .info-box.active {
-  background-color: #00C8C8;
+  background-color: #00c8c8;
   color: white;
 }
 
@@ -72,7 +72,7 @@
 }
 
 .btn.add {
-  background-color: #00C8C8;
+  background-color: #00c8c8;
   color: white;
 }
 
@@ -93,7 +93,6 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-
 /* Table */
 .subject-table {
   width: 100%;
@@ -109,20 +108,22 @@
 }
 
 .subject-table th {
-  background-color: #00C8C8;
+  background-color: #00c8c8;
   color: white;
 }
 
 /* Modal Overlay (shared) */
 .modal-overlay {
   position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.5);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 10;
 }
 
 /* Modal Box (shared) */
@@ -131,7 +132,7 @@
   padding: 20px;
   border-radius: 10px;
   width: 400px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.25);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
 }
 
 .modal select,
@@ -160,7 +161,7 @@
 }
 
 .modal-buttons button:first-child {
-  background-color: #00C8C8;
+  background-color: #00c8c8;
   color: white;
 }
 
@@ -186,7 +187,7 @@
   margin: 0;
 }
 
-.dropdown-options li{
+.dropdown-options li {
   font-size: 16px;
 }
 .options-menu li {

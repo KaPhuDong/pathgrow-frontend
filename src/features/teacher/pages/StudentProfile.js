@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 
-import Main from './Main';
+import Main2 from './Main2';
 
 import avatar from '../../../assets/images/avatar.png';
 import banner from '../../../assets/images/banner.png';
@@ -380,7 +380,7 @@ const StudentProfile = () => {
   const cancelDelete = () => setDeleteInfo(null);
 
   return (
-    <Main>
+    <Main2>
       <div className="content-body">
         <div className="content-header">
           <div className="content-info container">
@@ -514,7 +514,7 @@ const StudentProfile = () => {
           </div>
         </div>
       </div>
-    </Main>
+    </Main2>
   );
 };
 

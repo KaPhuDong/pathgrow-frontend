@@ -1,9 +1,9 @@
-import Header from '../layouts/Header';
+import Header1 from '../layouts/Header1';
 
-const Main = ({ children }) => {
+const Main1 = ({ children }) => {
   return (
     <>
-      <Header />
+      <Header1 />
       <main>
         <div className="main-content">{children}</div>
       </main>
@@ -11,4 +11,4 @@ const Main = ({ children }) => {
   );
 };
 
-export default Main;
+export default Main1;

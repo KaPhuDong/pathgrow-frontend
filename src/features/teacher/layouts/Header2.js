@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import logo from '../../../assets/images/logo.png';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 
-const Header = () => {
+const Header2 = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { studentId } = useParams(); // 👉 Lấy studentId từ URL
 
   const toggleDropdown = () => {
     setIsOpen((prev) => !prev);
@@ -27,30 +28,53 @@ const Header = () => {
         </NavLink>
         <ul className="nav nav-pills">
           <li className="nav-item">
+            <NavLink to="/teacher/home" className="nav-NavLink">
+              Home
+            </NavLink>
+          </li>
+          <li className="nav-item">
             <NavLink
-              to="/teacher/home"
+              to={`/teacher/view-student-profile/${studentId}`}
               className="nav-NavLink"
               aria-current="page"
             >
-              Class
+              About me
             </NavLink>
           </li>
           <li className="nav-item">
-            <NavLink to="/teacher/deadline" className="nav-NavLink">
-              Deadline
+            <NavLink
+              to={`/teacher/view-student-goals/${studentId}`}
+              className="nav-NavLink"
+            >
+              Goals
             </NavLink>
           </li>
           <li className="nav-item">
-            <NavLink to="/teacher/schedule" className="nav-NavLink">
+            <NavLink
+              to={`/teacher/view-student-study-plans/${studentId}`}
+              className="nav-NavLink"
+            >
+              Study Plans
+            </NavLink>
+          </li>
+          <li className="nav-item">
+            <NavLink
+              to={`/teacher/view-student-schedule/${studentId}`}
+              className="nav-NavLink"
+            >
               Schedule
+            </NavLink>
+          </li>
+          <li className="nav-item">
+            <NavLink
+              to={`/teacher/view-student-achievements/${studentId}`}
+              className="nav-NavLink"
+            >
+              Achievements
             </NavLink>
           </li>
         </ul>
         <div className="icon">
-          <NavLink to="/" className="icon-notification">
-            <i className="fa-solid fa-bell"></i>
-          </NavLink>
-
           <div className="account" id="account">
             <i
               className="fa-solid fa-circle-user account-icon"
@@ -64,6 +88,7 @@ const Header = () => {
               style={{ display: isOpen ? 'block' : 'none' }}
             >
               <NavLink to="/logout">Log out</NavLink>
+              <NavLink to="/student/account">Setting</NavLink>
             </div>
           </div>
         </div>
@@ -72,4 +97,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default Header2;

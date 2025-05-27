@@ -8,7 +8,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 999;
+  z-index: 10;
 }
 
 .modal {
@@ -48,7 +48,7 @@
   word-break: break-word;
 }
 
-.delete-item input[type="checkbox"] {
+.delete-item input[type='checkbox'] {
   margin-left: 12px;
   transform: scale(1.2);
 }
