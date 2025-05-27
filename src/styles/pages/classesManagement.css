@@ -59,7 +59,8 @@ main {
 
 .header-controls {
   display: flex;
-  gap: 10px;
+  /* gap: 10px; */
+  justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
 }
@@ -117,8 +118,10 @@ main {
 .class-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 30px;
+  /* justify-content: space-between; */
+  gap: 45px;
   margin-top: 30px;
+  margin-bottom: 30px;
 }
 
 .class-card {
@@ -168,3 +171,37 @@ main {
   bottom: -20px;
 }
 
+/* phân trang */
+.pagination {
+  position: fixed;
+  bottom: 0;
+  left: 100px;
+  width: 100%;
+  /* background-color: white; */
+  padding: 20px 0;
+  /* border-top: 1px solid #ddd; */
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  z-index: 100;
+}
+
+
+.pagination button {
+  padding: 6px 12px;
+  background-color: #f2f2f2;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.pagination button.active {
+  background-color: var(--primary);
+  color: white;
+  font-weight: bold;
+}
+
+.pagination button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}

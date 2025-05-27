@@ -6,9 +6,9 @@ import axios from "axios";
 const DeleteClassModal = ({
   isOpen,
   onClose,
-  data,
+  data = [],
   onDelete,
-  tab,
+  tab = "",
   classId,
 }) => {
   const [selectedIds, setSelectedIds] = useState([]);
@@ -26,23 +26,17 @@ const DeleteClassModal = ({
       if (tab === "subjects") {
         await axios.post(
           `http://localhost:8000/api/classesManagement/${classId}/remove-subjects`,
-          {
-            subjects: selectedIds,
-          }
+          { subjects: selectedIds }
         );
       } else if (tab === "students") {
         await axios.post(
           `http://localhost:8000/api/classesManagement/remove-students`,
-          {
-            students: selectedIds,
-          }
+          { students: selectedIds }
         );
       } else if (tab === "teachers") {
         await axios.post(
           `http://localhost:8000/api/classesManagement/remove-teachers`,
-          {
-            teachers: selectedIds,
-          }
+          { teachers: selectedIds }
         );
       }
 
@@ -60,21 +54,23 @@ const DeleteClassModal = ({
   return (
     <div className="modal-overlay">
       <div className="modal">
-        <h3>Delete {tab.charAt(0).toUpperCase() + tab.slice(1)}</h3>
+        <h3>Delete {tab ? tab.charAt(0).toUpperCase() + tab.slice(1) : ""}</h3>
+
         <div className="delete-list">
           {data.map((item) => (
             <label key={item.id} className="delete-item">
-              <span className="item-name">
-                {tab === "subjects" ? item.name : `${item.name}`}
-              </span>
               <input
                 type="checkbox"
                 checked={selectedIds.includes(item.id)}
                 onChange={() => handleCheckboxChange(item.id)}
               />
+              <span className="item-name">
+                {tab === "subjects" ? item.name : `${item.name}`}
+              </span>
             </label>
           ))}
         </div>
+
         <div className="modal-actions">
           <button className="btn delete" onClick={handleDelete}>
             Delete

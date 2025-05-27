@@ -74,7 +74,7 @@
 .add-class-button {
   margin-top: 20px;
   padding: 10px 16px;
-  background-color: #007bff;
+  background-color: var(--primary);
   color: #fff;
   border: none;
   border-radius: 6px;
