@@ -30,25 +30,28 @@
 }
 
 .delete-list {
-  flex: 1; /* Chiếm phần còn lại trong modal */
-  /* overflow-y: auto;  */
+  flex: 1;
   margin-bottom: 15px;
-  padding-right: 8px; /* Để tránh che nội dung bởi thanh cuộn */
+  padding-right: 8px;
 }
 
-.delete-item {
+.modal .delete-item {
   display: flex;
-  justify-content: space-between;
+  flex-direction: row;
+  /* align-items: center; */
+  gap: 10px; /* Khoảng cách giữa checkbox và tên */
   padding: 8px 0;
-  border-bottom: 1px solid #eee;
+  /* border-bottom: 1px solid #eee;  */
 }
 
 .item-name {
-  flex: 1;
+  width: 300px;
+  flex: 1; /* Tên sẽ chiếm phần còn lại nếu cần */
   word-break: break-word;
 }
 
 .delete-item input[type='checkbox'] {
+  width: 30px;
   margin-left: 12px;
   transform: scale(1.2);
 }
