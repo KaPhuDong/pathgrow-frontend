@@ -1,20 +1,24 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import api from '../../../api/student/api';
 import Main from './Main';
 import Filters from '../components/Filters';
 import GoalRow from '../components/GoalRow';
+import NoteSection from '../components/NoteSection';
 import ToastNotification from '../../../components/ui/ToastNotification';
 
 const {
   fetchSemesters,
   fetchSubjects,
   fetchGoal,
+  createGoal,
   saveGoal,
   // fetchQA,
   sendQuestion,
 } = api;
 
 const Goals = () => {
+  const [userId, setUserId] = useState(null);
   const [semesters, setSemesters] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [selectedSemester, setSelectedSemester] = useState('');
@@ -42,12 +46,13 @@ const Goals = () => {
         setSelectedSemester(semRes.data[0]?.id?.toString() || '');
         setSelectedSubject(subjRes.data[0]?.id?.toString() || '');
       } catch (err) {
-        // setError('Failed to load semesters and subjects.');
+        console.error('Failed to load semesters and subjects', err);
       }
     };
     loadFilters();
   }, []);
 
+  // Load goal data
   useEffect(() => {
     if (!selectedSemester || !selectedSubject) return;
 
@@ -87,6 +92,7 @@ const Goals = () => {
     setInputs((prev) => ({ ...prev, [field]: value }));
   };
 
+  // Save or create goal
   const handleSave = async () => {
     try {
       const goalPayload = {
@@ -98,9 +104,9 @@ const Goals = () => {
       };
 
       if (isNew) {
-        await api.createGoal(goalPayload);
+        await createGoal(goalPayload);
       } else {
-        await api.saveGoal(goalPayload);
+        await saveGoal(goalPayload);
       }
 
       setIsNew(false);
@@ -154,7 +160,6 @@ const Goals = () => {
                 </th>
               </tr>
               <tr>
-                {/* <td style={{ width: '30%', border: '1px solid #00cdd0' }}></td> */}
                 <td
                   colSpan={12}
                   className="text-center fw-bold"
@@ -190,31 +195,12 @@ const Goals = () => {
           </table>
         </div>
 
-        {/* Q&A Section (commented out) */}
-        {/* <div className="shadow-sm rounded">
-          <div className="card-body p-4">
-            <p className="fw-semibold mb-2">
-              <strong>Note:</strong> If you have any questions for the teacher
-              or need help, please write below.
-            </p>
-            <textarea
-              className="form-control mb-3"
-              rows={3}
-              placeholder="Enter your question here..."
-              value={question}
-              onChange={(e) => setQuestion(e.target.value)}
-              style={{ borderColor: '#00cdd0' }}
-            />
-            <button
-              className="btn btn-primary"
-              onClick={handleSendQuestion}
-              disabled={!question.trim()}
-            >
-              Send
-            </button>
-            {answer && <div className="alert alert-success mt-3">{answer}</div>}
-          </div>
-        </div> */}
+        <NoteSection
+          userId={userId}
+          semesterId={selectedSemester}
+          subjectId={selectedSubject}
+          onSendSuccess={() => setShowToast(true)}
+        />
       </div>
     </Main>
   );

@@ -47,14 +47,14 @@ const createGoal = async ({
   return response.data;
 };
 
-const fetchQA = async (semester, subject) => {
-  const response = await axios.get(`/goal-questions/${semester}/${subject}`);
+const fetchQA = async (userId) => {
+  const response = await axios.get(`/goal-questions/${userId}`);
   return response.data;
 };
 
 const sendQuestion = async (data) => {
   const response = await axios.post(
-    `/goal-questions/${data.semester}/${data.subject}`,
+    `/goal-questions/${data.userId}`,
     data
   );
   return response.data;
