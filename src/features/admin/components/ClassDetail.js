@@ -4,12 +4,18 @@ import Main from '../pages/Main';
 import AddInfoClassModal from '../components/AddInfoClassModal';
 import DeleteClassModal from '../components/DeleteClassModal';
 import RenameClassModal from '../components/RenameClassModal';
-import '../../../styles/components/classDetailManagement.css';
+import ToastNotification from '../../../components/ui/ToastNotification';
+import ConfirmDelete from '../../../components/ui/ConfirmDelete';
 import api from '../../../api/admin/api';
+
+import '../../../styles/components/classDetailManagement.css';
 
 const ITEMS_PER_PAGE = 6;
 
 const ClassDetail = () => {
+  const [toastMessage, setToastMessage] = useState('');
+  const [showConfirm, setShowConfirm] = useState(false);
+
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -30,10 +36,11 @@ const ClassDetail = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    api.fetchClassById(id)
+    api
+      .fetchClassById(id)
       .then((data) => {
         if (!data) {
-          alert('Class not found.');
+          setToastMessage('Class not found.');
           return;
         }
         setName(data.name);
@@ -43,7 +50,7 @@ const ClassDetail = () => {
       })
       .catch((err) => {
         console.error('Error loading class data:', err);
-        alert('Failed to load class information.');
+        setToastMessage('Failed to load class information.');
       });
   }, [id]);
 
@@ -52,17 +59,27 @@ const ClassDetail = () => {
   }, [activeTab, searchTerm]);
 
   const handleDeleteClass = () => {
-    if (!window.confirm(`Are you sure you want to delete the class "${name}" ?`)) return;
+    setShowConfirm(true);
+  };
 
-    api.deleteClass(id)
+  const confirmDelete = () => {
+    api
+      .deleteClass(id)
       .then(() => {
-        alert(`The class "${name}" has been deleted.`);
+        setToastMessage(`The class "${name}" has been deleted.`);
         navigate('/admin/classes/management');
       })
       .catch((error) => {
         console.error('Error deleting class:', error);
-        alert('Failed to delete the class.');
+        setToastMessage('Failed to delete the class.');
+      })
+      .finally(() => {
+        setShowConfirm(false);
       });
+  };
+
+  const cancelDelete = () => {
+    setShowConfirm(false);
   };
 
   const tabData =
@@ -116,28 +133,32 @@ const ClassDetail = () => {
       if (activeTab === 'subjects') {
         await api.addSubjectsToClass(id, ids);
         setSubjects(updatedData);
+        setToastMessage('Subjects added successfully.');
       } else if (activeTab === 'students') {
         await api.addStudentsToClass(id, ids);
         setStudents(updatedData);
+        setToastMessage('Students added successfully.');
       } else if (activeTab === 'teachers') {
         await api.addTeachersToClass(id, ids);
         setTeachers(updatedData);
+        setToastMessage('Teachers added successfully.');
       }
     } catch (err) {
       console.error('Error adding:', err);
-      alert('Failed to add the item.');
+      setToastMessage('This user is already added.');
     }
   };
 
   const handleRenameClass = (newName) => {
-    api.renameClass(id, newName)
+    api
+      .renameClass(id, newName)
       .then(() => {
         setName(newName);
-        alert('Class renamed successfully.');
+        setToastMessage('Class renamed successfully.');
       })
       .catch((err) => {
         console.error('Error renaming class:', err);
-        alert('Failed to rename the class.');
+        setToastMessage('Failed to rename the class.');
       });
   };
 
@@ -150,8 +171,22 @@ const ClassDetail = () => {
             <button onClick={() => setShowOptions(!showOptions)}>⋮</button>
             {showOptions && (
               <ul className="dropdown-options">
-                <li onClick={() => { setShowRenameModal(true); setShowOptions(false); }}>Rename class</li>
-                <li onClick={() => { handleDeleteClass(); setShowOptions(false); }}>Delete class</li>
+                <li
+                  onClick={() => {
+                    setShowRenameModal(true);
+                    setShowOptions(false);
+                  }}
+                >
+                  Rename class
+                </li>
+                <li
+                  onClick={() => {
+                    handleDeleteClass();
+                    setShowOptions(false);
+                  }}
+                >
+                  Delete class
+                </li>
               </ul>
             )}
           </div>
@@ -173,14 +208,25 @@ const ClassDetail = () => {
                   className={`info-box ${activeTab === tab ? 'active' : ''}`}
                   onClick={() => setActiveTab(tab)}
                 >
-                  {tab === 'subjects' ? subjects.length : tab === 'students' ? students.length : teachers.length}
+                  {tab === 'subjects'
+                    ? subjects.length
+                    : tab === 'students'
+                    ? students.length
+                    : teachers.length}
                   <span>{tab.charAt(0).toUpperCase() + tab.slice(1)}</span>
                 </div>
               ))}
             </div>
             <div className="btn-group">
-              <button onClick={handleAddClick} className="btn add">Add</button>
-              <button onClick={() => setShowDeleteModal(true)} className="btn delete">Delete</button>
+              <button onClick={handleAddClick} className="btn add">
+                Add
+              </button>
+              <button
+                onClick={() => setShowDeleteModal(true)}
+                className="btn delete"
+              >
+                Delete
+              </button>
             </div>
           </div>
         </div>
@@ -192,7 +238,10 @@ const ClassDetail = () => {
               {activeTab === 'subjects' && <th>Subject</th>}
               {(activeTab === 'students' || activeTab === 'teachers') && (
                 <>
-                  <th>{activeTab.slice(0, -1).charAt(0).toUpperCase() + activeTab.slice(1, -1)}</th>
+                  <th>
+                    {activeTab.slice(0, -1).charAt(0).toUpperCase() +
+                      activeTab.slice(1, -1)}
+                  </th>
                   <th>Email</th>
                 </>
               )}
@@ -214,7 +263,10 @@ const ClassDetail = () => {
               ))
             ) : (
               <tr>
-                <td colSpan={activeTab === 'subjects' ? 2 : 3} style={{ textAlign: 'center', padding: '20px' }}>
+                <td
+                  colSpan={activeTab === 'subjects' ? 2 : 3}
+                  style={{ textAlign: 'center', padding: '20px' }}
+                >
                   No matching results found.
                 </td>
               </tr>
@@ -278,6 +330,20 @@ const ClassDetail = () => {
           currentName={name}
         />
       </div>
+      {toastMessage && (
+        <ToastNotification
+          message={toastMessage}
+          onClose={() => setToastMessage('')}
+        />
+      )}
+      {showConfirm && (
+        <ConfirmDelete
+          title="Delete Class"
+          message={`Are you sure you want to delete the class "${name}"?`}
+          onConfirm={confirmDelete}
+          onCancel={cancelDelete}
+        />
+      )}
     </Main>
   );
 };

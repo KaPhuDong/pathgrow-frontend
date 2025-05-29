@@ -6,7 +6,7 @@ import React, {
 } from 'react';
 import api from '../../../api/student/api';
 
-const InClassTable = forwardRef(
+const SelfStudyTable = forwardRef(
   ({ weekId, selfStudyPlanId, setSelfStudyPlanId }, ref) => {
     const [skills, setSkills] = useState([]);
     const [rows, setRows] = useState([]);
@@ -97,11 +97,6 @@ const InClassTable = forwardRef(
       const rowToDelete = rows[indexToRemove];
 
       if (rowToDelete.id) {
-        const confirmDelete = window.confirm(
-          'Are you sure you want to delete this row?'
-        );
-        if (!confirmDelete) return;
-
         try {
           await api.deleteSelfStudySubject(rowToDelete.id);
         } catch (error) {
@@ -316,4 +311,4 @@ const InClassTable = forwardRef(
   }
 );
 
-export default InClassTable;
+export default SelfStudyTable;

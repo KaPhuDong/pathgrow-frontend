@@ -97,11 +97,6 @@ const InClassTable = forwardRef(
       const rowToDelete = rows[indexToRemove];
 
       if (rowToDelete.id) {
-        const confirmDelete = window.confirm(
-          'Are you sure you want to delete this row?'
-        );
-        if (!confirmDelete) return;
-
         try {
           await api.deleteSelfStudySubject(rowToDelete.id);
         } catch (error) {

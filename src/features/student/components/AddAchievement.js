@@ -1,134 +1,158 @@
-import react, { useState, useEffect } from "react";
+import React, { useState } from 'react';
+import Loading from '../../../components/ui/Loading';
 
-const AddAchievement = ({onClose, onAddAchievement, updateAchievement}) => {
-    const [formData, setFormData] = useState(
-        updateAchievement ||{
-            image: "",
-            title: "",
-            description: "",
-        }
-    )
-    const [imageFile, setImageFile] = useState(null);
-    const [loading, setLoading] = useState(false);
+const AddAchievement = ({ onClose, onAddAchievement, updateAchievement }) => {
+  const [formData, setFormData] = useState(
+    updateAchievement || {
+      image: '',
+      title: '',
+      description: '',
+    }
+  );
+  const [imageFile, setImageFile] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
-    };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        console.log("Chọn ảnh:", file);
-        setImageFile(file);
-    };
-    //Gửi ảnh đến backend thay vì Cloudinary trực tiếp
-    const uploadImageToBackend = async () => {
-        const token = localStorage.getItem("token");
-        const data = new FormData();
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    console.log('Chọn ảnh:', file);
+    setImageFile(file);
+  };
 
-        if (imageFile) {
-            data.append("image", imageFile);
-        }
-        data.append("title", formData.title);
-        data.append("description", formData.description);
+  const uploadImageToBackend = async () => {
+    const token = localStorage.getItem('token');
+    const data = new FormData();
 
-        const url = updateAchievement
-            ? `http://localhost:8000/api/achievements/${updateAchievement.id}`
-            : "http://localhost:8000/api/achievements";
-        const method = updateAchievement ? "POST" : "POST"; 
+    if (imageFile) {
+      data.append('image', imageFile);
+    }
+    data.append('title', formData.title);
+    data.append('description', formData.description);
 
-        // Nếu cập nhật, thêm _method
-        if (updateAchievement) {
-            data.append("_method", "PUT");
-        }
+    const url = updateAchievement
+      ? `http://localhost:8000/api/achievements/${updateAchievement.id}`
+      : 'http://localhost:8000/api/achievements';
+    const method = updateAchievement ? 'POST' : 'POST';
 
-        const res = await fetch(url, {
-            method,
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-            body: data,
-        });
+    if (updateAchievement) {
+      data.append('_method', 'PUT');
+    }
 
-        if (!res.ok) {
-            const errorText = await res.text();
-            throw new Error("Failed to upload: " + errorText);
-        }
+    const res = await fetch(url, {
+      method,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: data,
+    });
 
-        const result = await res.json();
-        return result.achievement;
-    };
-    
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-        try {
-            const achievement = await uploadImageToBackend();
-            console.log(`${updateAchievement ? "Cập nhật" : "Thêm"} thành công`, achievement);
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error('Failed to upload: ' + errorText);
+    }
 
-            onAddAchievement(achievement); // Truyền toàn bộ achievement
+    const result = await res.json();
+    return result.achievement;
+  };
 
-            if (!updateAchievement) {
-                setFormData({ image: "", title: "", description: "" });
-                setImageFile(null);
-            }
-            onClose(); 
-        } catch (error) {
-            console.error(`${updateAchievement ? "Lỗi khi cập nhật" : "Lỗi khi tải lên"} thành tựu`, error);
-        } finally {
-            setLoading(false);
-        }
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const achievement = await uploadImageToBackend();
+      console.log(
+        `${updateAchievement ? 'Cập nhật' : 'Thêm'} thành công`,
+        achievement
+      );
 
-    return (
-        <div className="add-achievement-modal">
-            <div className="modal-content" style={{width:'500px'}}>
-                <span className="close" onClick={onClose}>
-                &times;
-                </span>
-                <h2 className="modal-title">
-                    {updateAchievement ? "Update Achievement" : "Add New Achievement"}
-                </h2>
+      onAddAchievement(achievement);
 
-                <form onSubmit={handleSubmit}>
-                    <label htmlFor="image">Image</label>
-                    <input
-                        type="file"
-                        name="image"
-                        onChange={handleImageChange}
-                        required={!updateAchievement}
-                    />
+      if (!updateAchievement) {
+        setFormData({ image: '', title: '', description: '' });
+        setImageFile(null);
+      }
+      onClose();
+    } catch (error) {
+      console.error(
+        `${
+          updateAchievement ? 'Lỗi khi cập nhật' : 'Lỗi khi tải lên'
+        } thành tựu`,
+        error
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
-                    <label htmlFor="title">Title</label>
-                    <input
-                        type="text"
-                        name="title"
-                        placeholder="Enter your title …"
-                        value={formData.title}
-                        onChange={handleChange}
-                        required
-                    />
-                    <label htmlFor="description">Description</label>
-                    <textarea className="textarea-description"
-                        name="description"
-                        placeholder="Enter your description …"
-                        value={formData.description}
-                        onChange={handleChange}
-                        required
-                    />
+  return (
+    <div className="add-achievement-modal">
+      <div
+        className="modal-content"
+        style={{ width: '500px', position: 'relative' }}
+      >
+        <span className="close" onClick={onClose} style={{ cursor: 'pointer' }}>
+          &times;
+        </span>
+        <h2 className="modal-title">
+          {updateAchievement ? 'Update Achievement' : 'Add New Achievement'}
+        </h2>
 
-                    <div className="btn-add__cancel">
-                        <button type="submit" className="btn-add" disabled={loading}>
-                            {loading ? "Saving..." : updateAchievement ? "Save" : "Add"}
-                        </button>
-                        <button type="button" className="btn-cancel" onClick={onClose}>
-                            Cancel
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    )
-}
+        <form onSubmit={handleSubmit}>
+          <label htmlFor="image">Image</label>
+          <input
+            type="file"
+            name="image"
+            onChange={handleImageChange}
+            required={!updateAchievement}
+            disabled={loading}
+          />
+
+          <label htmlFor="title">Title</label>
+          <input
+            type="text"
+            name="title"
+            placeholder="Enter your title …"
+            value={formData.title}
+            onChange={handleChange}
+            required
+            disabled={loading}
+          />
+
+          <label htmlFor="description">Description</label>
+          <textarea
+            className="textarea-description"
+            name="description"
+            placeholder="Enter your description …"
+            value={formData.description}
+            onChange={handleChange}
+            required
+            disabled={loading}
+          />
+
+          <div className="btn-add__cancel">
+            <button
+              type="button"
+              className="btn-cancel"
+              onClick={onClose}
+              disabled={loading}
+            >
+              Cancel
+            </button>
+            <button type="submit" className="btn-add" disabled={loading}>
+              {updateAchievement ? 'Save' : 'Add'}
+            </button>
+          </div>
+        </form>
+
+        {/* Loading overlay */}
+        {loading && <Loading />}
+      </div>
+    </div>
+  );
+};
 
 export default AddAchievement;

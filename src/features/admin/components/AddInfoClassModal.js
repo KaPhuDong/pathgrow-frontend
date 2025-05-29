@@ -74,6 +74,9 @@ const AddInfoClassModal = ({
           )}
 
           <div className="modal-buttons">
+            <button type="button" className="cancel-button" onClick={onClose}>
+              Cancel
+            </button>
             <button
               type="button"
               className="add-class-button"
@@ -81,9 +84,6 @@ const AddInfoClassModal = ({
               disabled={selectedIds.length === 0}
             >
               Add
-            </button>
-            <button type="button" className="cancel-button" onClick={onClose}>
-              Cancel
             </button>
           </div>
         </form>

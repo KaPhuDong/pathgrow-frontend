@@ -45,7 +45,7 @@
 }
 
 .info-box.active {
-  background-color: #00c8c8;
+  background-color: var(--primary);
   color: white;
 }
 
@@ -62,9 +62,8 @@
 }
 
 .btn {
-  padding: 10px 16px;
   border: none;
-  border-radius: 8px;
+  border-radius: 5px;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -72,23 +71,23 @@
 }
 
 .btn.add {
-  background-color: #00c8c8;
+  background-color: var(--primary);
   color: white;
 }
 
 .btn.add:hover {
-  background-color: #08a0a0;
+  background-color: var(--primary);
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .btn.delete {
-  background-color: #dc3545;
+  background-color: var(--secondary);
   color: white;
 }
 
 .btn.delete:hover {
-  background-color: #c82333;
+  background-color: var(--secondary);
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
@@ -108,7 +107,7 @@
 }
 
 .subject-table th {
-  background-color: #00c8c8;
+  background-color: var(--primary);
   color: white;
 }
 
@@ -160,12 +159,12 @@
   font-weight: bold;
 }
 
-.modal-buttons button:first-child {
-  background-color: #00c8c8;
+.modal-buttons button:last-child {
+  background-color: var(--primary);
   color: white;
 }
 
-.modal-buttons button:last-child {
+.modal-buttons button:first-child {
   background-color: #ccc;
   color: black;
 }
