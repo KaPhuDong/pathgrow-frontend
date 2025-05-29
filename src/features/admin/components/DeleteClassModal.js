@@ -1,14 +1,14 @@
 // src/components/DeleteClassModal.js
-import React, { useState } from "react";
-import "../../../styles/components/deleteClassModalManagement.css";
-import axios from "axios";
+import React, { useState } from 'react';
+import '../../../styles/components/deleteClassModalManagement.css';
+import axios from 'axios';
 
 const DeleteClassModal = ({
   isOpen,
   onClose,
   data = [],
   onDelete,
-  tab = "",
+  tab = '',
   classId,
 }) => {
   const [selectedIds, setSelectedIds] = useState([]);
@@ -20,20 +20,20 @@ const DeleteClassModal = ({
   };
 
   const handleDelete = async () => {
-    if (selectedIds.length === 0) return alert("Vui lòng chọn phần tử cần xoá");
+    if (selectedIds.length === 0) return alert('Vui lòng chọn phần tử cần xoá');
 
     try {
-      if (tab === "subjects") {
+      if (tab === 'subjects') {
         await axios.post(
           `http://localhost:8000/api/classesManagement/${classId}/remove-subjects`,
           { subjects: selectedIds }
         );
-      } else if (tab === "students") {
+      } else if (tab === 'students') {
         await axios.post(
           `http://localhost:8000/api/classesManagement/remove-students`,
           { students: selectedIds }
         );
-      } else if (tab === "teachers") {
+      } else if (tab === 'teachers') {
         await axios.post(
           `http://localhost:8000/api/classesManagement/remove-teachers`,
           { teachers: selectedIds }
@@ -44,8 +44,8 @@ const DeleteClassModal = ({
       onDelete(updatedData);
       onClose();
     } catch (err) {
-      console.error("Lỗi khi xoá:", err);
-      alert("Xoá thất bại.");
+      console.error('Lỗi khi xoá:', err);
+      alert('Xoá thất bại.');
     }
   };
 
@@ -54,7 +54,7 @@ const DeleteClassModal = ({
   return (
     <div className="modal-overlay">
       <div className="modal">
-        <h3>Delete {tab ? tab.charAt(0).toUpperCase() + tab.slice(1) : ""}</h3>
+        <h3>Delete {tab ? tab.charAt(0).toUpperCase() + tab.slice(1) : ''}</h3>
 
         <div className="delete-list">
           {data.map((item) => (
@@ -65,18 +65,18 @@ const DeleteClassModal = ({
                 onChange={() => handleCheckboxChange(item.id)}
               />
               <span className="item-name">
-                {tab === "subjects" ? item.name : `${item.name}`}
+                {tab === 'subjects' ? item.name : `${item.name}`}
               </span>
             </label>
           ))}
         </div>
 
         <div className="modal-actions">
-          <button className="btn delete" onClick={handleDelete}>
-            Delete
-          </button>
           <button className="btn cancel" onClick={onClose}>
             Cancel
+          </button>
+          <button className="btn delete" onClick={handleDelete}>
+            Delete
           </button>
         </div>
       </div>

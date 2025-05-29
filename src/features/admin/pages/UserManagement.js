@@ -59,7 +59,6 @@ const UserManagement = () => {
   };
 
   const handleDeleteUser = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this user?')) return;
     try {
       await userApi.deleteUser(id);
       setUsers((prev) => prev.filter((user) => user.id !== id));
@@ -94,11 +93,11 @@ const UserManagement = () => {
 
   return (
     <Main>
-      <div className="user-management container py-4">
-        <div className="user-management__header d-flex justify-content-between align-items-center">
-          <h2>Users Management</h2>
-          <NavLink to="/logout" className="btn-admin-logout">
-            Log out
+      <div className="main-classesManagement">
+        <div className="title-class">
+          <h1 className="mb-4">Users Management</h1>
+          <NavLink to="/logout" className="logout">
+            Log out →
           </NavLink>
         </div>
         <div className="user-management__controls d-flex gap-3 align-items-center justify-content-between mb-4">
@@ -114,7 +113,7 @@ const UserManagement = () => {
               className="btn btn-add-user btn-admin-add-user"
               onClick={() => setShowAddUserModal(true)}
             >
-              + New user 
+              + New user
             </button>
           </div>
           <SearchBar

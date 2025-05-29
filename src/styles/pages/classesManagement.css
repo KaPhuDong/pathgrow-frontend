@@ -1,4 +1,5 @@
-body, html {
+body,
+html {
   margin: 0;
   font-family: Arial, sans-serif;
 }
@@ -15,14 +16,14 @@ main {
   height: 100%;
   box-sizing: border-box;
 }
-.title-class{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.title-class {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .sidebar {
   width: 200px;
-  background-color: #00C8C8;
+  background-color: var(--primary);
   color: white;
   padding: 20px;
 }
@@ -42,7 +43,7 @@ main {
   cursor: pointer;
 }
 
-.main-classesManagement{
+.main-classesManagement {
   flex-grow: 1;
   /* background-color: #f5f5f5; */
   padding: 25px;
@@ -65,14 +66,14 @@ main {
   margin-bottom: 20px;
 }
 
-.dropdown, .new-class {
-  background-color: #00C8C8;
+.dropdown,
+.new-class {
+  background-color: var(--primary);
   color: white;
   border: none;
-  padding: 8px 14px;
   font-size: 14px;
   font-weight: bold;
-  border-radius: 6px;
+  border-radius: 5px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -81,13 +82,17 @@ main {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.dropdown:hover, .new-class:hover {
+.new-class {
+  padding: 8px 16px;
+}
+
+.dropdown:hover,
+.new-class:hover {
   background-color: #00b3b3;
 }
 
-
 .logout {
-  background-color: #00C8C8;
+  background-color: var(--primary);
   color: white;
   padding: 6px 12px;
   font-size: 14px;
@@ -98,10 +103,9 @@ main {
   align-self: center;
 }
 
-
 .search {
   padding: 8px 12px;
-  border: 2px solid #E0F0FF;
+  border: 2px solid #e0f0ff;
   border-radius: 20px;
   font-size: 14px;
   outline: none;
@@ -111,9 +115,8 @@ main {
   background-position: right 10px center;
   background-size: 16px 16px;
   margin-left: 550px;
-   background-image: url("data:image/svg+xml,%3Csvg fill='%23999' viewBox='0 0 24 24' width='16' height='16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 5L20.49 19l-5-5zm-6 0C8.01 14 6 11.99 6 9.5S8.01 5 10.5 5 15 7.01 15 9.5 12.99 14 10.5 14z'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg fill='%23999' viewBox='0 0 24 24' width='16' height='16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 5L20.49 19l-5-5zm-6 0C8.01 14 6 11.99 6 9.5S8.01 5 10.5 5 15 7.01 15 9.5 12.99 14 10.5 14z'/%3E%3C/svg%3E");
 }
-
 
 .class-list {
   display: flex;
@@ -125,8 +128,8 @@ main {
 }
 
 .class-card {
-  width: 320px;       /* Tăng chiều rộng */
-  height: 150px;      /* Tăng chiều cao */
+  width: 320px; /* Tăng chiều rộng */
+  height: 150px; /* Tăng chiều cao */
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
@@ -135,7 +138,6 @@ main {
   background-color: white;
   font-size: 14px;
 }
-
 
 .class-card-top {
   /* flex: 1; */
@@ -185,7 +187,6 @@ main {
   gap: 8px;
   z-index: 100;
 }
-
 
 .pagination button {
   padding: 6px 12px;

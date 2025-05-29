@@ -53,6 +53,6 @@
 }
 
 .rename-modal-buttons .save-btn {
-  background-color: #007bff;
+  background-color: var(--primary);
   color: white;
 }
