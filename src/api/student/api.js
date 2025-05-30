@@ -53,12 +53,10 @@ const fetchQA = async (userId) => {
 };
 
 const sendQuestion = async (data) => {
-  const response = await axios.post(
-    `/goal-questions/${data.userId}`, 
-    data
-  );
+  const response = await axios.post('/goal-questions', data);
   return response.data;
 };
+
 
 const fetchNotificationsByUser = async (userId) => {
   const response = await axios.get(`/notifications/${userId}`);

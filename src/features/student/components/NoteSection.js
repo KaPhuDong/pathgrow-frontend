@@ -1,21 +1,26 @@
 import React, { useState } from 'react';
 import api from '../../../api/student/api'; // đảm bảo có sendQuestion
-
 const NoteSection = ({ userId, semesterId, subjectId, onSendSuccess }) => {
-  const [questionText, setQuestionText] = useState('');
+  const [question, setQuestion] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleSend = async () => {
-    if (!questionText.trim()) return;
+    if (!userId) {
+      console.error("userId không tồn tại");
+      return;
+    }
+    const data = {
+      user_id: userId,
+      semester_id: semesterId,
+      subject_id: subjectId,
+      question: question,
+    };
+
+    if (!question.trim()) return;
     try {
       setLoading(true);
-      await api.sendQuestion({
-        user_id: userId,
-        semester_id: semesterId,
-        subject_id: subjectId,
-        question: questionText,
-      });
-      setQuestionText('');
+      await api.sendQuestion(data);
+      setQuestion('');
       onSendSuccess?.();
     } catch (error) {
       alert('Gửi câu hỏi thất bại');
@@ -29,8 +34,8 @@ const NoteSection = ({ userId, semesterId, subjectId, onSendSuccess }) => {
       <p><strong>Note:</strong> If you have any questions for the teacher or need help, include them here.</p>
       <textarea
         placeholder="I want you to check my goal"
-        value={questionText}
-        onChange={(e) => setQuestionText(e.target.value)}
+        value={question}
+        onChange={(e) => setQuestion(e.target.value)}
         rows={4}
       />
       <button className="send-button" onClick={handleSend} disabled={loading}>

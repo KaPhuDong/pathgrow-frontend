@@ -35,8 +35,11 @@ const Goals = () => {
   const [showToast, setShowToast] = useState(false);
 
   useEffect(() => {
-  const uid = localStorage.getItem('user_Id');
-  if (uid) setUserId(Number(uid));
+  const storedUser = localStorage.getItem('user');
+  if (storedUser) {
+    const parsedUser = JSON.parse(storedUser);
+    setUserId(parsedUser.id); 
+  }
 }, []);
 
 
@@ -201,12 +204,15 @@ const Goals = () => {
           </table>
         </div>
 
-        <NoteSection
-          userId={userId}
-          semesterId={selectedSemester}
-          subjectId={selectedSubject}
-          onSendSuccess={() => setShowToast(true)}
-        />
+    
+          <NoteSection
+            userId={userId}
+            semesterId={selectedSemester}
+            subjectId={selectedSubject}
+            onSendSuccess={() => setShowToast(true)}
+          />
+  
+
       </div>
     </Main>
   );
