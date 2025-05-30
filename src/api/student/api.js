@@ -54,7 +54,7 @@ const fetchQA = async (userId) => {
 
 const sendQuestion = async (data) => {
   const response = await axios.post(
-    `/goal-questions/${data.userId}`,
+    `/goal-questions/${data.userId}`, 
     data
   );
   return response.data;

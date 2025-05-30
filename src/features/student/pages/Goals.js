@@ -35,6 +35,12 @@ const Goals = () => {
   const [showToast, setShowToast] = useState(false);
 
   useEffect(() => {
+  const uid = localStorage.getItem('user_Id');
+  if (uid) setUserId(Number(uid));
+}, []);
+
+
+  useEffect(() => {
     const loadFilters = async () => {
       try {
         const [semRes, subjRes] = await Promise.all([
