@@ -5,6 +5,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import axios from 'axios';
 import Main from './Main';
+import Loading from '../../../components/ui/Loading';
 
 const presetColors = [
   { name: 'Green', value: '#d9f2d9' },
@@ -20,13 +21,13 @@ const AddEvent = ({ datetime, onAdd, onCancel }) => {
   const [selectedColor, setSelectedColor] = useState(presetColors[0].value);
   const initialized = useRef(false);
 
-   const inputStyle = {
-        width: '100%',
-        padding: 8,
-        borderRadius: 6,
-        border: '1px solid #ccc',
-        marginTop: 4,
-    };
+  const inputStyle = {
+    width: '100%',
+    padding: 8,
+    borderRadius: 6,
+    border: '1px solid #ccc',
+    marginTop: 4,
+  };
 
   useEffect(() => {
     if (!initialized.current) {
@@ -53,26 +54,43 @@ const AddEvent = ({ datetime, onAdd, onCancel }) => {
   const endDate = new Date(datetime.end);
 
   return (
-    <div className="event-form" style={{ background: '#fff', padding: 20, borderRadius: 8, boxShadow: '0 0 8px rgba(0,0,0,0.15)', width: 300, position: 'absolute', zIndex: 10000, top: 100, left: 100 }}>
+    <div
+      className="event-form"
+      style={{
+        background: '#fff',
+        padding: 20,
+        borderRadius: 8,
+        boxShadow: '0 0 8px rgba(0,0,0,0.15)',
+        width: 300,
+        position: 'absolute',
+        zIndex: 10,
+        top: 100,
+        left: 100,
+      }}
+    >
       <h3>Add Event</h3>
-      <p><strong>From:</strong> {startDate.toLocaleString()}</p>
-      <p><strong>To:</strong> {endDate.toLocaleString()}</p>
+      <p>
+        <strong>From:</strong> {startDate.toLocaleString()}
+      </p>
+      <p>
+        <strong>To:</strong> {endDate.toLocaleString()}
+      </p>
 
       <form onSubmit={handleSubmit}>
         <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-                    <div style={{ flex: 1, minWidth: 250 }}>
-                        <div style={{ marginBottom: 12 }}>
-                            <label>Title</label>
-                            <input
-                                type="text"
-                                value={title}
-                                onChange={(e) => setTitle(e.target.value)}
-                                style={inputStyle}
-                                required
-                            />
-                        </div>
+          <div style={{ flex: 1, minWidth: 250 }}>
+            <div style={{ marginBottom: 12 }}>
+              <label>Title</label>
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                style={inputStyle}
+                required
+              />
+            </div>
 
-                        {/* <div style={{ marginBottom: 12 }}>
+            {/* <div style={{ marginBottom: 12 }}>
                             <label>Class</label>
                             <select
                                 value={selectedClass}
@@ -88,7 +106,7 @@ const AddEvent = ({ datetime, onAdd, onCancel }) => {
                             </select>
                         </div> */}
 
-                        {/* <div style={{ marginBottom: 12 }}>
+            {/* <div style={{ marginBottom: 12 }}>
                             <label>Add Reminder</label>
                             <input
                                 type="text"
@@ -98,9 +116,9 @@ const AddEvent = ({ datetime, onAdd, onCancel }) => {
                                 placeholder="e.g., 1 hour before"
                             />
                         </div> */}
-                    </div>
+          </div>
 
-                    {/* <div style={{ flex: 1, minWidth: 250 }}>
+          {/* <div style={{ flex: 1, minWidth: 250 }}>
                         <div style={{ marginBottom: 12 }}>
                             <label>Description</label>
                             <input
@@ -119,11 +137,26 @@ const AddEvent = ({ datetime, onAdd, onCancel }) => {
                             </select>
                         </div>
                     </div> */}
-                </div>
+        </div>
 
-        <div className="form-buttons" style={{ marginTop: 16, display: 'flex', justifyContent: 'space-between' }}>
-          <button type="button" onClick={onCancel} style={{ padding: '6px 12px' }}>Cancel</button>
-          <button type="submit" style={{ padding: '6px 12px' }}>Add</button>
+        <div
+          className="form-buttons"
+          style={{
+            marginTop: 16,
+            display: 'flex',
+            justifyContent: 'space-between',
+          }}
+        >
+          <button
+            type="button"
+            onClick={onCancel}
+            style={{ padding: '6px 12px' }}
+          >
+            Cancel
+          </button>
+          <button type="submit" style={{ padding: '6px 12px' }}>
+            Add
+          </button>
         </div>
       </form>
     </div>
@@ -137,14 +170,14 @@ const DeleteEvent = ({ eventInfo, onConfirm, onCancel, position }) => {
     <div
       style={{
         position: 'absolute',
-        top: position.y,
-        left: position.x,
+        top: position.y - 80,
+        left: position.x - 500,
         backgroundColor: '#fff',
         border: '1px solid #ccc',
         padding: '16px',
         borderRadius: '8px',
         boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-        zIndex: 10000,
+        zIndex: 10,
         width: 260,
         maxWidth: '90vw',
       }}
@@ -156,8 +189,26 @@ const DeleteEvent = ({ eventInfo, onConfirm, onCancel, position }) => {
         Do you want to delete event: <strong>{eventInfo.title}</strong>?
       </p>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <button onClick={onCancel} type="button" style={{ padding: '6px 12px' }}>Cancel</button>
-        <button onClick={() => onConfirm(eventInfo)} type="button" style={{ padding: '6px 12px', backgroundColor: 'red', color: '#fff', border: 'none', borderRadius: 4 }}>Delete</button>
+        <button
+          onClick={onCancel}
+          type="button"
+          style={{ padding: '6px 12px' }}
+        >
+          Cancel
+        </button>
+        <button
+          onClick={() => onConfirm(eventInfo)}
+          type="button"
+          style={{
+            padding: '6px 12px',
+            backgroundColor: 'red',
+            color: '#fff',
+            border: 'none',
+            borderRadius: 4,
+          }}
+        >
+          Delete
+        </button>
       </div>
     </div>
   );
@@ -169,16 +220,22 @@ const StudentSchedule = () => {
   const [formPosition, setFormPosition] = useState(null);
   const [deleteInfo, setDeleteInfo] = useState(null);
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const getAuthHeader = () => ({
     Authorization: `Bearer ${localStorage.getItem('token')}`,
   });
 
   const fetchEvents = async () => {
+    setIsLoading(true);
     try {
-      const res = await axios.get('http://localhost:8000/api/student-calendar', {
-        headers: getAuthHeader(),
-        withCredentials: true,
-      });
+      const res = await axios.get(
+        'http://localhost:8000/api/student-calendar',
+        {
+          headers: getAuthHeader(),
+          withCredentials: true,
+        }
+      );
 
       const formatted = res.data.map((e) => ({
         id: String(e.id),
@@ -191,6 +248,8 @@ const StudentSchedule = () => {
       setEvents(formatted);
     } catch (err) {
       console.error('Error fetching study plans:', err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -212,6 +271,7 @@ const StudentSchedule = () => {
   };
 
   const addEvent = async (newEvent) => {
+    setIsLoading(true);
     try {
       const startDate = new Date(newEvent.start);
       const endDate = new Date(newEvent.end);
@@ -220,7 +280,15 @@ const StudentSchedule = () => {
       const start_time = startDate.toTimeString().split(' ')[0];
       const end_time = endDate.toTimeString().split(' ')[0];
 
-      const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const days = [
+        'Sunday',
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
+      ];
       const day_of_week = days[startDate.getDay()];
 
       const payload = {
@@ -244,6 +312,8 @@ const StudentSchedule = () => {
       setSelectedRange(null);
     } catch (error) {
       console.error('Failed to add event:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -258,6 +328,7 @@ const StudentSchedule = () => {
 
   const confirmDelete = async (eventInfo) => {
     const id = String(eventInfo.id);
+    setIsLoading(true);
     try {
       await axios.delete(`http://localhost:8000/api/student-calendar/${id}`, {
         headers: getAuthHeader(),
@@ -267,6 +338,8 @@ const StudentSchedule = () => {
       setDeleteInfo(null);
     } catch (err) {
       console.error('Failed to delete event:', err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -274,7 +347,15 @@ const StudentSchedule = () => {
 
   return (
     <Main>
-      <div className="calendar-wrapper" style={{ position: 'relative', minHeight: '700px', display: 'flex', gap: '20px' }}>
+      <div
+        className="calendar-wrapper"
+        style={{
+          position: 'relative',
+          minHeight: '700px',
+          display: 'flex',
+          gap: '20px',
+        }}
+      >
         <div style={{ width: '280px' }}>
           <FullCalendar
             plugins={[dayGridPlugin]}
@@ -293,7 +374,11 @@ const StudentSchedule = () => {
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             initialView="timeGridWeek"
             initialDate="2025-05-15"
-            headerToolbar={{ start: 'prev,today,next', center: 'title', end: '' }}
+            headerToolbar={{
+              start: 'prev,today,next',
+              center: 'title',
+              end: '',
+            }}
             events={events}
             allDaySlot={false}
             slotMinTime="00:00:00"
@@ -305,7 +390,11 @@ const StudentSchedule = () => {
           />
 
           {selectedRange && formPosition && (
-            <AddEvent datetime={selectedRange} onAdd={addEvent} onCancel={cancelAdd} />
+            <AddEvent
+              datetime={selectedRange}
+              onAdd={addEvent}
+              onCancel={cancelAdd}
+            />
           )}
 
           {deleteInfo && (
@@ -318,6 +407,7 @@ const StudentSchedule = () => {
           )}
         </div>
       </div>
+      {isLoading && <Loading />}
     </Main>
   );
 };

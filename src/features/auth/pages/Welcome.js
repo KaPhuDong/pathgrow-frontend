@@ -33,7 +33,7 @@ function Welcome() {
             Teachers can review student activities and provide helpful guidance.
           </p>
           <NavLink to="/login" className="header__btn-signup">
-            Sign In
+            Let's explore
           </NavLink>
         </div>
 

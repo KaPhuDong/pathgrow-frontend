@@ -5,6 +5,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import axios from 'axios';
 import Main1 from './Main1';
+import Loading from '../../../components/ui/Loading';
 
 const AddEvent = ({ datetime, onAdd, onCancel }) => {
   const [title, setTitle] = useState('');
@@ -164,8 +165,8 @@ const DeleteEvent = ({ eventInfo, onConfirm, onCancel, position }) => {
     <div
       style={{
         position: 'absolute',
-        top: position.y,
-        left: position.x,
+        top: position.y - 80,
+        left: position.x - 500,
         backgroundColor: '#fff',
         border: '1px solid #ccc',
         padding: '16px',
@@ -213,12 +214,14 @@ const TeacherSchedule = () => {
   const [selectedRange, setSelectedRange] = useState(null);
   const [formPosition, setFormPosition] = useState(null);
   const [deleteInfo, setDeleteInfo] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getAuthHeader = () => ({
     Authorization: `Bearer ${localStorage.getItem('token')}`,
   });
 
   const fetchEvents = async () => {
+    setIsLoading(true);
     try {
       const res = await axios.get(
         'http://localhost:8000/api/teacher-schedule',
@@ -239,6 +242,8 @@ const TeacherSchedule = () => {
       setEvents(formatted);
     } catch (err) {
       console.error('Error fetching study plans:', err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -260,6 +265,7 @@ const TeacherSchedule = () => {
   };
 
   const addEvent = async (newEvent) => {
+    setIsLoading(true);
     try {
       const startDate = new Date(newEvent.start);
       const endDate = new Date(newEvent.end);
@@ -300,6 +306,8 @@ const TeacherSchedule = () => {
       setSelectedRange(null);
     } catch (error) {
       console.error('Failed to add event:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -314,6 +322,7 @@ const TeacherSchedule = () => {
 
   const confirmDelete = async (eventInfo) => {
     const id = String(eventInfo.id);
+    setIsLoading(true);
     try {
       await axios.delete(`http://localhost:8000/api/teacher-schedule/${id}`, {
         headers: getAuthHeader(),
@@ -323,6 +332,8 @@ const TeacherSchedule = () => {
       setDeleteInfo(null);
     } catch (err) {
       console.error('Failed to delete event:', err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -385,6 +396,7 @@ const TeacherSchedule = () => {
           )}
         </div>
       </div>
+      {isLoading && <Loading />}
     </Main1>
   );
 };
