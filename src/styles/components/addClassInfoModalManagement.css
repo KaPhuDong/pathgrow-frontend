@@ -1,4 +1,4 @@
-.modal-overlay {
+.add-class-info-modal .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -11,7 +11,7 @@
   z-index: 10;
 }
 
-.modal {
+.add-class-info-modal .modal {
   background-color: #fff;
   padding: 2rem;
   width: 400px;
@@ -50,6 +50,7 @@
   font-size: 20px;
   margin-bottom: 16px;
   text-transform: capitalize;
+  font-weight: bold;
 }
 
 .modal form {

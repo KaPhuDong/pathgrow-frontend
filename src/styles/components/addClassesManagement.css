@@ -1,5 +1,5 @@
 /* Modal styles */
-.modal-overlay {
+.add-class-modal .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -12,7 +12,7 @@
   z-index: 10;
 }
 
-.modal {
+.add-class-modal .modal {
   position: relative;
   background-color: white;
   padding: 2rem;
@@ -36,6 +36,7 @@
 .modal h2 {
   text-align: center;
   margin-bottom: 20px;
+  font-weight: bold;
 }
 
 .modal form {

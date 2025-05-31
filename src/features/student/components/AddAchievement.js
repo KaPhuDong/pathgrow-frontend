@@ -91,9 +91,7 @@ const AddAchievement = ({ onClose, onAddAchievement, updateAchievement }) => {
   return (
     <div className="add-achievement-modal">
       <div
-        className="modal-content"
-        style={{ width: '500px', position: 'relative' }}
-      >
+        className="modal-content">
         <span className="close" onClick={onClose} style={{ cursor: 'pointer' }}>
           &times;
         </span>
@@ -137,12 +135,13 @@ const AddAchievement = ({ onClose, onAddAchievement, updateAchievement }) => {
             <button
               type="button"
               className="btn-cancel"
+              style={{fontWeight: 'bold', fontSize: '16px'}}
               onClick={onClose}
               disabled={loading}
             >
               Cancel
             </button>
-            <button type="submit" className="btn-add" disabled={loading}>
+            <button type="submit" className="btn-add" disabled={loading} style={{fontWeight: 'bold'}}> 
               {updateAchievement ? 'Save' : 'Add'}
             </button>
           </div>
