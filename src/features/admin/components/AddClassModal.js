@@ -24,30 +24,32 @@ const AddClassModal = ({ onClose, onAddClass }) => {
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal d-block">
-        <button className="close-button" onClick={onClose}>×</button>
-        <h2>Add new Class</h2>
-        <form onSubmit={handleSubmit}>
-          <label>
-            Class name
-            <input
-              type="text"
-              placeholder="Enter your class name..."
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </label>
-          <label>
-            Color (HEX)
-            <input
-              type="color"
-              value={color}
-              onChange={(e) => setColor(e.target.value)}
-            />
-          </label>
-          <button type="submit" className="add-class-button">Add</button>
-        </form>
+    <div className='add-class-modal'>
+      <div className="modal-overlay">
+        <div className="modal d-block">
+          <button className="close-button" onClick={onClose}>×</button>
+          <h2>Add new Class</h2>
+          <form onSubmit={handleSubmit}>
+            <label>
+              Class name
+              <input
+                type="text"
+                placeholder="Enter your class name..."
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </label>
+            <label>
+              Color (HEX)
+              <input
+                type="color"
+                value={color}
+                onChange={(e) => setColor(e.target.value)}
+              />
+            </label>
+            <button type="submit" className="add-class-button">Add</button>
+          </form>
+        </div>
       </div>
     </div>
   );
