@@ -35,6 +35,8 @@
   justify-content: space-between;
 }
 .student__header {
+  position: fixed;
+  z-index: 9999;
   height: 90px;
   width: 100%;
   padding: 0 50px;

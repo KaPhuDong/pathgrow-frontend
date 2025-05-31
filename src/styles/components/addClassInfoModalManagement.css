@@ -1,0 +1,89 @@
+.add-class-info-modal .modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.add-class-info-modal .modal {
+  background-color: #fff;
+  padding: 2rem;
+  width: 400px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 8px;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.close-button {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #333;
+}
+
+.modal h2 {
+  margin-top: 0;
+  font-size: 20px;
+  margin-bottom: 16px;
+  text-transform: capitalize;
+  font-weight: bold;
+}
+
+.modal form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modal label {
+  display: flex;
+  /* align-items: center; */
+  gap: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.modal input[type="checkbox"] {
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+.add-class-button {
+  margin-top: 20px;
+  padding: 10px 16px;
+  background-color: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.add-class-button:hover {
+  background-color: #0056b3;
+}

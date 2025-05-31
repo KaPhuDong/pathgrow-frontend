@@ -9,20 +9,22 @@
 .content-info {
   display: flex;
   flex-direction: column;
-  row-gap: 37px;
   justify-content: center;
   text-align: center;
-
   height: 390px;
 }
 .profile {
   display: flex;
+  justify-content: space-between;
+}
+.profile-info {
+  display: flex;
+  flex-direction: column;
   justify-content: center;
 }
-
 .img-profile {
-  width: 200px;
-  height: 200px;
+  width: 350px;
+  height: 350px;
   position: relative;
 }
 
@@ -30,7 +32,6 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 100px;
 }
 
 .edit-icon {

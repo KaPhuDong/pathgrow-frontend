@@ -1,10 +1,22 @@
-import UserManagement from '../pages/admin/UserManagement';
+import UserManagement from '../features/admin/pages/UserManagement';
+import ClassesManagement from '../features/admin/pages/ClassesManagement';
+import ClassDetail from '../features/admin/components/ClassDetail';
+
 
 const AdminRoutes = [
   {
-    path: '/admin/user/management',
+    path: '/admin/users/management',
     element: <UserManagement />,
-  }
+  },
+
+  {
+    path: '/admin/classes/management',
+    element: <ClassesManagement />,
+  },
+  {
+    path: '/admin/classes/management/:id',
+    element: <ClassDetail />,
+  },
 ];
 
 export default AdminRoutes;

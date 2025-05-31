@@ -1,6 +1,6 @@
-import Welcome from '../pages/Welcome';
-import Login from '../pages/auth/Login';
-import Logout from '../pages/auth/Logout';
+import Welcome from '../features/auth/pages/Welcome';
+import Login from '../features/auth/pages/Login';
+import Logout from '../features/auth/pages/Logout';
 
 const PublicRoutes = [
   {

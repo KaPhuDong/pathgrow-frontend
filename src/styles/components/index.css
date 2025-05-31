@@ -1,1 +1,12 @@
 @import './addUser.css';
+@import './loading.css';
+@import './goalRows.css';
+@import './toastNotification.css';
+@import './weekSelector.css';
+@import './learningTarget.css';
+@import './tablePlans.css';
+@import './pagination.css';
+@import './addAchievement.css';
+@import './addButton.css';
+@import './adminManagement.css';
+@import './confirmDelete.css';
