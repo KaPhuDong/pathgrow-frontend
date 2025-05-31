@@ -89,54 +89,7 @@ const AddEvent = ({ datetime, onAdd, onCancel }) => {
                 required
               />
             </div>
-
-            {/* <div style={{ marginBottom: 12 }}>
-                            <label>Class</label>
-                            <select
-                                value={selectedClass}
-                                onChange={(e) => setSelectedClass(e.target.value)}
-                                style={inputStyle}
-                            >
-                                <option value="all">All Classes</option>
-                                {classOptions.map((cls) => (
-                                    <option key={cls.id} value={cls.id}>
-                                        {cls.name}
-                                    </option>
-                                ))}
-                            </select>
-                        </div> */}
-
-            {/* <div style={{ marginBottom: 12 }}>
-                            <label>Add Reminder</label>
-                            <input
-                                type="text"
-                                value={reminder}
-                                onChange={(e) => setReminder(e.target.value)}
-                                style={inputStyle}
-                                placeholder="e.g., 1 hour before"
-                            />
-                        </div> */}
           </div>
-
-          {/* <div style={{ flex: 1, minWidth: 250 }}>
-                        <div style={{ marginBottom: 12 }}>
-                            <label>Description</label>
-                            <input
-                                type="text"
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
-                                style={inputStyle}
-                                placeholder="Enter description"
-                            />
-                        </div>
-
-                        <div style={{ marginBottom: 12 }}>
-                            <label>Student</label>
-                            <select disabled style={inputStyle}>
-                                <option>All students</option>
-                            </select>
-                        </div>
-                    </div> */}
         </div>
 
         <div

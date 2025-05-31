@@ -14,7 +14,7 @@ function Home() {
 
   const fetchClasses = async () => {
     try {
-      const data = await api.getClasses();
+      const data = await api.fetchClasses();
       setClasses(data);
     } catch (error) {
       console.error(error);
