@@ -16,15 +16,15 @@ const ListStudent = () => {
   const studentsPerPage = 5;
 
   useEffect(() => {
-    const getClasses = async () => {
+    const fetchClasses = async () => {
       try {
-        const data = await api.fetchAllClasses();
+        const data = await api.fetchClasses();
         setClasses(data);
       } catch (err) {
         console.error('Error fetching classes:', err);
       }
     };
-    getClasses();
+    fetchClasses();
   }, []);
 
   useEffect(() => {
