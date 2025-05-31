@@ -52,34 +52,34 @@ const DeleteClassModal = ({
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay">
-      <div className="modal">
-        <h3>Delete {tab ? tab.charAt(0).toUpperCase() + tab.slice(1) : ''}</h3>
+    <div className='delete-class-modal'>
+        <div className="modal">
+          <h3>Delete {tab ? tab.charAt(0).toUpperCase() + tab.slice(1) : ''}</h3>
 
-        <div className="delete-list">
-          {data.map((item) => (
-            <label key={item.id} className="delete-item">
-              <input
-                type="checkbox"
-                checked={selectedIds.includes(item.id)}
-                onChange={() => handleCheckboxChange(item.id)}
-              />
-              <span className="item-name">
-                {tab === 'subjects' ? item.name : `${item.name}`}
-              </span>
-            </label>
-          ))}
-        </div>
+          <div className="delete-list">
+            {data.map((item) => (
+              <label key={item.id} className="delete-item">
+                <input
+                  type="checkbox"
+                  checked={selectedIds.includes(item.id)}
+                  onChange={() => handleCheckboxChange(item.id)}
+                />
+                <span className="item-name">
+                  {tab === 'subjects' ? item.name : `${item.name}`}
+                </span>
+              </label>
+            ))}
+          </div>
 
-        <div className="modal-actions">
-          <button className="btn cancel" onClick={onClose}>
-            Cancel
-          </button>
-          <button className="btn delete" onClick={handleDelete}>
-            Delete
-          </button>
+          <div className="modal-actions">
+            <button className="btn cancel" onClick={onClose}>
+              Cancel
+            </button>
+            <button className="btn delete" onClick={handleDelete}>
+              Delete
+            </button>
+          </div>
         </div>
-      </div>
     </div>
   );
 };

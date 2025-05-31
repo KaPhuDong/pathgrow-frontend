@@ -1,4 +1,7 @@
-.modal-overlay {
+.delete-class-modal {
+  
+}
+.delete-class-modal{
   position: fixed;
   top: 0;
   left: 0;
@@ -11,14 +14,15 @@
   z-index: 10;
 }
 
-.modal {
+.delete-class-modal .modal {
+  position: relative;
   background: white;
   padding: 20px;
   border-radius: 8px;
   width: 500px;
-  max-height: 80vh; /* Giới hạn chiều cao tối đa của modal */
+  max-height: 80vh; 
   display: flex;
-  flex-direction: column; /* Đảm bảo chia bố cục theo chiều dọc */
+  flex-direction: column; 
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
@@ -27,6 +31,8 @@
   margin-bottom: 12px;
   font-size: 20px;
   font-weight: bold;
+  display: flex;
+  justify-content: center;
 }
 
 .delete-list {
@@ -71,7 +77,7 @@
 }
 
 .btn.delete {
-  background-color: #e53935;
+  background-color: var(--secondary);
   color: white;
 }
 
