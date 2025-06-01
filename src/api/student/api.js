@@ -46,21 +46,30 @@ const createGoal = async ({
   });
   return response.data;
 };
-
+// Question nottifications
 const fetchQA = async (userId) => {
   const response = await axios.get(`/goal-questions/${userId}`);
   return response.data;
 };
 
 const sendQuestion = async (data) => {
-  const response = await axios.post('/goal-questions', data);
-  return response.data;
+  try {
+    const response = await axios.post('/goal-questions', data);
+    return response.data;
+  } catch (error) {
+    console.error('Error sending question:', error);
+    throw error;
+  }
 };
 
-
-const fetchNotificationsByUser = async (userId) => {
-  const response = await axios.get(`/notifications/${userId}`);
-  return response.data;
+const fetchNotifications = async () => {
+  try {
+    const response = await axios.get('/notifications');  // không truyền userId
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching notifications:', error);
+    throw error;
+  }
 };
 
 // study-plans api
@@ -181,7 +190,7 @@ export default {
   createGoal,
   fetchQA,
   sendQuestion,
-  fetchNotificationsByUser,
+  fetchNotifications,
   fetchWeeks,
   createWeek,
   deleteWeek,

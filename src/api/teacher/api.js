@@ -121,8 +121,6 @@ const fetchUnreadQuestions = async () => {
 
 export default {
   fetchUnreadQuestions,
-  getClasses,
-  fetchAllClasses,
   fetchStudentsByClass,
   fetchSemesters,
   fetchSubjects,

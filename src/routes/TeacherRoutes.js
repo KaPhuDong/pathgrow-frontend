@@ -6,6 +6,7 @@ import StudentProfile from '../features/teacher/pages/StudentProfile';
 import StudyPlan from '../features/teacher/pages/StudyPlan';
 import StudentSchedule from '../features/teacher/pages/StudentSchedule';
 import StudentAchievements from '../features/teacher/pages/StudentAchievements';
+import Notifications from '../features/teacher/pages/Notifications';
 
 const TeacherRoutes = [
   {
@@ -40,6 +41,10 @@ const TeacherRoutes = [
     path: '/teacher/view-student-achievements/:studentId',
     element: <StudentAchievements />,
   },
+  {
+       path: '/teacher/notifications',
+        element: <Notifications />,
+      },
 ];
 
 export default TeacherRoutes;
