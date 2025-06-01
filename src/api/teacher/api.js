@@ -1,11 +1,6 @@
 import axios from '../axiosConfig';
 
-const getClasses = async () => {
-  const res = await axios.get('/classes');
-  return res.data;
-};
-
-const fetchAllClasses = async () => {
+const fetchClasses = async () => {
   const res = await axios.get('/classes');
   return res.data;
 };
@@ -77,12 +72,30 @@ const getStudentCalendar = async (studentId) => {
   return response.data;
 };
 
+// getTeacherCalendar
+const getTeacherCalendar = async () => {
+  const response = await axios.get(`/teacher-schedule`);
+  return response.data;
+};
+
 // addSchedule
 const addSchedule = async (studentId, scheduleData) => {
   const response = await axios.post(
     `/teacher-view-student-calendar/${studentId}`,
     scheduleData
   );
+  return response.data;
+};
+
+//addEvent
+const addEvent = async (scheduleData) => {
+  const response = await axios.post('/teacher-schedule', scheduleData);
+  return response.data;
+};
+
+//deleteEvent
+const deleteEvent = async (eventId) => {
+  const response = await axios.delete(`/teacher-schedule/${eventId}`);
   return response.data;
 };
 
@@ -121,7 +134,10 @@ export default {
   fetchSelfStudyPlanIdByWeek,
   fetchInClassSubjects,
   fetchSelfStudySubjects,
+  addEvent,
+  deleteEvent,
   getStudentCalendar,
+  getTeacherCalendar,
   addSchedule,
   deleteSchedule,
 };

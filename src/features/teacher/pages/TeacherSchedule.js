@@ -1,15 +1,19 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, use } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import axios from 'axios';
+// import axios from 'axios';
+import api from '../../../api/teacher/api';
 import Main1 from './Main1';
+import Loading from '../../../components/ui/Loading';
 
 const AddEvent = ({ datetime, onAdd, onCancel }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [selectedClass, setSelectedClass] = useState('all');
+  const [selectedStudent, setSelectedStudent] = useState('all');
+  const [studentOptions, setStudentOptions] = useState([]);
   const [reminder, setReminder] = useState('');
   const [classOptions, setClassOptions] = useState([]);
   const initialized = useRef(false);
@@ -23,6 +27,33 @@ const AddEvent = ({ datetime, onAdd, onCancel }) => {
   };
 
   useEffect(() => {
+    const fetchClasses = async () => {
+      try {
+        const res = await api.fetchClasses();
+        setClassOptions(res); // giả sử res là mảng [{ id, name }]
+      } catch (err) {
+        console.error('Error fetching class list:', err);
+      }
+    };
+
+    fetchClasses();
+  }, []);
+
+  useEffect(() => {
+    const fetchStudentsByClass = async () => {
+      try {
+        const res = await api.fetchStudentsByClass(selectedClass);
+
+        setStudentOptions(res.data); // giả sử res.data là mảng [{ id, name }]
+      } catch (err) {
+        console.error('Error fetching student list:', err);
+      }
+    };
+
+    fetchStudentsByClass();
+  }, [selectedClass]);
+
+  useEffect(() => {
     if (!initialized.current) {
       initialized.current = true;
     }
@@ -33,8 +64,11 @@ const AddEvent = ({ datetime, onAdd, onCancel }) => {
     if (!title) return;
 
     const newEvent = {
+      student_id: selectedStudent === 'all' ? null : selectedStudent,
       title,
-
+      description,
+      class_id: selectedClass === 'all' ? null : selectedClass,
+      reminder,
       start: new Date(datetime.start).toISOString(),
       end: new Date(datetime.end).toISOString(),
     };
@@ -126,8 +160,17 @@ const AddEvent = ({ datetime, onAdd, onCancel }) => {
 
             <div style={{ marginBottom: 12 }}>
               <label>Student</label>
-              <select disabled style={inputStyle}>
-                <option>All students</option>
+              <select
+                value={selectedStudent}
+                onChange={(e) => setSelectedStudent(e.target.value)}
+                style={inputStyle}
+              >
+                <option value="all">All Students</option>
+                {studentOptions.map((student) => (
+                  <option key={student.id} value={student.id}>
+                    {student.name}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -164,8 +207,8 @@ const DeleteEvent = ({ eventInfo, onConfirm, onCancel, position }) => {
     <div
       style={{
         position: 'absolute',
-        top: position.y,
-        left: position.x,
+        top: position.y - 80,
+        left: position.x - 500,
         backgroundColor: '#fff',
         border: '1px solid #ccc',
         padding: '16px',
@@ -213,20 +256,20 @@ const TeacherSchedule = () => {
   const [selectedRange, setSelectedRange] = useState(null);
   const [formPosition, setFormPosition] = useState(null);
   const [deleteInfo, setDeleteInfo] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getAuthHeader = () => ({
     Authorization: `Bearer ${localStorage.getItem('token')}`,
   });
 
   const fetchEvents = async () => {
+    setIsLoading(true);
     try {
-      const res = await axios.get(
-        'http://localhost:8000/api/teacher-schedule',
-        {
-          headers: getAuthHeader(),
-          withCredentials: true,
-        }
-      );
+      const res = await api.getTeacherCalendar();
+      if (!res || !res.data) {
+        console.error('No data returned from API');
+        return;
+      }
 
       const formatted = res.data.map((e) => ({
         id: String(e.id),
@@ -239,6 +282,8 @@ const TeacherSchedule = () => {
       setEvents(formatted);
     } catch (err) {
       console.error('Error fetching study plans:', err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -259,74 +304,88 @@ const TeacherSchedule = () => {
     setSelectedRange({ start: arg.date, end: arg.date });
   };
 
+  const dayOfWeekNames = [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+  ];
+
   const addEvent = async (newEvent) => {
+    setIsLoading(true);
     try {
-      const startDate = new Date(newEvent.start);
-      const endDate = new Date(newEvent.end);
+      // Lấy thông tin ngày, thời gian từ newEvent.start và newEvent.end
+      const startDateTime = new Date(newEvent.start);
+      const endDateTime = new Date(newEvent.end);
 
-      const date = startDate.toISOString().split('T')[0];
-      const start_time = startDate.toTimeString().split(' ')[0];
-      const end_time = endDate.toTimeString().split(' ')[0];
+      const dayOfWeek = dayOfWeekNames[startDateTime.getDay()]; // Chuyển số thành chuỗi tên ngày
+      const date = startDateTime.toISOString().split('T')[0]; // yyyy-mm-dd
+      const start_time = startDateTime.toTimeString().split(' ')[0]; // HH:mm:ss
+      const end_time = endDateTime.toTimeString().split(' ')[0]; // HH:mm:ss
 
-      const days = [
-        'Sunday',
-        'Monday',
-        'Tuesday',
-        'Wednesday',
-        'Thursday',
-        'Friday',
-        'Saturday',
-      ];
-      const day_of_week = days[startDate.getDay()];
-
+      // Tạo payload gửi lên backend
       const payload = {
-        title: newEvent.title,
-        day_of_week,
+        student_id: newEvent.student_id || null,
+        title: newEvent.title || '',
+        description: newEvent.description,
+        class_id: newEvent.class_id,
+        day_of_week: dayOfWeek,
         date,
         start_time,
         end_time,
-        color: newEvent.color,
+        reminder: newEvent.reminder || '',
+        color: newEvent.color || '#cfe9ff',
       };
 
-      await axios.post('http://localhost:8000/api/teacher-schedule', payload, {
-        headers: {
-          ...getAuthHeader(),
-          'Content-Type': 'application/json',
-        },
-        withCredentials: true,
-      });
+      const res = await api.addEvent(payload);
+      const savedEvent = res;
 
-      await fetchEvents();
+      // Thêm vào events state
+      setEvents((prev) => [
+        ...prev,
+        {
+          id: String(savedEvent.id),
+          title: savedEvent.title,
+          start: `${savedEvent.date}T${savedEvent.start_time}`,
+          end: `${savedEvent.date}T${savedEvent.end_time}`,
+          backgroundColor: savedEvent.color || '#cfe9ff',
+        },
+      ]);
+
       setSelectedRange(null);
-    } catch (error) {
-      console.error('Failed to add event:', error);
+      setFormPosition(null);
+    } catch (err) {
+      console.error('Error adding event:', err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const cancelAdd = () => setSelectedRange(null);
-
   const handleEventClick = (clickInfo) => {
-    const { jsEvent, event } = clickInfo;
+    setDeleteInfo({
+      eventInfo: clickInfo.event,
+      position: { x: clickInfo.jsEvent.pageX, y: clickInfo.jsEvent.pageY },
+    });
     setSelectedRange(null);
     setFormPosition(null);
-    setDeleteInfo({ event, position: { x: jsEvent.pageX, y: jsEvent.pageY } });
   };
 
   const confirmDelete = async (eventInfo) => {
-    const id = String(eventInfo.id);
+    setIsLoading(true);
     try {
-      await axios.delete(`http://localhost:8000/api/teacher-schedule/${id}`, {
-        headers: getAuthHeader(),
-        withCredentials: true,
-      });
-      setEvents((prev) => prev.filter((e) => e.id !== id));
+      await api.deleteEvent(eventInfo.id);
+
+      setEvents((prev) => prev.filter((ev) => ev.id !== eventInfo.id));
       setDeleteInfo(null);
     } catch (err) {
-      console.error('Failed to delete event:', err);
+      console.error('Error deleting event:', err);
+    } finally {
+      setIsLoading(false);
     }
   };
-
-  const cancelDelete = () => setDeleteInfo(null);
 
   return (
     <Main1>
@@ -371,20 +430,24 @@ const TeacherSchedule = () => {
             <AddEvent
               datetime={selectedRange}
               onAdd={addEvent}
-              onCancel={cancelAdd}
+              onCancel={() => {
+                setSelectedRange(null);
+                setFormPosition(null);
+              }}
             />
           )}
 
           {deleteInfo && (
             <DeleteEvent
-              eventInfo={deleteInfo.event}
+              eventInfo={deleteInfo.eventInfo}
               position={deleteInfo.position}
               onConfirm={confirmDelete}
-              onCancel={cancelDelete}
+              onCancel={() => setDeleteInfo(null)}
             />
           )}
         </div>
       </div>
+      {isLoading && <Loading />}
     </Main1>
   );
 };

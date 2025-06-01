@@ -15,7 +15,7 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-
+import Loading from '../../../components/ui/Loading';
 import { Link } from 'react-router-dom';
 
 const presetColors = [
@@ -141,7 +141,7 @@ const DeleteEvent = ({ eventInfo, onConfirm, onCancel, position }) => {
         padding: '16px',
         borderRadius: '8px',
         boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-        zIndex: 10000,
+        zIndex: 10,
         width: 260,
         maxWidth: '90vw',
       }}
@@ -236,11 +236,13 @@ const StudentProfile = () => {
   const [formPosition, setFormPosition] = useState(null);
   const [deleteInfo, setDeleteInfo] = useState(null);
   const [achievements, setAchievements] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { studentId } = useParams();
 
   useEffect(() => {
     const fetchEvents = async () => {
+      setIsLoading(true);
       try {
         const data = await api.getStudentCalendar(studentId);
         const formatted = data.map((e) => ({
@@ -253,6 +255,8 @@ const StudentProfile = () => {
         setEvents(formatted);
       } catch (err) {
         console.error('Error fetching study plans:', err);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -283,6 +287,7 @@ const StudentProfile = () => {
   };
 
   const addEvent = async (newEvent) => {
+    setIsLoading(true);
     try {
       const startDate = new Date(newEvent.start);
       const endDate = new Date(newEvent.end);
@@ -326,6 +331,8 @@ const StudentProfile = () => {
       setSelectedRange(null);
     } catch (error) {
       console.error('Failed to add event:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
   const cancelAdd = () => setSelectedRange(null);
@@ -339,12 +346,15 @@ const StudentProfile = () => {
 
   const confirmDelete = async (eventInfo) => {
     const id = String(eventInfo.id);
+    setIsLoading(true);
     try {
       await api.deleteSchedule(studentId, id);
       setEvents((prev) => prev.filter((e) => e.id !== id));
       setDeleteInfo(null);
     } catch (err) {
       console.error('Failed to delete event:', err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -485,6 +495,7 @@ const StudentProfile = () => {
           </div>
         </div>
       </div>
+      {isLoading && <Loading />}
     </Main2>
   );
 };
