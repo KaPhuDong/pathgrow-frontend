@@ -15,7 +15,7 @@ const NotificationList = ({ notifications, onAnswerSubmit }) => {
   };
 
   const handleInputChange = (e, id) => {
-    setAnswers(prev => ({
+    setAnswers((prev) => ({
       ...prev,
       [id]: e.target.value,
     }));
@@ -26,7 +26,7 @@ const NotificationList = ({ notifications, onAnswerSubmit }) => {
     const answerText = answers[id]?.trim();
     if (!answerText) return;
 
-    setLoading(prev => ({ ...prev, [id]: true }));
+    setLoading((prev) => ({ ...prev, [id]: true }));
 
     try {
       const token = localStorage.getItem('token');
@@ -43,44 +43,45 @@ const NotificationList = ({ notifications, onAnswerSubmit }) => {
         }
       );
 
-      setLocalAnswered(prev => ({ ...prev, [id]: answerText }));
+      setLocalAnswered((prev) => ({ ...prev, [id]: answerText }));
       if (onAnswerSubmit) onAnswerSubmit(id, answerText);
-      setAnswers(prev => ({ ...prev, [id]: '' }));
+      setAnswers((prev) => ({ ...prev, [id]: '' }));
     } catch (error) {
       console.error('Error submitting answer:', error);
       alert('Failed to submit answer.');
     } finally {
-      setLoading(prev => ({ ...prev, [id]: false }));
+      setLoading((prev) => ({ ...prev, [id]: false }));
     }
   };
 
   return (
     <div className="space-y-4">
-      {notifications.map(item => {
+      {notifications.map((item) => {
         const user = item.user || {};
         return (
           <div
             key={item.id}
             className="bg-white p-4 shadow rounded-xl flex items-start gap-4"
           >
-            <img
-              src={user.avatar || '/default-avatar.png'}
-              alt={user.name || 'User'}
-              className="w-12 h-12 rounded-full object-cover"
-            />
             <div className="flex-1">
               <div className="flex justify-between items-center mb-1">
-                <h3 className="font-semibold">{user.name || 'Unknown User'}</h3>
-                <span className="text-sm text-gray-500">
+                <p className="font-semibold">{user.name || 'Unknown User'}</p>
+                <span
+                  className="text-sm text-gray-500"
+                  style={{ color: 'var(--secondary)' }}
+                >
                   {formatDateTime(item.createdAt || item.created_at)}
                 </span>
               </div>
 
-              <p className="text-gray-800 mb-2">{item.question || ''}</p>
+              <p className="text-gray-800 mb-2" style={{ fontSize: '18px' }}>
+                "{item.question || ''}"
+              </p>
 
-              {(item.answer || localAnswered[item.id]) ? (
+              {item.answer || localAnswered[item.id] ? (
                 <div className="bg-green-50 border border-green-200 p-2 rounded-md text-green-800">
-                  <strong>Answer:</strong> {item.answer || localAnswered[item.id]}
+                  <strong style={{ color: 'var(--primary)' }}>Answer:</strong>{' '}
+                  {item.answer || localAnswered[item.id]}
                 </div>
               ) : (
                 <form

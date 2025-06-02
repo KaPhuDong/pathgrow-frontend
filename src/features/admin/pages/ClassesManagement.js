@@ -32,8 +32,17 @@ const Header = ({ onNewClassClick, searchTerm, onSearchChange }) => (
 const ClassList = ({ classes }) => (
   <div className="class-list">
     {classes.length === 0 ? (
-      <p style={{ textAlign: 'center', marginTop: '2rem' }}>
-        Không tìm thấy lớp phù hợp.
+      <p
+        style={{
+          textAlign: 'center',
+          marginTop: '2rem',
+          width: '100%',
+          color: 'var(--secondary)',
+        }}
+      >
+        No classes found. Please add a new class.
+        <br />
+        Click on the "+ New Class" button to create one.
       </p>
     ) : (
       classes.map((classItem) => (
@@ -42,7 +51,6 @@ const ClassList = ({ classes }) => (
           id={classItem.id}
           name={classItem.name}
           slug={classItem.slug}
-          teacher="Trống thông tin"
           color={classItem.color}
         />
       ))
@@ -72,7 +80,9 @@ function ClassesManagement() {
     api
       .fetchClasses()
       .then((data) => setClasses(data))
-      .catch((error) => console.error('Failed to fetch the class list:', error));
+      .catch((error) =>
+        console.error('Failed to fetch the class list:', error)
+      );
   };
 
   const handleAddClass = (newClass) => {

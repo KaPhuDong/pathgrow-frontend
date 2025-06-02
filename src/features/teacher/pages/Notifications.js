@@ -22,7 +22,7 @@ function Notifications() {
   return (
     <Main>
       <div className="container-notifications">
-        <h2>My Notifications</h2>
+        <h2 className="pb-4">My Notifications</h2>
         <NotificationList notifications={notifications} />
       </div>
     </Main>

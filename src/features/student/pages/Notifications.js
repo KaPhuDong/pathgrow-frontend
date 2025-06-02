@@ -23,7 +23,7 @@ function Notifications() {
           console.log('API notifications:', res);
 
           // Không thêm type, không lọc nữa, chỉ đảm bảo user luôn có name và avatar
-          const normalized = res.map(item => ({
+          const normalized = res.map((item) => ({
             ...item,
             user: item.user || {
               name: `User #${item.user_id}`,
@@ -43,23 +43,24 @@ function Notifications() {
   }, [userId]);
 
   const handleAnswerSubmit = (id, answerText) => {
-    setNotifications(prev =>
-      prev.map(n => (n.id === id ? { ...n, answer: answerText } : n))
+    setNotifications((prev) =>
+      prev.map((n) => (n.id === id ? { ...n, answer: answerText } : n))
     );
   };
 
   return (
     <Main>
-      <div className="container-notifications p-6 max-w-4xl mx-auto">
-        <h2 className="text-2xl font-bold mb-6 ms-3">Teacher Feedback</h2>
+      <div className="container-notifications">
+        <h2 className="text-2xl font-bold pb-4">Teacher Feedback</h2>
         {notifications.length === 0 ? (
-          <p>No feedback notifications found.</p>
+          <p style={{ textAlign: 'center', width: '100%' }}>
+            No feedback notifications found.
+          </p>
         ) : (
           <NotificationList
             notifications={notifications}
             onAnswerSubmit={handleAnswerSubmit}
           />
-
         )}
       </div>
     </Main>

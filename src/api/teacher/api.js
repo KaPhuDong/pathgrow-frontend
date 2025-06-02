@@ -30,7 +30,6 @@ const fetchGoal = async (studentId, semester, subject) => {
 
 // notification
 
-
 //fetchWeeklyStudyPlan
 const fetchWeeks = async (studentId) => {
   const response = await axios.get(`/weekly-study-plans/user/${studentId}`);
@@ -117,12 +116,12 @@ const fetchUnreadQuestions = async () => {
   return response.data;
 };
 
-
 export default {
   fetchUnreadQuestions,
   fetchStudentsByClass,
   fetchSemesters,
   fetchSubjects,
+  fetchClasses,
   fetchGoal,
   fetchWeeks,
   getWeeklyGoals,
