@@ -15,6 +15,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import Loading from '../../../components/ui/Loading'; // Đảm bảo đường dẫn đúng với vị trí của component Loading
 
 const presetColors = [
   { name: 'Green', value: '#d9f2d9' },
@@ -252,12 +253,14 @@ const StudentProfile = () => {
   const [formPosition, setFormPosition] = useState(null);
   const [deleteInfo, setDeleteInfo] = useState(null);
   const [achievements, setAchievements] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getAuthHeader = () => ({
     Authorization: `Bearer ${localStorage.getItem('token')}`,
   });
 
   const fetchEvents = async () => {
+    setIsLoading(true);
     try {
       const res = await axios.get(
         'http://localhost:8000/api/student-calendar',
@@ -278,6 +281,8 @@ const StudentProfile = () => {
       setEvents(formatted);
     } catch (err) {
       console.error('Error fetching study plans:', err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -311,6 +316,7 @@ const StudentProfile = () => {
   };
 
   const addEvent = async (newEvent) => {
+    setIsLoading(true);
     try {
       const startDate = new Date(newEvent.start);
       const endDate = new Date(newEvent.end);
@@ -351,6 +357,8 @@ const StudentProfile = () => {
       setSelectedRange(null);
     } catch (error) {
       console.error('Failed to add event:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -365,6 +373,7 @@ const StudentProfile = () => {
 
   const confirmDelete = async (eventInfo) => {
     const id = String(eventInfo.id);
+    setIsLoading(true);
     try {
       await axios.delete(`http://localhost:8000/api/student-calendar/${id}`, {
         headers: getAuthHeader(),
@@ -374,6 +383,8 @@ const StudentProfile = () => {
       setDeleteInfo(null);
     } catch (err) {
       console.error('Failed to delete event:', err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -514,6 +525,7 @@ const StudentProfile = () => {
           </div>
         </div>
       </div>
+      {isLoading && <Loading />}
     </Main>
   );
 };

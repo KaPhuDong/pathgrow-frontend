@@ -188,7 +188,7 @@
   font-size: 14px;
 }
 
-.event-form input[type="text"] {
+.event-form input[type='text'] {
   width: 100%;
   padding: 0px 10px;
   font-size: 14px;
@@ -197,7 +197,7 @@
   outline: none;
 }
 
-.event-form input[type="text"]:focus {
+.event-form input[type='text']:focus {
   border-color: var(--primary);
 }
 

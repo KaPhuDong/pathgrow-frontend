@@ -6,6 +6,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import api from '../../../api/teacher/api';
 import Main2 from './Main2';
+import Loading from '../../../components/ui/Loading';
 
 const presetColors = [
   { name: 'Green', value: '#d9f2d9' },
@@ -130,7 +131,7 @@ const DeleteEvent = ({ eventInfo, onConfirm, onCancel, position }) => {
         padding: '16px',
         borderRadius: '8px',
         boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-        zIndex: 10000,
+        zIndex: 10,
         width: 260,
         maxWidth: '90vw',
       }}
@@ -172,11 +173,12 @@ const StudentSchedule = () => {
   const [selectedRange, setSelectedRange] = useState(null);
   const [formPosition, setFormPosition] = useState(null);
   const [deleteInfo, setDeleteInfo] = useState(null);
-
+  const [isLoading, setIsLoading] = useState(false);
   const { studentId } = useParams();
 
   useEffect(() => {
     const fetchEvents = async () => {
+      setIsLoading(true);
       try {
         const data = await api.getStudentCalendar(studentId);
         const formatted = data.map((e) => ({
@@ -189,6 +191,8 @@ const StudentSchedule = () => {
         setEvents(formatted);
       } catch (err) {
         console.error('Error fetching study plans:', err);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -252,6 +256,8 @@ const StudentSchedule = () => {
       setSelectedRange(null);
     } catch (error) {
       console.error('Failed to add event:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -266,12 +272,15 @@ const StudentSchedule = () => {
 
   const confirmDelete = async (eventInfo) => {
     const id = String(eventInfo.id);
+    setIsLoading(true);
     try {
       await api.deleteSchedule(studentId, id);
       setEvents((prev) => prev.filter((e) => e.id !== id));
       setDeleteInfo(null);
     } catch (err) {
       console.error('Failed to delete event:', err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -340,6 +349,7 @@ const StudentSchedule = () => {
           )}
         </div>
       </div>
+      {isLoading && <Loading />}
     </Main2>
   );
 };
