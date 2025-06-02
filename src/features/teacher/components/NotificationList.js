@@ -1,70 +1,116 @@
-import React from 'react';
+// NotificationList.jsx
+import React, { useState } from 'react';
+import axios from 'axios';
 
-const NotificationList = ({ notifications }) => {
-  console.log('Notifications:', notifications);
+const NotificationList = ({ notifications, onAnswerSubmit }) => {
+  const [answers, setAnswers] = useState({});
+  const [loading, setLoading] = useState({});
+  const [localAnswered, setLocalAnswered] = useState({});
 
   const formatDateTime = (isoString) => {
+    if (!isoString) return '';
     const date = new Date(isoString);
+    if (isNaN(date)) return '';
     return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
   };
 
-   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <h2 className="text-2xl font-bold mb-4">Student notifications</h2>
-      <div className="space-y-4">
-        {notifications.length === 0 ? (
-          <p>No notifications found.</p>
-        ) : (
-          notifications.map((item) => (
-            <div
-              key={item.id}
-              className="bg-white p-4 shadow rounded-xl flex items-start gap-4"
-            >
-              <img
-                src={item.user.avatar}
-                alt={item.user.name}
-                className="w-12 h-12 rounded-full object-cover"
-              />
-              <div className="flex-1">
-                <div className="flex justify-between items-center mb-1">
-                  <h3 className="font-semibold">{item.user.name}</h3>
-                  <span className="text-sm text-gray-500">
-                    {formatDateTime(item.created_at)}
-                  </span>
-                </div>
-                <p className="text-gray-800 mb-2">{item.question}</p>
-                {item.answer ? (
-                  <div className="bg-gray-100 p-2 rounded-md text-green-700">
-                    <strong>Answer:</strong> {item.answer}
-                  </div>
-                ) : (
-                  <form
-                    className="flex gap-2 mt-2"
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      // TODO: handle submit answer
-                      alert('Chức năng gửi câu trả lời chưa được cài đặt');
-                    }}
-                  >
-                    <input
-                      type="text"
-                      name="answer"
-                      className="flex-1 border border-gray-300 rounded px-3 py-1"
-                      placeholder="Type your answer..."
-                    />
-                    <button
-                      type="submit"
-                      className="bg-blue-600 text-white px-4 py-1 rounded"
-                    >
-                      Reply
-                    </button>
-                  </form>
-                )}
+  const handleInputChange = (e, id) => {
+    setAnswers(prev => ({
+      ...prev,
+      [id]: e.target.value,
+    }));
+  };
+
+  const handleSubmit = async (e, id) => {
+    e.preventDefault();
+    const answerText = answers[id]?.trim();
+    if (!answerText) return;
+
+    setLoading(prev => ({ ...prev, [id]: true }));
+
+    try {
+      const token = localStorage.getItem('token');
+
+      await axios.post(
+        'http://localhost:8000/api/goal-questions/teacher/answer-questions',
+        {
+          answers: [{ id, answer: answerText }],
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setLocalAnswered(prev => ({ ...prev, [id]: answerText }));
+      if (onAnswerSubmit) onAnswerSubmit(id, answerText);
+      setAnswers(prev => ({ ...prev, [id]: '' }));
+    } catch (error) {
+      console.error('Error submitting answer:', error);
+      alert('Failed to submit answer.');
+    } finally {
+      setLoading(prev => ({ ...prev, [id]: false }));
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      {notifications.map(item => {
+        const user = item.user || {};
+        return (
+          <div
+            key={item.id}
+            className="bg-white p-4 shadow rounded-xl flex items-start gap-4"
+          >
+            <img
+              src={user.avatar || '/default-avatar.png'}
+              alt={user.name || 'User'}
+              className="w-12 h-12 rounded-full object-cover"
+            />
+            <div className="flex-1">
+              <div className="flex justify-between items-center mb-1">
+                <h3 className="font-semibold">{user.name || 'Unknown User'}</h3>
+                <span className="text-sm text-gray-500">
+                  {formatDateTime(item.createdAt || item.created_at)}
+                </span>
               </div>
+
+              <p className="text-gray-800 mb-2">{item.question || ''}</p>
+
+              {(item.answer || localAnswered[item.id]) ? (
+                <div className="bg-green-50 border border-green-200 p-2 rounded-md text-green-800">
+                  <strong>Answer:</strong> {item.answer || localAnswered[item.id]}
+                </div>
+              ) : (
+                <form
+                  className="flex gap-2 mt-2"
+                  onSubmit={(e) => handleSubmit(e, item.id)}
+                >
+                  <input
+                    type="text"
+                    value={answers[item.id] || ''}
+                    onChange={(e) => handleInputChange(e, item.id)}
+                    className="flex-1 border border-gray-300 rounded px-3 py-1"
+                    placeholder="Type your answer..."
+                  />
+                  <button
+                    type="submit"
+                    disabled={loading[item.id]}
+                    className={`px-4 py-1 rounded text-white ${
+                      loading[item.id]
+                        ? 'bg-gray-400 cursor-not-allowed'
+                        : 'bg-blue-600 hover:bg-blue-700'
+                    }`}
+                  >
+                    Reply
+                  </button>
+                </form>
+              )}
             </div>
-          ))
-        )}
-      </div>
+          </div>
+        );
+      })}
     </div>
   );
 };

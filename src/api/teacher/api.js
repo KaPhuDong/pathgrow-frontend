@@ -31,7 +31,6 @@ const fetchGoal = async (studentId, semester, subject) => {
 // notification
 
 
-
 //fetchWeeklyStudyPlan
 const fetchWeeks = async (studentId) => {
   const response = await axios.get(`/weekly-study-plans/user/${studentId}`);
