@@ -62,14 +62,14 @@ const sendQuestion = async (data) => {
   }
 };
 
-const fetchNotifications = async () => {
-  try {
-    const response = await axios.get('/notifications');  // không truyền userId
+const fetchNotificationsForTeacher = async () => {
+    const response = await axios.get('/goal-questions');  // không truyền userId
     return response.data;
-  } catch (error) {
-    console.error('Error fetching notifications:', error);
-    throw error;
-  }
+};
+
+const fetchNotificationsForStudent = async (userId) => {
+    const response = await axios.get(`/notifications`);
+    return response.data;
 };
 
 // study-plans api
@@ -181,6 +181,11 @@ const fetchSelfStudySubjects = async (weeklyStudyPlanId) => {
   return response.data;
 };
 
+//Notifications for student
+const fetchNotificationsByUser = async () => {
+  const response = await axios.get(`/notifications`);
+  return response.data;
+};
 // export
 export default {
   fetchSemesters,
@@ -190,7 +195,9 @@ export default {
   createGoal,
   fetchQA,
   sendQuestion,
-  fetchNotifications,
+  fetchNotificationsForStudent,
+  fetchNotificationsByUser,
+  fetchNotificationsForTeacher,
   fetchWeeks,
   createWeek,
   deleteWeek,

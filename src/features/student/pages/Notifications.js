@@ -24,16 +24,8 @@ function Notifications() {
 
   useEffect(() => {
     if (userId) {
-      api
-        .fetchNotificationsByUser(userId)
-        .then((data) => {
-          if (Array.isArray(data)) setNotifications(data);
-          else setNotifications([]);
-        })
-        .catch((err) => {
-          console.error('Error fetching notifications:', err);
-          setNotifications([]);
-        });
+      const res = api.fetchNotificationsByUser();
+      setNotifications(res);
     }
   }, [userId]);
 

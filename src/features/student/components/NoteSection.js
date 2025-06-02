@@ -14,6 +14,7 @@ const NoteSection = ({ userId, semesterId, subjectId, onSendSuccess }) => {
       semester_id: semesterId,
       subject_id: subjectId,
       question: question,
+      teacher_id: 2,
     };
 
     if (!question.trim()) return;
@@ -39,7 +40,7 @@ const NoteSection = ({ userId, semesterId, subjectId, onSendSuccess }) => {
         rows={4}
       />
       <button className="send-button" onClick={handleSend} disabled={loading}>
-        {loading ? 'Sending...' : 'Send'}
+        Send
       </button>
     </div>
   );

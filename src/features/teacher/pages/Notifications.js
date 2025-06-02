@@ -1,4 +1,3 @@
-// src/pages/Notifications.js
 import React, { useState, useEffect } from 'react';
 import Main from './Main1';
 import api from '../../../api/student/api';
@@ -7,21 +6,13 @@ import NotificationList from '../components/NotificationList';
 function Notifications() {
   const [notifications, setNotifications] = useState([]);
 
-  const fetchNotifications = () => {
-    api.fetchNotifications()
-      .then((data) => {
-        if (Array.isArray(data)) {
-          // Lọc chỉ lấy thông báo có type là 'question'
-          const questionOnly = data.filter(n => n.type === 'question');
-          setNotifications(questionOnly);
-        } else {
-          setNotifications([]);
-        }
-      })
-      .catch((err) => {
-        console.error('Error fetching notifications:', err);
-        setNotifications([]);
-      });
+  const fetchNotifications = async () => {
+    try {
+      const res = await api.fetchNotificationsForTeacher();
+      setNotifications(res);
+    } catch (error) {
+      console.error('Failed to fetch notifications:', error);
+    }
   };
 
   useEffect(() => {
@@ -31,7 +22,7 @@ function Notifications() {
   return (
     <Main>
       <div className="container-notifications">
-        <h2>My Questions</h2>
+        <h2>My Notifications</h2>
         <NotificationList notifications={notifications} />
       </div>
     </Main>
