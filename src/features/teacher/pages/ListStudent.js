@@ -69,7 +69,7 @@ const ListStudent = () => {
   return (
     <Main1>
       <div className="vh-100">
-        <div className="row h-100">
+        <div className="row h-100 gx-0">
           {/* Sidebar */}
           <nav className="col-md-2 d-none d-md-block bg-white border-end p-3">
             <h4 className="fw-bold mb-3" style={{ color: 'var(--primary)' }}>

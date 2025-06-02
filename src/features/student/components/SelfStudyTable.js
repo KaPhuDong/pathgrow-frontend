@@ -19,7 +19,7 @@ const SelfStudyTable = forwardRef(
       const loadSkills = async () => {
         try {
           const result = await api.fetchSubjects();
-          setSkills(result.data);
+          setSkills(result);
         } catch (error) {
           console.error('Failed to fetch subjects:', error);
         }

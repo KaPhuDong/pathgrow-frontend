@@ -38,9 +38,9 @@ const Goals = () => {
           fetchSubjects(),
         ]);
         setSemesters(semRes.data);
-        setSubjects(subjRes.data);
+        setSubjects(subjRes);
         setSelectedSemester(semRes.data[0]?.id?.toString() || '');
-        setSelectedSubject(subjRes.data[0]?.id?.toString() || '');
+        setSelectedSubject(subjRes[0]?.id?.toString() || '');
       } catch (err) {
         // setError('Failed to load semesters and subjects.');
       }
