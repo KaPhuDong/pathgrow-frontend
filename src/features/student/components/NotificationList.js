@@ -22,7 +22,7 @@ const NotificationList = ({ notifications, onAnswerSubmit }) => {
           >
             <div className="flex-1">
               <div className="flex justify-between items-center mb-1">
-                <p className="font-semibold">{teacher.name}</p>
+                {/* <p className="font-semibold">{teacher.name}</p> */}
                 <span
                   className="text-sm text-gray-500"
                   style={{ color: 'var(--secondary)' }}
