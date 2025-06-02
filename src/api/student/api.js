@@ -2,18 +2,17 @@ import axios from '../axiosConfig';
 
 const API_BASE = 'http://localhost:8000/api';
 
-
 const fetchNotificationsByUser = async (userId) => {
   const token = localStorage.getItem('token');
-  const res = await axios.get(`${API_BASE}/goal-questions`, {
+  const res = await axios.get(`${API_BASE}/goal-questions/student`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
 
   const normalized = res.data
-    .filter(item => item.answer) // Lọc chỉ các câu hỏi đã được trả lời
-    .map(item => ({
+    .filter((item) => item.answer) // Lọc chỉ các câu hỏi đã được trả lời
+    .map((item) => ({
       id: item.id,
       question: item.question,
       answer: item.answer,
@@ -37,9 +36,6 @@ const fetchNotificationsByUser = async (userId) => {
 
   return normalized;
 };
-
-
-
 
 const fetchSemesters = async () => {
   const response = await axios.get('/semesters');
@@ -104,7 +100,7 @@ const sendQuestion = async (data) => {
 };
 
 const fetchNotificationsForTeacher = async () => {
-  const response = await axios.get('/goal-questions');
+  const response = await axios.get('/goal-questions/teacher');
   return response.data;
 };
 
