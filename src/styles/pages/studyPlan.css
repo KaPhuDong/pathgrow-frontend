@@ -88,6 +88,7 @@
 .note-section {
   background-color: #fefefe;
   padding: 16px;
+  padding-right: 0px;
   border-left: 5px solid #2196f3;
   border-radius: 8px;
   margin-bottom: 30px;
@@ -111,7 +112,6 @@
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  margin-left: 1100px;
 }
 
 /* Week Selector */

@@ -6,7 +6,7 @@ const NoteSection = ({ userId, semesterId, subjectId, onSendSuccess }) => {
 
   const handleSend = async () => {
     if (!userId) {
-      console.error("userId không tồn tại");
+      console.error('userId không tồn tại');
       return;
     }
     const data = {
@@ -32,16 +32,22 @@ const NoteSection = ({ userId, semesterId, subjectId, onSendSuccess }) => {
 
   return (
     <div className="note-section">
-      <p><strong>Note:</strong> If you have any questions for the teacher or need help, include them here.</p>
+      <p>
+        <strong>Note:</strong> If you have any questions for the teacher or need
+        help, include them here.
+      </p>
       <textarea
         placeholder="I want you to check my goal"
         value={question}
         onChange={(e) => setQuestion(e.target.value)}
         rows={4}
+        style={{ outline: 'none', width: '100%' }}
       />
-      <button className="send-button" onClick={handleSend} disabled={loading}>
-        Send
-      </button>
+      <div className="text-right mb-2">
+        <button className="send-button" onClick={handleSend} disabled={loading}>
+          Send
+        </button>
+      </div>
     </div>
   );
 };

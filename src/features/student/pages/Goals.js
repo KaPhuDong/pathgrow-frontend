@@ -13,7 +13,6 @@ const {
   fetchGoal,
   createGoal,
   saveGoal,
-  // fetchQA,
   sendQuestion,
 } = api;
 
@@ -33,15 +32,15 @@ const Goals = () => {
   const [error, setError] = useState('');
   const [isNew, setIsNew] = useState(false);
   const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
 
   useEffect(() => {
-  const storedUser = localStorage.getItem('user');
-  if (storedUser) {
-    const parsedUser = JSON.parse(storedUser);
-    setUserId(parsedUser.id); 
-  }
-}, []);
-
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      const parsedUser = JSON.parse(storedUser);
+      setUserId(parsedUser.id);
+    }
+  }, []);
 
   useEffect(() => {
     const loadFilters = async () => {
@@ -61,7 +60,6 @@ const Goals = () => {
     loadFilters();
   }, []);
 
-  // Load goal data
   useEffect(() => {
     if (!selectedSemester || !selectedSubject) return;
 
@@ -79,10 +77,6 @@ const Goals = () => {
           expectTeacher: goalData?.expect_teacher || '',
           expectMyself: goalData?.expect_myself || '',
         });
-
-        // const qaRes = await fetchQA(Number(selectedSemester), selectedSubject);
-        // setQuestion('');
-        // setAnswer(qaRes.data.answer || '');
       } catch (err) {
         setInputs({
           expectCourse: '',
@@ -101,7 +95,6 @@ const Goals = () => {
     setInputs((prev) => ({ ...prev, [field]: value }));
   };
 
-  // Save or create goal
   const handleSave = async () => {
     try {
       const goalPayload = {
@@ -119,6 +112,7 @@ const Goals = () => {
       }
 
       setIsNew(false);
+      setToastMessage('Saved successfully!');
       setShowToast(true);
     } catch (err) {
       alert('Save failed. Please try again.');
@@ -148,7 +142,7 @@ const Goals = () => {
 
         {showToast && (
           <ToastNotification
-            message="Saved successfully!"
+            message={toastMessage}
             onClose={() => setShowToast(false)}
           />
         )}
@@ -204,15 +198,15 @@ const Goals = () => {
           </table>
         </div>
 
-    
-          <NoteSection
-            userId={userId}
-            semesterId={selectedSemester}
-            subjectId={selectedSubject}
-            onSendSuccess={() => setShowToast(true)}
-          />
-  
-
+        <NoteSection
+          userId={userId}
+          semesterId={selectedSemester}
+          subjectId={selectedSubject}
+          onSendSuccess={() => {
+            setToastMessage('Sent successfully!');
+            setShowToast(true);
+          }}
+        />
       </div>
     </Main>
   );
