@@ -129,6 +129,7 @@ const AddEvent = ({ datetime, onAdd, onCancel }) => {
           }}
         >
           <button
+            className="cancel-button"
             type="button"
             onClick={onCancel}
             style={{ padding: '6px 12px' }}
@@ -479,7 +480,10 @@ const StudentProfile = () => {
             </div>
             <div className="class-description">
               <a href="/study/plans" className="class-card">
-                <div className="card-header">
+                <div
+                  className="card-header"
+                  style={{ backgroundColor: '#91e5ff' }}
+                >
                   <div className="card-header">
                     <h3>PNV26B - TOEIC1</h3>
                     <p>Lê Nguyễn Phúc Nhân</p>
@@ -492,7 +496,7 @@ const StudentProfile = () => {
               <a href="/study/plans" className="class-card">
                 <div
                   className="card-header"
-                  style={{ backgroundColor: '#D9D9D9' }}
+                  style={{ backgroundColor: '#d2ee99' }}
                 >
                   <div className="card-header">
                     <h3>IT English 1</h3>
@@ -506,7 +510,7 @@ const StudentProfile = () => {
               <a href="/study/plans" className="class-card">
                 <div
                   className="card-header"
-                  style={{ backgroundColor: '#FA009E' }}
+                  style={{ backgroundColor: '#fff9bf' }}
                 >
                   <div className="card-header">
                     <h3>PNV26B - TOEIC1</h3>

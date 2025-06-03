@@ -7,7 +7,6 @@ import LearningTarget from '../components/LearningTarget';
 import LearningJournal from '../components/LearningJournal';
 import InClassTable from '../components/InClassTable';
 import SelfStudyTable from '../components/SelfStudyTable';
-import NoteSection from '../components/NoteSection';
 import api from '../../../api/teacher/api';
 import ToastNotification from '../../../components/ui/ToastNotification';
 
@@ -186,7 +185,6 @@ const StudyPlan = () => {
             setSelfStudyPlanId={setSelfStudyPlanId}
           />
         )}
-        <NoteSection />
       </div>
     </Main2>
   );

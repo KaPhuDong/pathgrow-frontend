@@ -102,6 +102,7 @@ const AddEvent = ({ datetime, onAdd, onCancel }) => {
           }}
         >
           <button
+            className="cancel-button"
             type="button"
             onClick={onCancel}
             style={{ padding: '6px 12px' }}

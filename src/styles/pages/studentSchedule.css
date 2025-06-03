@@ -265,6 +265,7 @@
 
 .cancel-button {
   margin-right: 8px;
+  background-color: var(--secondary) !important;
 }
 
 .custom-button:hover {

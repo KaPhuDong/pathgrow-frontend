@@ -102,18 +102,13 @@ const ClassDetail = () => {
   );
 
   const fetchAvailableItems = async () => {
-    try {
-      if (activeTab === 'subjects') {
-        const allSubjects = await api.fetchSubjects();
-        return allSubjects.data;
-      } else {
-        const role = activeTab === 'students' ? 'student' : 'teacher';
-        const users = await api.fetchUsersByRole(role);
-        return users;
-      }
-    } catch (err) {
-      console.error('Error loading the list:', err);
-      return [];
+    if (activeTab === 'subjects') {
+      const allSubjects = await api.fetchSubjects();
+      return allSubjects;
+    } else {
+      const role = activeTab === 'students' ? 'student' : 'teacher';
+      const users = await api.fetchUsersByRole(role);
+      return users;
     }
   };
 

@@ -1,5 +1,42 @@
 import axios from '../axiosConfig';
 
+const API_BASE = 'http://localhost:8000/api';
+
+const fetchNotificationsByUser = async (userId) => {
+  const token = localStorage.getItem('token');
+  const res = await axios.get(`${API_BASE}/goal-questions/student`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const normalized = res.data
+    .filter((item) => item.answer) // Lọc chỉ các câu hỏi đã được trả lời
+    .map((item) => ({
+      id: item.id,
+      question: item.question,
+      answer: item.answer,
+      subject: item.subject?.name || 'Môn học không xác định',
+
+      // Dùng answered_at (ngày trả lời) nếu có, fallback về created_at
+      createdAt: item.answered_at || item.updated_at || item.created_at,
+
+      // Thông tin giáo viên trả lời (nếu có)
+      teacher: item.answered_by || {
+        name: 'Giáo viên không xác định',
+        avatar: '/default-teacher-avatar.png',
+      },
+
+      // Thông tin user (học sinh), vẫn giữ để hiển thị hoặc dùng sau
+      user: item.user || {
+        name: `HS #${item.user_id}`,
+        avatar: '/default-avatar.png',
+      },
+    }));
+
+  return normalized;
+};
+
 const fetchSemesters = async () => {
   const response = await axios.get('/semesters');
   return response.data;
@@ -47,25 +84,32 @@ const createGoal = async ({
   return response.data;
 };
 
-const fetchQA = async (semester, subject) => {
-  const response = await axios.get(`/goal-questions/${semester}/${subject}`);
+const fetchQA = async (userId) => {
+  const response = await axios.get(`/goal-questions/${userId}`);
   return response.data;
 };
 
 const sendQuestion = async (data) => {
-  const response = await axios.post(
-    `/goal-questions/${data.semester}/${data.subject}`,
-    data
-  );
+  try {
+    const response = await axios.post('/goal-questions', data);
+    return response.data;
+  } catch (error) {
+    console.error('Error sending question:', error);
+    throw error;
+  }
+};
+
+const fetchNotificationsForTeacher = async () => {
+  const response = await axios.get('/goal-questions/teacher');
   return response.data;
 };
 
-const fetchNotificationsByUser = async (userId) => {
-  const response = await axios.get(`/notifications/${userId}`);
+const fetchNotificationsForStudent = async (userId) => {
+  const response = await axios.get(`/notifications`);
   return response.data;
 };
 
-// study-plans api
+// Weekly study plan APIs
 const fetchWeeks = async () => {
   const response = await axios.get('/weekly-study-plans');
   return response.data;
@@ -86,7 +130,7 @@ const updateWeek = async (id, updatedData) => {
   return response.data;
 };
 
-// weekly-goals api
+// Weekly goals APIs
 const getWeeklyGoals = (weeklyStudyPlanId) => {
   return axios.get(`/weekly-goals/${weeklyStudyPlanId}`);
 };
@@ -103,7 +147,7 @@ const deleteWeeklyGoal = (id) => {
   return axios.delete(`/weekly-goals/${id}`);
 };
 
-// in-class-plans and self-study-plans api
+// In-class and self-study plans
 const fetchInClassPlanIdByWeek = async (weeklyStudyPlanId) => {
   const response = await axios.get(`/in-class-plans/${weeklyStudyPlanId}`);
   return response.data;
@@ -134,7 +178,7 @@ const deleteSelfStudyPlan = async (id) => {
   return response.data;
 };
 
-// in-class-subjects and self-study-subjects api
+// Subjects in plans
 const createInClassSubject = async (data) => {
   const response = await axios.post('/in-class-subjects', data);
   return response.data;
@@ -159,6 +203,7 @@ const updateInClassSubject = async (id, updatedData) => {
   const response = await axios.put(`/in-class-subjects/${id}`, updatedData);
   return response.data;
 };
+
 const updateSelfStudySubject = async (id, updatedData) => {
   const response = await axios.put(`/self-study-subjects/${id}`, updatedData);
   return response.data;
@@ -174,7 +219,7 @@ const fetchSelfStudySubjects = async (weeklyStudyPlanId) => {
   return response.data;
 };
 
-// export
+// ✅ Export đầy đủ
 export default {
   fetchSemesters,
   fetchSubjects,
@@ -183,7 +228,9 @@ export default {
   createGoal,
   fetchQA,
   sendQuestion,
-  fetchNotificationsByUser,
+  fetchNotificationsForStudent,
+  fetchNotificationsByUser, // ✅ đã định nghĩa đúng
+  fetchNotificationsForTeacher,
   fetchWeeks,
   createWeek,
   deleteWeek,
