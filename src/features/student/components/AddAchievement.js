@@ -34,8 +34,8 @@ const AddAchievement = ({ onClose, onAddAchievement, updateAchievement }) => {
     data.append('description', formData.description);
 
     const url = updateAchievement
-      ? `http://localhost:8000/api/achievements/${updateAchievement.id}`
-      : 'http://localhost:8000/api/achievements';
+      ? `https://pathgrow-backend-z6tf.onrender.com/api/achievements/${updateAchievement.id}`
+      : 'https://pathgrow-backend-z6tf.onrender.com/api/achievements';
     const method = updateAchievement ? 'POST' : 'POST';
 
     if (updateAchievement) {
@@ -90,8 +90,7 @@ const AddAchievement = ({ onClose, onAddAchievement, updateAchievement }) => {
 
   return (
     <div className="add-achievement-modal">
-      <div
-        className="modal-content">
+      <div className="modal-content">
         <span className="close" onClick={onClose} style={{ cursor: 'pointer' }}>
           &times;
         </span>
@@ -135,13 +134,18 @@ const AddAchievement = ({ onClose, onAddAchievement, updateAchievement }) => {
             <button
               type="button"
               className="btn-cancel"
-              style={{fontWeight: 'bold', fontSize: '16px'}}
+              style={{ fontWeight: 'bold', fontSize: '16px' }}
               onClick={onClose}
               disabled={loading}
             >
               Cancel
             </button>
-            <button type="submit" className="btn-add" disabled={loading} style={{fontWeight: 'bold'}}> 
+            <button
+              type="submit"
+              className="btn-add"
+              disabled={loading}
+              style={{ fontWeight: 'bold' }}
+            >
               {updateAchievement ? 'Save' : 'Add'}
             </button>
           </div>

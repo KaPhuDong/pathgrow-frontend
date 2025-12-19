@@ -32,7 +32,7 @@ const NotificationList = ({ notifications, onAnswerSubmit }) => {
       const token = localStorage.getItem('token');
 
       await axios.post(
-        'http://localhost:8000/api/goal-questions/teacher/answer-questions',
+        'https://pathgrow-backend-z6tf.onrender.com/api/goal-questions/teacher/answer-questions',
         {
           answers: [{ id, answer: answerText }],
         },

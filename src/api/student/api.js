@@ -1,6 +1,6 @@
 import axios from '../axiosConfig';
 
-const API_BASE = 'http://localhost:8000/api';
+const API_BASE = 'https://pathgrow-backend-z6tf.onrender.com/api';
 
 const fetchNotificationsByUser = async (userId) => {
   const token = localStorage.getItem('token');

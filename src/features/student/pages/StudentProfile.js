@@ -264,7 +264,7 @@ const StudentProfile = () => {
     setIsLoading(true);
     try {
       const res = await axios.get(
-        'http://localhost:8000/api/student-calendar',
+        'https://pathgrow-backend-z6tf.onrender.com/api/student-calendar',
         {
           headers: getAuthHeader(),
           withCredentials: true,
@@ -290,9 +290,12 @@ const StudentProfile = () => {
   //Achievements
   const fetchAchievements = async () => {
     try {
-      const res = await axios.get('http://localhost:8000/api/achievements', {
-        headers: getAuthHeader(),
-      });
+      const res = await axios.get(
+        'https://pathgrow-backend-z6tf.onrender.com/api/achievements',
+        {
+          headers: getAuthHeader(),
+        }
+      );
       setAchievements(res.data.achievements);
     } catch (err) {
       console.error('Error fetching achievements:', err);
@@ -346,13 +349,17 @@ const StudentProfile = () => {
         color: newEvent.color,
       };
 
-      await axios.post('http://localhost:8000/api/student-calendar', payload, {
-        headers: {
-          ...getAuthHeader(),
-          'Content-Type': 'application/json',
-        },
-        withCredentials: true,
-      });
+      await axios.post(
+        'https://pathgrow-backend-z6tf.onrender.com/api/student-calendar',
+        payload,
+        {
+          headers: {
+            ...getAuthHeader(),
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        }
+      );
 
       await fetchEvents();
       setSelectedRange(null);
@@ -376,10 +383,13 @@ const StudentProfile = () => {
     const id = String(eventInfo.id);
     setIsLoading(true);
     try {
-      await axios.delete(`http://localhost:8000/api/student-calendar/${id}`, {
-        headers: getAuthHeader(),
-        withCredentials: true,
-      });
+      await axios.delete(
+        `https://pathgrow-backend-z6tf.onrender.com/api/student-calendar/${id}`,
+        {
+          headers: getAuthHeader(),
+          withCredentials: true,
+        }
+      );
       setEvents((prev) => prev.filter((e) => e.id !== id));
       setDeleteInfo(null);
     } catch (err) {

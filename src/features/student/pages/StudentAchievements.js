@@ -13,11 +13,14 @@ const StudentAchievements = () => {
   useEffect(() => {
     const fetchAchievements = async () => {
       const token = localStorage.getItem('token');
-      const res = await fetch('http://localhost:8000/api/achievements', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await fetch(
+        'https://pathgrow-backend-z6tf.onrender.com/api/achievements',
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       const data = await res.json();
       setAchievements(data.achievements);
     };
@@ -45,12 +48,15 @@ const StudentAchievements = () => {
   const handleDelete = async (id) => {
     const token = localStorage.getItem('token');
     // console.log("Token:", token);
-    const res = await fetch(`http://localhost:8000/api/achievements/${id}`, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const res = await fetch(
+      `https://pathgrow-backend-z6tf.onrender.com/api/achievements/${id}`,
+      {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     if (res.ok) {
       setAchievements((prev) => prev.filter((item) => item.id !== id));
