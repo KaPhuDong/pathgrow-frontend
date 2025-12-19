@@ -46,7 +46,7 @@ const ChangePassword = ({
     try {
       const token = localStorage.getItem('token');
       await axios.post(
-        'http://127.0.0.1:8000/api/student/account/change-password',
+        'https://pathgrow-backend-z6tf.onrender.com/api/student/account/change-password',
         passwordData,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -89,7 +89,7 @@ const ChangePassword = ({
   if (!showPasswordModal) return null;
 
   return (
-    <div className='change-password'>
+    <div className="change-password">
       <div
         className="modal fade show"
         style={{ display: 'block', backgroundColor: 'rgba(0,0,0,0.5)' }}
@@ -98,7 +98,7 @@ const ChangePassword = ({
         aria-modal="true"
       >
         <div className="modal-dialog modal-dialog-centered" role="document">
-          <div className="modal-content" style={{ marginTop: '100px'}}>
+          <div className="modal-content" style={{ marginTop: '100px' }}>
             <div className="modal-header">
               <h5 className="modal-title">Change Password</h5>
               <button
@@ -198,11 +198,18 @@ const ChangePassword = ({
               </div>
             </div>
 
-            <div className="modal-footer" style={{ justifyContent: 'space-between' }}>
+            <div
+              className="modal-footer"
+              style={{ justifyContent: 'space-between' }}
+            >
               <button
                 type="button"
                 className="btn btn-secondary"
-                style={{ backgroundColor: 'var(--secondary)', border: 'none', fontWeight: 'bold' }}
+                style={{
+                  backgroundColor: 'var(--secondary)',
+                  border: 'none',
+                  fontWeight: 'bold',
+                }}
                 onClick={handleClose}
               >
                 Cancel
@@ -210,7 +217,7 @@ const ChangePassword = ({
               <button
                 type="button"
                 className="btn btn-info text-white fw-bold"
-                style={{fontWeight: 'bold'}}
+                style={{ fontWeight: 'bold' }}
                 onClick={handleChangePassword}
               >
                 Save
@@ -219,7 +226,6 @@ const ChangePassword = ({
           </div>
         </div>
       </div>
-
     </div>
   );
 };
